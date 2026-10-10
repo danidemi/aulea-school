@@ -13,7 +13,7 @@ web app, a CLI tool, or anything else.
 ## Finding the SCRUM root
 
 The SCRUM root is not always the repo root or the code root — in a repo that separates spec from
-code, it can live in its own tree (e.g. `learning_software_spec/<project>/` next to an unrelated
+code, it can live in its own tree (e.g. `agile/<project>/` next to an unrelated
 `<project>/` source tree). Locate it by finding the folder that contains both a `backlog/` and an
 `active_sprint/` subfolder, searching from the human's stated location or the current directory
 outward/downward as needed. If none is found, or more than one candidate exists, ask the human

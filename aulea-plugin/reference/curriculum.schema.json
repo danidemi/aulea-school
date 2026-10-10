@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://coderit.it/piattaforma-corsi/curriculum.schema.json",
+  "title": "Curriculum (CURRICULUM SSOT store)",
+  "description": "Schema for the CURRICULUM SSOT store (design/curriculum.json), written by curriculum-sequencer. Sequences the DESIGN graph's taught nodes (Baseline excluded) into sessions of ordered lessons, embedded checkpoints, and assessments, each carrying a delivery style so downstream tools can pick a material-generation strategy per item. Node ids referenced by `node_ref` must exist in design/knowledge_goals_graph.json.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["sessions"],
+  "properties": {
+    "sessions": {
+      "type": "array",
+      "description": "Ordered delivery sessions. Order in this array is the delivery order.",
+      "items": { "$ref": "#/$defs/session" },
+      "minItems": 1
+    },
+    "coverage": { "$ref": "#/$defs/coverage" }
+  },
+  "$defs": {
+    "persona_ref": {
+      "type": "string",
+      "description": "A persona id from STUDENT_PERSONAS/DESIGN for this course (e.g. P-DEV, P-DBA, P-PM — any persona set the course defines), or \"shared\" when a task is not lane-specific.",
+      "pattern": "^(P-[A-Z0-9]+|shared)$"
+    },
+
+    "didactic_activity": {
+      "type": "string",
+      "description": "The pedagogical shape of the item. Drives which material-generation strategy a downstream tool applies (e.g. lecture -> slide deck, hands_on_practical -> exercise sheet + starter repo, briefing -> handout only). \"lecture\": one-way conceptual presentation, no live demo, no built-in discussion stop. \"lecture_discussion\": lecture with deliberate stops for questions/opinions/comparing the group's own experience; still no one touches a system. \"lecture_demo\": instructor presents and also drives a live system in front of the group (they watch, don't type) — use when the concept must be seen running, not just described. \"group_discussion\": students talk to each other with no instructor exposition first; the discussion itself is the point. \"hands_on_practical\": students execute a scoped exercise themselves, tied to one specific node/skill, normally with one clear expected outcome. \"project_based\": open-ended activity integrating multiple already-taught nodes/skills, less scripted than hands_on_practical, may have more than one valid solution path. \"briefing\": short one-way informational announcement with no instructional depth (logistics, credentials) — not teaching a skill.",
+      "enum": [
+        "lecture",
+        "demo",
+        "group_discussion",
+        "hands_on",
+        "project",
+        "prerequisite_assessment_quiz",
+        "feedback_assessment_quiz",
+        "learning_assessment_quiz",
+        "summative_assessment_quiz"
+      ]
+    },
+
+    "item": {
+      "type": "object",
+      "description": "One row of the sequence table: a taught node, an embedded DR checkpoint, or an assessment.",
+      "additionalProperties": false,
+      "required": ["sequence", "title", "didactic_activity", "duration_minutes"],
+      "properties": {
+        "sequence": {
+          "type": "string",
+          "description": "Display order key as used in the source doc (e.g. \"1\", \"A1\", \"13\"). Array position is authoritative for ordering; this is for cross-referencing the human-readable doc."
+        },
+        "node_ref": {
+          "description": "Id(s) of the DESIGN node(s) this item teaches or checks (e.g. PRQ-SCG-BASICS, DR-DEPLOY-GATEWAY). A single id for an item that teaches or checks one node. An array of ids for an item that spans several nodes at once (e.g. a prerequisite-check quiz covering every Baseline a unit assumes) — never invent a separate field name for this case. Omitted entirely for a pure cross-DR assessment scoped to \"all nodes in the course\", such as a summative final exam or the capstone, where enumerating every node adds no information. Required (in one of its two shapes) for item_type lesson and checkpoint.",
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^(BSL|PRQ|DR)-[A-Z0-9-]+$"
+            },
+            {
+              "type": "array",
+              "items": { "type": "string", "pattern": "^(BSL|PRQ|DR)-[A-Z0-9-]+$" },
+              "minItems": 1
+            }
+          ]
+        },
+        "title": {
+          "type": "string",
+          "description": "Human-readable topic/label for this item."
+        },
+        "didactic_activity": {
+          "$ref": "#/$defs/didactic_activity",
+          "description": "Required for item_type lesson; a checkpoint or assessment may omit it (see assessment_kind instead) or reuse the enclosing lesson's style."
+        },
+        "duration_minutes": {
+          "type": ["number", "null"],
+          "description": "Minutes budgeted for this item. Null for a checkpoint embedded inside another item's time (see embedded_in)."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Free-text asides (e.g. why this item's rubric/timing looks the way it does)."
+        }
+      }
+    },
+
+    "session": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["session_number", "title", "usable_minutes", "items"],
+      "properties": {
+        "session_number": { "type": "integer", "minimum": 1 },
+        "title": { "type": "string" },
+        "target_minutes": {
+          "type": "number",
+          "description": "The target teaching/assessment minutes for this session (may be below usable_minutes to leave buffer)."
+        },
+        "usable_minutes": {
+          "type": "number",
+          "description": "Usable minutes in the session block after accounting for setup/breaks/friction, per LOGISTICS."
+        },
+        "total_minutes": {
+          "type": "number",
+          "description": "Sum of this session's items' duration_minutes (null durations contribute 0). Provided for cross-check against a tool's own recomputation."
+        },
+        "items": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/item" },
+          "minItems": 1
+        }
+      }
+    }
+  }
+}

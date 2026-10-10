@@ -1,0 +1,19 @@
+services:
+  # E2E-BROWSER-001: a disposable Postgres for the Playwright suite, kept
+  # separate from server/docker-compose.yml's own stack (different
+  # project name via `-p`, different host port) so a developer's
+  # long-running dev stack is never touched or collided with. No named
+  # volume — this data is never meant to survive a run.
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: aulea_platform
+      POSTGRES_PASSWORD: aulea_platform
+      POSTGRES_DB: aulea_platform
+    ports:
+      - '${E2E_DB_PORT:-5433}:5432'
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U aulea_platform']
+      interval: 2s
+      timeout: 2s
+      retries: 30

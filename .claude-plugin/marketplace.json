@@ -1,12 +1,12 @@
 {
-  "name": "learning-tools",
+  "name": "aulea",
   "owner": {
     "name": "Daniele Demichelis"
   },
   "plugins": [
     {
-      "name": "learning-plugin",
-      "source": "./learning-plugin",
+      "name": "aulea-plugin",
+      "source": "./aulea-plugin",
       "description": "Plugin for planning adult courses and producing didactic material"
     }
   ]
