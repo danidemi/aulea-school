@@ -1,0 +1,29 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: aulea_platform
+      POSTGRES_PASSWORD: aulea_platform
+      POSTGRES_DB: aulea_platform
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U aulea_platform']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # SIGN-UP-001: local SMTP mock. Captures confirmation emails without
+  # sending anywhere real — view them at http://localhost:8025.
+  mailpit:
+    image: axllent/mailpit
+    restart: unless-stopped
+    ports:
+      - '1025:1025' # SMTP
+      - '8025:8025' # web GUI
+
+volumes:
+  postgres-data:

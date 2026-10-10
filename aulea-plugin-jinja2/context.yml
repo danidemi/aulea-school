@@ -1,0 +1,95 @@
+# Single source of truth for names/paths repeated across template/*.
+#
+# render.py loads this file and passes every top-level key to Jinja2 as a
+# template variable (Environment uses StrictUndefined: a template that
+# references a key not defined here fails to render, instead of silently
+# producing an empty string).
+#
+# Partial convention: a file or directory under template/ whose name starts
+# with `_` (e.g. template/agents/_agent_base.md) is library-only content,
+# reachable via {% extends %}/{% include %} but never rendered to its own
+# output file — render.py skips any such path in its output walk. Nothing to
+# register here; it's a naming convention, not a list to keep in sync.
+
+# The SSOT stores, canonical list in reference/ssot_structure.md. Paths are
+# relative to the plugin's project root (what ssot_structure.md calls
+# <ROOT>), matching how they are written in the templates.
+stores:
+  logistics:
+    name: LOGISTICS
+    path: specifications/logistics.md
+  student_personas:
+    name: STUDENT_PERSONAS
+    path: specifications/student_personas.md
+  goals:
+    name: GOALS
+    path: specifications/goals.md
+  design:
+    name: DESIGN
+    path: design/knowledge_goals_graph.json
+  curriculum:
+    name: CURRICULUM
+    path: design/curriculum.json
+  editorial_guidelines:
+    name: EDITORIAL_GUIDELINES
+    path: specifications/editorial_guidelines.md
+
+references:
+  design_schema:
+    path: reference/knowledge_goals_graph.schema.json
+  curriculum_schema:
+    path: reference/curriculum.schema.json
+  ssot_structure:
+    path: reference/ssot_structure.md
+  didactic_material_catalog:
+    path: reference/material_catalog.md
+
+didactic_activities:
+  lecture:
+    name: lecture
+  demo:
+    name: demo
+  group_discussion:
+    name: group_discussion
+  hands_on:
+    name: hands_on
+  project:
+    name: project
+  prerequisite_assessment_quiz:
+    name: prerequisite_assessment_quiz
+  feedback_assessment_quiz:
+    name: feedback_assessment_quiz
+  learning_assessment_quiz:
+    name: learning_assessment_quiz
+  summative_assessment_quiz:
+    name: summative_assessment_quiz
+
+didactic_material:
+  - type: slides
+    audience: Students and Trainer
+    preferred_formats: "YAML deck model (`reference/deck_model_spec.md`); a human renders an approved model to PowerPoint/PDF separately, via `aulea-tools/slides/slides`"
+    owning_subagent: author-slide
+    trigger: One per session, learner-facing content only, used by trainer
+    path_pattern: "`material/slides/`"
+    filename_pattern: "`session-NN.yml`"
+  - type: student book
+    audience: Student
+    preferred_formats: AsciiDoc
+    owning_subagent: student-book-author
+    trigger: "One per session, covering only that session's lecture, demo, and group_discussion items — never hands_on, project, or any of the four *_assessment_quiz items, which stay in their own student-facing files. Learner-facing only: no node_ref, no confidence tags, no reference to CURRICULUM/DESIGN or to any trainer-only material."
+    path_pattern: "`material/student/books/`"
+    filename_pattern: "`session-NN-student-book.adoc`"
+  - type: quiz
+    audience: Student
+    preferred_formats: "QTI 3.0 content package — a qti-assessment-test XML referencing one qti-assessment-item XML per question by relative href (a test cannot embed item bodies inline, per the QTI 3.0 binding spec), plus an imsmanifest.xml. Answer keys live inside each item file; a QTI-compatible delivery app is responsible for withholding them from the student-facing render."
+    owning_subagent: quiz-author
+    trigger: "One per CURRICULUM item whose didactic_activity is prerequisite_assessment_quiz, feedback_assessment_quiz, learning_assessment_quiz, or summative_assessment_quiz. The item's node_ref may be a single node, an array of nodes (e.g. a prerequisite check spanning every Baseline a unit assumes), or omitted (a summative/capstone scoped to the whole course)."
+    path_pattern: "`material/teacher/quizzes/quiz-<kind>-session-NN-<sequence>/`"
+    filename_pattern: "`imsmanifest.xml`, `test.xml`, and `items/item-<NN>.xml` (one per question) inside that directory"
+  - type: demo guide
+    audience: Trainer
+    preferred_formats: AsciiDoc
+    owning_subagent: demo-author
+    trigger: One per CURRICULUM item with didactic_activity demo — a trainer-only, step-by-step script for a live demonstration, precise enough that a command-shaped step can be copy-pasted, plus a companion notes file holding the reasoning a trainer does not need mid-class
+    path_pattern: "`material/teacher/demos/`"
+    filename_pattern: "`session-NN-<node_ref>-demo-guide.adoc` (the clean trainer script) and `session-NN-<node_ref>-demo-guide-notes.adoc` (instructional decisions, timing math, provenance reasoning)"

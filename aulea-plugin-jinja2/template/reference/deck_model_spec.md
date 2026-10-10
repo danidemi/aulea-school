@@ -1,0 +1,254 @@
+# Deck model spec
+
+The **model** is the reviewable, version-controlled source of a deck. A human reviews and edits
+this file, not a rendered `.pptx`/`.pdf` — turning the model into a delivery format is a separate,
+later step, done by `aulea-tools/slides/slides` (see `aulea-tools/slides/README.md`), never by
+hand and never by the authoring subagent itself.
+
+One YAML file per {{ stores.curriculum.name }} **session**, at `material/slides/session-NN.yml`.
+`session` in the header matches that session's `session_number` in {{ stores.curriculum.path }}.
+
+Why YAML rather than Markdown: every slide carries structured metadata a reviewer needs to check
+by eye — role, objective trace, five separate note fields, image licence provenance, per-slide
+timing. In Markdown all of that becomes fragile HTML-comment parsing.
+
+This model is authored and reviewed **independently of every other material type**. It does not
+name a path under `material/teacher/` or `material/student/`, and its own path is never named by
+another material type either. A deck stands on its own file, readable and approvable without any
+other material existing yet.
+
+---
+
+## Deck header
+
+```yaml
+deck: 1                    # schema version
+status: draft              # draft | approved  — ONLY a human sets 'approved'
+language: it                # from {{ stores.logistics.name }}
+course: "Spring Cloud Gateway…"
+session: 1                  # must match a session_number in {{ stores.curriculum.name }}
+title: "…"                  # title slide
+subtitle: "…"               # optional
+
+sources:                    # provenance: which store versions this was built from
+  curriculum: {{ stores.curriculum.path }}
+  design: {{ stores.design.path }}
+  goals: {{ stores.goals.path }}
+  logistics: {{ stores.logistics.path }}
+  read_at: 2026-08-20
+
+budget:
+  session_minutes: 240      # from {{ stores.logistics.name }}
+  slide_budget: [12, 24]    # a guideline range, not tool-enforced (see "Not tool-checked yet")
+
+instructional_decisions:    # see "Absorbed phase-3 decisions" below
+  - decision: "…"
+    rationale: "…"
+    confidence: stated | inferred | invented
+    awaiting: instructional-designer
+
+segments: [ … ]
+```
+
+## Segment
+
+A segment is one coherent teaching arc inside the session — normally a single {{ stores.curriculum.name }}
+lesson item together with any checkpoint embedded in it. It is an **authoring-only grouping**: it
+has no id of its own and is never referenced from outside this file. What is authoritative is the
+list of {{ stores.curriculum.name }} items it covers.
+
+The deck presents concepts only. {{ stores.curriculum.name }} already schedules the course's
+hands-on practice, project work, and their debriefs as their own items, sequenced by
+`curriculum-sequencer`; the deck does not restage that practice as slides, and a segment
+never needs to model an experiential cycle of its own.
+
+```yaml
+segments:
+  - covers:                 # the {{ stores.curriculum.name }} item(s) this segment presents
+      - sequence: "3"        # sequence key, as in {{ stores.curriculum.path }}
+        node_ref: PRQ-…      # node_ref of that item, omitted only where the item itself omits it
+    title: "…"               # author-written label for this arc — not a curriculum id
+    minutes: 45              # sum of the covered items' duration_minutes, for cross-check
+    note: "…"                # optional: anything about this segment's scope worth a reviewer's eye
+    slides: [ … ]
+```
+
+Every `sequence`/`node_ref` pair in `covers` must exist in the target session of
+{{ stores.curriculum.name }}. Never invent a segment id shaped like the old `"1.1"` unit ids —
+there is nothing in {{ stores.curriculum.name }} for such an id to match, and a stray id is a dead
+reference nobody can trace back.
+
+A session's segments do not have to account for every item in the session — a purely hands-on or
+project-based item with no concept content of its own may need no slides at all, since its
+exercise and debrief are already scheduled as their own {{ stores.curriculum.name }} items. When an
+item is deliberately left out of every segment, record that as an `instructional_decisions` entry
+rather than leaving a silent gap a reviewer has to notice on their own.
+
+## Slide
+
+```yaml
+- id: S1-03                # unique across the deck; stable across edits
+  role: concept             # see roles below
+  goals: [G1, G5a]           # ids from {{ stores.goals.path }}; G5a/G5b fold onto G5
+  provenance: stated         # stated | inferred | invented
+  headline: "Una frase completa che afferma il punto."
+  body: { kind: … }          # exactly one body, see kinds below
+  links:                     # optional, any body kind
+    - label: "Documentazione…"
+      url: "https://…"
+  notes: { … }               # all five fields required
+```
+
+**Roles.** Authorable: `vocab`, `problem`, `concept`, `menu`, `homework`, `recap`. Any `title`,
+`section`, or `attribution` slide is generated by whatever later turns this model into a delivery
+format — do not author one by hand. There is no hands-on-cycle role (no `lab-brief`, `debrief`, or
+`apply`) — the deck does not stage practice; {{ stores.curriculum.name }} already schedules it as
+its own items.
+
+## Body kinds
+
+```yaml
+# Preferred: diagram as code (Mermaid). Text, so it diffs in git and is written in the course language.
+body:
+  kind: diagram
+  caption: "Percorso di una richiesta"
+  mermaid: |
+    flowchart LR
+      C[Client] --> S[Service]
+
+# The licensed exception to "no bullet lists" — justification is MANDATORY
+body:
+  kind: list
+  ordered: true             # numbered when the order is part of the meaning
+  justification: "Procedura sequenziale: ogni passo dipende dal precedente."
+  items: ["Applicare il Deployment", "Esporre il Service"]
+
+body:
+  kind: code
+  lang: yaml
+  caption: "…"              # optional
+  text: |
+    readinessProbe:
+      httpGet: { path: /actuator/health/readiness }
+
+# Third-party image, fetched by the authoring agent. license/attribution/alt are required — a
+# legal artefact, not just an asset. asset path is relative to the repo root (the git worktree
+# top), not to this file — `slides` mounts and runs from there.
+body:
+  kind: image
+  source_url: "https://commons.wikimedia.org/wiki/File:…"   # the page the agent found it on,
+                                                              # kept for provenance even after
+                                                              # fetching
+  asset: <course-dir>/material/slides/assets/…png           # the agent's local, downloaded copy
+  license: "CC BY-SA 4.0"      # copy verbatim from the source page. Never invent a plausible
+                                # value — if the page does not state one, write
+                                # "UNKNOWN — human must verify"
+  attribution: "Autore — Wikimedia Commons"
+  alt: "Descrizione per chi non vede l'immagine"   # grounded in what the agent actually saw
+                                                     # after downloading, not guessed from the URL
+  caption: "…"              # optional
+  reviewed: false            # a HUMAN still sets true, after actually looking at it. The
+                              # authoring agent downloads the file and can view it (so it judges
+                              # relevance itself before proposing the slide) — but it does not own
+                              # the license/rights check or the final visual sign-off; `render`
+                              # (not `preview`) refuses any image body with an unset/false
+                              # `reviewed` once both `asset` and `source_url` are present
+
+# Image never fetched — rights unclear, fetch failed, or the agent chose not to. Renders as a
+# labelled placeholder for a human to fetch deliberately.
+body:
+  kind: image
+  source_url: "https://upload.wikimedia.org/…"
+  license: "CC BY-SA 4.0"
+  attribution: "Autore — Wikimedia Commons"
+  alt: "Descrizione per chi non vede l'immagine"
+  caption: "…"              # optional
+  reviewed: false            # a HUMAN sets true after actually looking at it — the authoring
+                              # agent cannot see images; anything it proposes is a guess from a
+                              # URL and a caption
+
+# Pre-existing local asset (e.g. a client screenshot) — not fetched from the internet, no
+# source_url, no licence lookup needed.
+body:
+  kind: image
+  asset: material/slides/assets/console-gke.png   # local file, no licence lookup needed
+  license: "Screenshot cliente — uso interno"
+  attribution: "Interno"
+  alt: "…"
+
+body:
+  kind: callout             # or: quote
+  text: "Una frase breve che vale da sola."
+
+# Honest gap. Better than an invented illustration.
+body:
+  kind: placeholder
+  needs: "Screenshot della console GKE con il workload Running"
+  why: "Ambiente del cliente: non recuperabile dalla rete."
+
+body:
+  kind: none                # headline alone (a deliberate pause slide)
+```
+
+## Teacher notes
+
+All five fields are required — an empty one is a defect. They carry what a different instructor
+would need to teach this exact deck.
+
+```yaml
+notes:
+  talk: |
+    The line of argument to make, as beats — NOT a script to read aloud, and not a
+    restatement of the slide. What does the instructor say that the slide does not show?
+  why_here: |
+    Which prerequisite this clears, which objective it serves, why it sits at this point
+    in the sequence rather than earlier or later.
+  links: |
+    What this builds on — name the earlier session/item where it was already taught, do not
+    re-explain it here. What it sets up for later — name the later session/item only, never
+    its content; a forward reference is one line at most, added only when skipping it would
+    leave the current point feeling like a dead end.
+  watch_for: |
+    The predictable misconception FOR THIS COHORT at this exact point.
+  timing_min: 5
+```
+
+`talk` must add to the slide, not restate it: a reader should learn something from the notes that
+the slide text alone does not already say. `timing_min` values are summed per segment and per
+session and compared against `budget` — as a reviewer's cross-check, not a tool-enforced gate (see
+below).
+
+## Absorbed phase-3 decisions
+
+The pipeline in `.claude/reference/phases.md` puts **instructional design** between curriculum and
+materials, and no agent owns that phase yet.
+Writing a deck is impossible without making some of those decisions (what is a lab versus a
+lecture, how much to expose at once, what moves to a handout, where a segment boundary falls).
+
+So they are made **explicitly and recorded** in `instructional_decisions`, tagged with confidence
+and `awaiting: instructional-designer` — never buried in slide wording. When a phase-3 owner
+exists, that list is the handover.
+
+## Not tool-checked yet
+
+`aulea-tools/slides/slides` turns an approved model into a `.pptx`/`.pdf` (a Docker-wrapped
+renderer — see `aulea-tools/slides/README.md`) — see "Status" below for the draft/approved gate
+it enforces. It does not lint. Word budgets, the list-item exception, and note-novelty are still
+real quality bars — `.claude/reference/slide_design_rules.md` states the reasoning — but nothing
+currently checks them mechanically. An author applies them by judgment and a human reviews the
+result; do not claim a check ran that did not.
+
+One further, deliberate limit of the renderer, so a reviewer isn't surprised by the output: a
+`source_url` image is never downloaded, only rendered as a labelled placeholder with its url,
+licence, attribution and alt text — only a local `asset` file is actually embedded. A `diagram`
+slide's Mermaid source is rendered to a real graphic via mermaid-cli, which the toolchain's Docker
+image carries.
+
+## Status
+
+`status: draft` until a human reviews the deck and sets `status: approved`. The authoring agent
+never sets `status: approved` itself — a model that can flip its own approval flag has no gate at
+all, the same rule every other material type in this project follows.
+
+`aulea-tools/slides/slides preview` renders regardless of `status`, stamping `[DRAFT]` on every
+slide. `aulea-tools/slides/slides render` refuses when `status` is not `approved`.
