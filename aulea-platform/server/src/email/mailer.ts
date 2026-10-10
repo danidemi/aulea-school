@@ -15,13 +15,27 @@ export interface Mailer {
  * SMTP port 1025, no auth) — a real SMTP provider is a separate, later
  * decision (out of scope per SIGN-UP-001's Notes).
  */
-export function createMailer(smtpHost: string, smtpPort: number): Mailer {
-  const transport = nodemailer.createTransport({ host: smtpHost, port: smtpPort })
+export interface MailerOptions {
+  user?: string
+  password?: string
+  /** true = implicit TLS (usually port 465); false = plain / STARTTLS upgrade when offered. */
+  secure?: boolean
+  from?: string
+}
+
+export function createMailer(smtpHost: string, smtpPort: number, options: MailerOptions = {}): Mailer {
+  const transport = nodemailer.createTransport({
+    host: smtpHost,
+    port: smtpPort,
+    secure: options.secure ?? false,
+    ...(options.user ? { auth: { user: options.user, pass: options.password ?? '' } } : {}),
+  })
+  const from = options.from ?? 'no-reply@aulea-platform.local'
 
   return {
     async sendConfirmationEmail(to, confirmationLink) {
       await transport.sendMail({
-        from: 'no-reply@aulea-platform.local',
+        from,
         to,
         subject: 'Confirm your account',
         text: `Confirm your account by visiting: ${confirmationLink}`,

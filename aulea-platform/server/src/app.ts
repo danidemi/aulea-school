@@ -146,7 +146,12 @@ function lazyMailer(): Mailer {
       if (!smtpHost || !smtpPort) {
         throw new Error('SMTP_HOST/SMTP_PORT are not set — copy server/.env.example to server/.env first')
       }
-      real = createMailer(smtpHost, Number(smtpPort))
+      real = createMailer(smtpHost, Number(smtpPort), {
+        user: process.env.SMTP_USER,
+        password: process.env.SMTP_PASSWORD,
+        secure: process.env.SMTP_SECURE === 'true',
+        from: process.env.SMTP_FROM,
+      })
     }
     return real
   }

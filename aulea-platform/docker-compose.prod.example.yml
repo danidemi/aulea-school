@@ -1,0 +1,31 @@
+# Example deployment. Copy next to a real .env / secrets and adapt.
+# Plain values go in `environment`; sensitive ones via *_FILE (Docker secrets).
+services:
+  app:
+    image: aulea-platform:latest
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    environment:
+      APP_BASE_URL: https://aulea.example.com
+      SMTP_HOST: smtp.example.com
+      SMTP_PORT: '587'
+      SMTP_SECURE: 'false'        # true for implicit TLS (port 465)
+      SMTP_USER: no-reply@example.com
+      SMTP_FROM: Aulea <no-reply@example.com>
+      DATABASE_URL_FILE: /run/secrets/database_url
+      SESSION_SECRET_FILE: /run/secrets/session_secret
+      SMTP_PASSWORD_FILE: /run/secrets/smtp_password
+    secrets: [database_url, session_secret, smtp_password]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ['no-new-privileges:true']
+    tmpfs: [/tmp]
+
+secrets:
+  database_url:
+    file: ./secrets/database_url      # postgres://user:pass@host:5432/db
+  session_secret:
+    file: ./secrets/session_secret
+  smtp_password:
+    file: ./secrets/smtp_password

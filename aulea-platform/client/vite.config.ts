@@ -12,16 +12,28 @@ import path from 'node:path'
 // as a single `__CLIENT_VERSION__` constant below.
 const LEARNING_PLATFORM_ROOT = path.resolve(__dirname, '..')
 
+// Docker builds have no .git: the Dockerfile passes the snapshot in as env.
+const fromEnv = process.env.GIT_COMMIT_SHA
+  ? {
+      branch: process.env.GIT_BRANCH ?? 'unknown',
+      commitSha: process.env.GIT_COMMIT_SHA,
+      dirty: process.env.GIT_DIRTY === 'true',
+      commitTimestamp: process.env.GIT_COMMIT_TIMESTAMP ?? '',
+    }
+  : undefined
+
 function git(args: string[]): string {
   return execFileSync('git', args, { cwd: LEARNING_PLATFORM_ROOT, encoding: 'utf8' }).trim()
 }
 
 export default defineConfig(({ command }) => {
   const clientVersion = {
-    branch: git(['rev-parse', '--abbrev-ref', 'HEAD']),
-    commitSha: git(['rev-parse', '--short', 'HEAD']),
-    dirty: git(['status', '--porcelain', '--', '.']).length > 0,
-    commitTimestamp: git(['log', '-1', '--format=%cI', '--', '.']),
+    ...(fromEnv ?? {
+      branch: git(['rev-parse', '--abbrev-ref', 'HEAD']),
+      commitSha: git(['rev-parse', '--short', 'HEAD']),
+      dirty: git(['status', '--porcelain', '--', '.']).length > 0,
+      commitTimestamp: git(['log', '-1', '--format=%cI', '--', '.']),
+    }),
     label: command === 'build' ? 'Built' : 'Dev build',
     ...(command === 'build' ? { builtAt: new Date().toISOString() } : { startedAt: new Date().toISOString() }),
   }

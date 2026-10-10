@@ -36,6 +36,15 @@ function git(args: string[]): string {
 }
 
 export function computeGitVersionFields(): GitVersionFields {
+  // Docker builds have no .git: the Dockerfile passes the snapshot in as env.
+  if (process.env.GIT_COMMIT_SHA) {
+    return {
+      branch: process.env.GIT_BRANCH ?? 'unknown',
+      commitSha: process.env.GIT_COMMIT_SHA,
+      dirty: process.env.GIT_DIRTY === 'true',
+      commitTimestamp: process.env.GIT_COMMIT_TIMESTAMP ?? '',
+    }
+  }
   return {
     branch: git(['rev-parse', '--abbrev-ref', 'HEAD']),
     commitSha: git(['rev-parse', '--short', 'HEAD']),
