@@ -7,6 +7,43 @@
 #     --build-arg GIT_COMMIT_SHA=$(git rev-parse --short HEAD) \
 #     --build-arg GIT_COMMIT_TIMESTAMP=$(git log -1 --format=%cI -- .) \
 #     --build-arg GIT_DIRTY=$(test -n "$(git status --porcelain -- .)" && echo true || echo false) .
+#
+# Connecting to a PostgreSQL database
+# -----------------------------------
+# The image contains no database and no DB settings. The DB is configured at
+# run time (not build time) through ONE environment variable:
+#
+#   DATABASE_URL=postgres://USER:PASSWORD@HOST:PORT/DBNAME
+#
+# The app fails to start if DATABASE_URL is missing. On startup it applies
+# the pending Drizzle migrations (./drizzle) to that database, then serves.
+# The DB user therefore needs rights to create and alter tables in the schema.
+# The same database also stores the login sessions (connect-pg-simple).
+#
+# Examples:
+#   docker run -p 3000:3000 \
+#     -e DATABASE_URL=postgres://aulea:secret@db.example.com:5432/aulea \
+#     -e SESSION_SECRET=<long random value> \
+#     -e APP_BASE_URL=https://aulea.example.com \
+#     -e SMTP_HOST=smtp.example.com -e SMTP_PORT=587 \
+#     aulea-platform
+#
+#   Docker secrets / mounted file (keeps the password out of `docker inspect`):
+#     -e DATABASE_URL_FILE=/run/secrets/database_url
+#   The entrypoint (docker/entrypoint.sh) reads the file into DATABASE_URL.
+#   Set DATABASE_URL or DATABASE_URL_FILE, never both. See
+#   docker-compose.prod.example.yml for a complete setup.
+#
+# Notes:
+#   - HOST must be reachable from inside the container. For a DB on the Docker
+#     host use host.docker.internal (add --add-host=host.docker.internal:host-gateway
+#     on Linux). In Compose, use the service name of the postgres container.
+#   - URL-encode special characters in the password (e.g. @ -> %40, / -> %2F).
+#   - TLS: the client is node-postgres, which reads `?sslmode=require` from the
+#     URL. Example: postgres://user:pass@host:5432/db?sslmode=require
+#   - Other variables the app needs besides the DB: SESSION_SECRET,
+#     APP_BASE_URL, SMTP_HOST, SMTP_PORT (optional: SMTP_USER, SMTP_PASSWORD,
+#     SMTP_SECURE, SMTP_FROM, PORT). Each also accepts the *_FILE form.
 
 ARG NODE_VERSION=22
 
