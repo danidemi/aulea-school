@@ -1,6 +1,6 @@
 ID: TEST-INTEGRATION-001
 
-Status: DRAFT
+Status: READY
 
 Priority: Medium
 

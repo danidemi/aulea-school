@@ -27,6 +27,8 @@ One-line entries. Long definitions live in `ul/<slug>.md`, linked from here.
 - **Quiz Take Page** (aka: quiz-taking page, take page) — the student-facing page for answering a
   quiz session's questions in sequence.
 - **Student** — a course participant who takes quizzes during a quiz session.
+- **Tagline** — the phrase "AI AUTHORING FOR HUMAN TEACHERS" shown under the Wordmark on the login and
+  home pages only.
 - **Tenant** (aka: workspace) — an organizational account boundary; every user and course belongs
   to one tenant. The UI currently labels it `<email>'s workspace`.
 - **Trainer** — the person running the course and controlling quiz sessions.
@@ -35,3 +37,5 @@ One-line entries. Long definitions live in `ul/<slug>.md`, linked from here.
 - **Version Info** — the running app's reported source/build identity (branch, commit SHA,
   dirty/clean status, commit and build timestamps), shown so a trainer can confirm what code is
   actually running.
+- **Wordmark** — the product name as styled text: "Aulea" plus ".school" in two colors. Shown in the
+  App Header next to the icon.
