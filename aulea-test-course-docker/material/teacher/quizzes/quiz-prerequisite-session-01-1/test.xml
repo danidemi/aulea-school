@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<qti-assessment-test xmlns="http://www.imsglobal.org/xsd/imsqtiasi_v3p0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqtiasi_v3p0 https://purl.imsglobal.org/spec/qti/v3p0/schema/xsd/imsqti_asiv3p0p1_v1p0.xsd" identifier="quiz-prerequisite-session-01-1" title="Quiz di ingresso sui prerequisiti" xml:lang="it">
+  <!--
+  status: draft
+  kind: prerequisite
+  node_ref: [BSL-SHELL, BSL-PC-USE, BSL-IT-BG, BSL-DOCKER-PRIOR] [stated — curriculum session 1, sequence 1, notes]
+  instructional_decisions:
+    - decision: "10 domande: 4 su BSL-SHELL (3 di conoscenza + 1 autovalutazione), 2 su BSL-PC-USE, 1 su BSL-IT-BG, 2 su BSL-DOCKER-PRIOR (solo autovalutazione)."
+      rationale: "Durata 15 minuti, circa 1 minuto e mezzo a domanda con lettura; più peso a BSL-SHELL perché è l'unico baseline dichiarato in LOGISTICS come prerequisito assunto; BSL-DOCKER-PRIOR è un'ipotesi (risk) e va solo rilevata, quindi autovalutazione."
+      confidence: inferred
+      awaiting: instructional-designer
+    - decision: "Le domande di autovalutazione (item-05, 08, 09, 10) non hanno risposta corretta e non producono punteggio. Le 6 domande di conoscenza usano match_correct."
+      rationale: "Il quiz non è punitivo (curriculum notes). BSL-IT-BG e BSL-DOCKER-PRIOR sono ipotesi sul background, non conoscenze verificabili con una risposta giusta. Il punteggio totale copre solo BSL-SHELL e BSL-PC-USE."
+      confidence: inferred
+      awaiting: instructional-designer
+    - decision: "Le 6 domande di conoscenza includono l'opzione 'Non lo so', fixed=true (resta ultima anche con shuffle), punteggio 0 come una risposta errata."
+      rationale: "Separa una lacuna onesta da un tentativo a caso, anche se la spec la prevede di norma per il kind feedback. Utile qui per non spingere a indovinare. Distinguibile in revisione perché ha identifier choice-dk."
+      confidence: invented
+      awaiting: instructional-designer
+    - decision: "Nessuna domanda su processi, reti, indirizzi IP, porte."
+      rationale: "LOGISTICS e BSL-PC-USE li escludono dai prerequisiti: sono contenuto del corso."
+      confidence: stated
+      awaiting: instructional-designer
+    - decision: "shuffle=true sull'ordine delle domande (default), nessuna soglia di superamento definita."
+      rationale: "Non c'è un criterio di ammissione: lo scopo è far emergere i livelli misti, non filtrare l'accesso (curriculum notes)."
+      confidence: inferred
+      awaiting: instructional-designer
+    - decision: "Il testo usa 'riga di comando' e 'terminale' come sinonimi; 'container' non tradotto; 'cartella' e 'file' in italiano."
+      rationale: "Applica EDITORIAL_GUIDELINES (terminologia)."
+      confidence: stated
+      awaiting: instructional-designer
+    - decision: "Risposte dei distrattori e l'equivalente Windows `dir` (item-04) non sono in nessuno store."
+      rationale: "Derivati da conoscenza generale per rendere plausibili le scelte; da rivedere da un umano."
+      confidence: invented
+      awaiting: instructional-designer
+  -->
+  <qti-test-part identifier="testPart-1" navigation-mode="linear" submission-mode="individual">
+    <qti-assessment-section identifier="section-1" title="Quiz di ingresso">
+      <qti-ordering shuffle="true"/>
+      <qti-assessment-item-ref identifier="item-01" href="items/item-01.xml"/>
+      <qti-assessment-item-ref identifier="item-02" href="items/item-02.xml"/>
+      <qti-assessment-item-ref identifier="item-03" href="items/item-03.xml"/>
+      <qti-assessment-item-ref identifier="item-04" href="items/item-04.xml"/>
+      <qti-assessment-item-ref identifier="item-05" href="items/item-05.xml"/>
+      <qti-assessment-item-ref identifier="item-06" href="items/item-06.xml"/>
+      <qti-assessment-item-ref identifier="item-07" href="items/item-07.xml"/>
+      <qti-assessment-item-ref identifier="item-08" href="items/item-08.xml"/>
+      <qti-assessment-item-ref identifier="item-09" href="items/item-09.xml"/>
+      <qti-assessment-item-ref identifier="item-10" href="items/item-10.xml"/>
+    </qti-assessment-section>
+  </qti-test-part>
+</qti-assessment-test>

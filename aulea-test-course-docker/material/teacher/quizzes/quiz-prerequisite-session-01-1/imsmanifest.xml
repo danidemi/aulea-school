@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest xmlns="http://www.imsglobal.org/xsd/imscp_v1p1" identifier="manifest-quiz-prerequisite-session-01-1">
+  <metadata>
+    <schema>QTI Package</schema>
+    <schemaversion>3.0.0</schemaversion>
+  </metadata>
+  <organizations/>
+  <resources>
+    <resource identifier="res-test" type="imsqti_test_xmlv3p0" href="test.xml">
+      <metadata><schema>QTI Test</schema><schemaversion>3.0.0</schemaversion><status>draft</status></metadata>
+      <file href="test.xml"/>
+      <dependency identifierref="res-item-01"/>
+      <dependency identifierref="res-item-02"/>
+      <dependency identifierref="res-item-03"/>
+      <dependency identifierref="res-item-04"/>
+      <dependency identifierref="res-item-05"/>
+      <dependency identifierref="res-item-06"/>
+      <dependency identifierref="res-item-07"/>
+      <dependency identifierref="res-item-08"/>
+      <dependency identifierref="res-item-09"/>
+      <dependency identifierref="res-item-10"/>
+    </resource>
+    <resource identifier="res-item-01" type="imsqti_item_xmlv3p0" href="items/item-01.xml">
+      <metadata><schema>QTI Item</schema><schemaversion>3.0.0</schemaversion><status>draft</status></metadata>
+      <file href="items/item-01.xml"/>
+    </resource>
+    <resource identifier="res-item-02" type="imsqti_item_xmlv3p0" href="items/item-02.xml">
+      <metadata><schema>QTI Item</schema><schemaversion>3.0.0</schemaversion><status>draft</status></metadata>
+      <file href="items/item-02.xml"/>
+    </resource>
+    <resource identifier="res-item-03" type="imsqti_item_xmlv3p0" href="items/item-03.xml">
+      <metadata><schema>QTI Item</schema><schemaversion>3.0.0</schemaversion><status>draft</status></metadata>
+      <file href="items/item-03.xml"/>
+    </resource>
+    <resource identifier="res-item-04" type="imsqti_item_xmlv3p0" href="items/item-04.xml">
+      <metadata><schema>QTI Item</schema><schemaversion>3.0.0</schemaversion><status>draft</status></metadata>
+      <file href="items/item-04.xml"/>
+    </resource>
+    <resource identifier="res-item-05" type="imsqti_item_xmlv3p0" href="items/item-05.xml">
+      <metadata><schema>QTI Item</schema><schemaversion>3.0.0</schemaversion><status>draft</status></metadata>
+      <file href="items/item-05.xml"/>
+    </resource>
+    <resource identifier="res-item-06" type="imsqti_item_xmlv3p0" href="items/item-06.xml">
+      <metadata><schema>QTI Item</schema><schemaversion>3.0.0</schemaversion><status>draft</status></metadata>
+      <file href="items/item-06.xml"/>
+    </resource>
+    <resource identifier="res-item-07" type="imsqti_item_xmlv3p0" href="items/item-07.xml">
+      <metadata><schema>QTI Item</schema><schemaversion>3.0.0</schemaversion><status>draft</status></metadata>
+      <file href="items/item-07.xml"/>
+    </resource>
+    <resource identifier="res-item-08" type="imsqti_item_xmlv3p0" href="items/item-08.xml">
+      <metadata><schema>QTI Item</schema><schemaversion>3.0.0</schemaversion><status>draft</status></metadata>
+      <file href="items/item-08.xml"/>
+    </resource>
+    <resource identifier="res-item-09" type="imsqti_item_xmlv3p0" href="items/item-09.xml">
+      <metadata><schema>QTI Item</schema><schemaversion>3.0.0</schemaversion><status>draft</status></metadata>
+      <file href="items/item-09.xml"/>
+    </resource>
+    <resource identifier="res-item-10" type="imsqti_item_xmlv3p0" href="items/item-10.xml">
+      <metadata><schema>QTI Item</schema><schemaversion>3.0.0</schemaversion><status>draft</status></metadata>
+      <file href="items/item-10.xml"/>
+    </resource>
+  </resources>
+</manifest>

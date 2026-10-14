@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<qti-assessment-item xmlns="http://www.imsglobal.org/xsd/imsqtiasi_v3p0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqtiasi_v3p0 https://purl.imsglobal.org/spec/qti/v3p0/schema/xsd/imsqti_asiv3p0p1_v1p0.xsd" identifier="item-04" title="Equivalente di ls su Windows" adaptive="false" time-dependent="false" xml:lang="it">
+  <!-- node_ref: BSL-SHELL
+       item: curriculum session 1, sequence 1
+       type: knowledge check (scored)
+       provenance: inferred — BSL-SHELL dice "ls, cd ed equivalenti"; LOGISTICS indica laptop prevalentemente Windows; `dir` come equivalente non è scritto in nessuno store [risk] -->
+  <qti-response-declaration identifier="RESPONSE" cardinality="single" base-type="identifier">
+    <qti-correct-response>
+      <qti-value>choice-a</qti-value>
+    </qti-correct-response>
+  </qti-response-declaration>
+  <qti-outcome-declaration identifier="SCORE" cardinality="single" base-type="float"/>
+  <qti-item-body>
+    <qti-choice-interaction response-identifier="RESPONSE" shuffle="true" max-choices="1">
+      <qti-prompt>Su Windows (Prompt dei comandi) c'è un comando che fa una cosa simile a <code>ls</code>. Quale?</qti-prompt>
+      <qti-simple-choice identifier="choice-a">dir</qti-simple-choice>
+      <qti-simple-choice identifier="choice-b">cd</qti-simple-choice>
+      <qti-simple-choice identifier="choice-c">list-off</qti-simple-choice>
+      <qti-simple-choice identifier="choice-d">exit</qti-simple-choice>
+      <qti-simple-choice identifier="choice-dk" fixed="true">Non lo so</qti-simple-choice>
+    </qti-choice-interaction>
+  </qti-item-body>
+  <qti-response-processing template="https://purl.imsglobal.org/spec/qti/v3p0/rptemplates/match_correct"/>
+</qti-assessment-item>

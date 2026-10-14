@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<qti-assessment-item xmlns="http://www.imsglobal.org/xsd/imsqtiasi_v3p0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqtiasi_v3p0 https://purl.imsglobal.org/spec/qti/v3p0/schema/xsd/imsqti_asiv3p0p1_v1p0.xsd" identifier="item-07" title="Programma in esecuzione" adaptive="false" time-dependent="false" xml:lang="it">
+  <!-- node_ref: BSL-PC-USE
+       item: curriculum session 1, sequence 1
+       type: knowledge check (scored)
+       provenance: inferred — BSL-PC-USE cita "programma in esecuzione"; domanda volutamente informale, non tocca il modello dei processi (escluso dal nodo) -->
+  <qti-response-declaration identifier="RESPONSE" cardinality="single" base-type="identifier">
+    <qti-correct-response>
+      <qti-value>choice-a</qti-value>
+    </qti-correct-response>
+  </qti-response-declaration>
+  <qti-outcome-declaration identifier="SCORE" cardinality="single" base-type="float"/>
+  <qti-item-body>
+    <qti-choice-interaction response-identifier="RESPONSE" shuffle="true" max-choices="1">
+      <qti-prompt>Quale frase descrive un programma <em>in esecuzione</em>?</qti-prompt>
+      <qti-simple-choice identifier="choice-a">Un programma che sta funzionando in questo momento sul computer</qti-simple-choice>
+      <qti-simple-choice identifier="choice-b">Un file di programma salvato nella cartella Download e mai aperto</qti-simple-choice>
+      <qti-simple-choice identifier="choice-c">Un programma che è stato disinstallato</qti-simple-choice>
+      <qti-simple-choice identifier="choice-d">Un programma copiato su una chiavetta USB</qti-simple-choice>
+      <qti-simple-choice identifier="choice-dk" fixed="true">Non lo so</qti-simple-choice>
+    </qti-choice-interaction>
+  </qti-item-body>
+  <qti-response-processing template="https://purl.imsglobal.org/spec/qti/v3p0/rptemplates/match_correct"/>
+</qti-assessment-item>
