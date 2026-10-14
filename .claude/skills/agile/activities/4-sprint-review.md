@@ -4,6 +4,8 @@ Goal: get the human's approval on what was built, then gather what comes next.
 
 ## Sign-off
 
+Read `references/do_and_donts.md` first and check each PBI against it before asking for approval.
+
 When no PBIs remain to develop, or the human says the sprint is done, ask for approval on each
 PBI:
 

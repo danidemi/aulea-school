@@ -1,16 +1,16 @@
-ID: SOCIAL-LOGIN
+ID: FAVICONS
 
 Status: DRAFT
 
-Priority: 
+Priority: Normal
 
 
 As:
-`unregistered user`
+`website user`
 
 I want to:
-log in with my google accounts
+see the right kind of favicon associated to the web site suited for my OS / browser / device (i.e. classic favico for old browser, svg favicon for modern ones, etc...)
 
 So that:
-I can use the system without explicitly signing up with an email based account.
+I can immediately recognize the website.
 

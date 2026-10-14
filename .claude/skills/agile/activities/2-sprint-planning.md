@@ -4,6 +4,10 @@ Goal: decide with the human which PBIs to work on, then plan how each will be im
 
 Use the canonical terms from `references/ubiquitous_language.md` in plans and ADRs.
 
+Read `references/do_and_donts.md` first and obey it. For each PBI that introduces a UX pattern
+(table, destructive action, dialog, header, form), grep every screen for the same pattern and
+state in the plan whether the PBI covers them or why not.
+
 ## Selecting PBIs
 
 - Prefer the smallest possible subset. A single, complex PBI is a perfectly good sprint.

@@ -248,6 +248,7 @@ function lazySessionRepository(): SessionRepository {
     findByIdForTenant: (sessionId, tenantId) => resolve().findByIdForTenant(sessionId, tenantId),
     findById: (sessionId) => resolve().findById(sessionId),
     listForQuiz: (quizId, tenantId) => resolve().listForQuiz(quizId, tenantId),
+    deleteForQuiz: (quizId, tenantId, sessionIds, options) => resolve().deleteForQuiz(quizId, tenantId, sessionIds, options),
   }
 }
 

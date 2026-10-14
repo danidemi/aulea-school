@@ -192,12 +192,20 @@ export function createFakeQuizRepository(
  * `22P02` shape for a non-UUID-shaped `quizId` or `sessionId`, so a test
  * actually exercises this router's malformed-id guards.
  */
+export interface SessionCascade {
+  countAnswers(sessionIds: string[]): number
+  remove(sessionIds: string[]): void
+}
+
 export function createFakeSessionRepository(
   quizzes: QuizRepository & { rows: (Quiz & { courseId: string })[] },
   courses: CourseRepository & { rows: (Course & { tenantId: string })[] },
-): SessionRepository & { rows: QuizSession[] } {
+): SessionRepository & { rows: QuizSession[]; cascade: SessionCascade } {
   const rows: QuizSession[] = []
   let nextId = 1
+  // SESSION-DELETE-001: the connections/answers fakes live elsewhere and
+  // are built on top of this one, so a test wires them in here.
+  const cascade: SessionCascade = { countAnswers: () => 0, remove: () => {} }
 
   function quizBelongsToTenant(quizId: string, tenantId: string): boolean {
     const quiz = quizzes.rows.find((row) => row.id === quizId)
@@ -215,6 +223,7 @@ export function createFakeSessionRepository(
 
   return {
     rows,
+    cascade,
     async createForQuiz(quizId: string, tenantId: string) {
       throwIfNotUuidShaped(quizId)
       if (!quizBelongsToTenant(quizId, tenantId)) return null
@@ -264,6 +273,20 @@ export function createFakeSessionRepository(
       throwIfNotUuidShaped(quizId)
       if (!quizBelongsToTenant(quizId, tenantId)) return null
       return rows.filter((row) => row.quizId === quizId).sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+    },
+    async deleteForQuiz(quizId: string, tenantId: string, sessionIds: string[], options: { dryRun: boolean; isRunning: (session: QuizSession) => boolean }) {
+      throwIfNotUuidShaped(quizId)
+      sessionIds.forEach(throwIfNotUuidShaped)
+      const ids = [...new Set(sessionIds)]
+      const found = ids.map((id) => rows.find((row) => row.id === id && row.quizId === quizId && quizBelongsToTenant(quizId, tenantId)))
+      if (found.some((row) => !row)) return { outcome: 'not_found' as const }
+      if (found.some((row) => options.isRunning(row!))) return { outcome: 'running' as const }
+      const result = { outcome: 'ok' as const, sessionCount: ids.length, answerCount: cascade.countAnswers(ids) }
+      if (!options.dryRun) {
+        cascade.remove(ids)
+        for (const id of ids) rows.splice(rows.findIndex((row) => row.id === id), 1)
+      }
+      return result
     },
   }
 }

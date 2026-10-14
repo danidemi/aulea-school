@@ -221,6 +221,47 @@ export function createQuizSessionsRouter(
     }
   })
 
+  // SESSION-DELETE-001: all-or-nothing hard delete of several sessions of
+  // one quiz. `dryRun: true` only reports what would be removed, to feed
+  // the confirmation dialog.
+  router.post('/api/quizzes/:quizId/sessions/delete', sessionMiddleware, async (req, res) => {
+    const tenantId = requireTenant(req, res)
+    if (!tenantId) return
+    const { sessionIds, dryRun } = req.body ?? {}
+    if (
+      !Array.isArray(sessionIds) ||
+      sessionIds.length === 0 ||
+      !sessionIds.every((id) => typeof id === 'string') ||
+      (dryRun !== undefined && typeof dryRun !== 'boolean')
+    ) {
+      res.status(400).json({ error: 'invalid_session_ids' })
+      return
+    }
+    try {
+      const now = new Date()
+      const result = await sessions.deleteForQuiz(req.params.quizId, tenantId, sessionIds, {
+        dryRun: dryRun === true,
+        isRunning: (session) => deriveStatus(session, now) === 'running',
+      })
+      if (result.outcome === 'not_found') {
+        res.status(404).json({ error: 'session_not_found' })
+        return
+      }
+      if (result.outcome === 'running') {
+        res.status(409).json({ error: 'session_running' })
+        return
+      }
+      res.status(200).json({ sessionCount: result.sessionCount, answerCount: result.answerCount })
+    } catch (err) {
+      if (isInvalidIdError(err)) {
+        res.status(404).json({ error: 'session_not_found' })
+        return
+      }
+      console.error('delete quiz sessions failed:', err)
+      res.status(500).json({ error: 'internal_error' })
+    }
+  })
+
   router.post('/api/quiz-sessions/:sessionId/start', sessionMiddleware, async (req, res) => {
     const tenantId = requireTenant(req, res)
     if (!tenantId) return

@@ -53,7 +53,7 @@ export function createSignupRouter(
       return
     }
 
-    const { email, password } = req.body ?? {}
+    const { email, password, passwordConfirmation } = req.body ?? {}
 
     if (!isValidEmail(email)) {
       res.status(400).json({ error: 'invalid_email' })
@@ -62,6 +62,12 @@ export function createSignupRouter(
 
     if (!isValidPassword(password)) {
       res.status(400).json({ error: 'password_too_short' })
+      return
+    }
+
+    // SIGNUP-002: checked after the length rule, before hashing/creating.
+    if (passwordConfirmation !== password) {
+      res.status(400).json({ error: 'password_mismatch' })
       return
     }
 
@@ -86,7 +92,7 @@ export function createSignupRouter(
   })
 
   router.post('/api/signup', async (req, res) => {
-    const { email, password } = req.body ?? {}
+    const { email, password, passwordConfirmation } = req.body ?? {}
 
     if (!isValidEmail(email)) {
       res.status(400).json({ error: 'invalid_email' })
@@ -95,6 +101,12 @@ export function createSignupRouter(
 
     if (!isValidPassword(password)) {
       res.status(400).json({ error: 'password_too_short' })
+      return
+    }
+
+    // SIGNUP-002: checked after the length rule, before hashing/creating.
+    if (passwordConfirmation !== password) {
+      res.status(400).json({ error: 'password_mismatch' })
       return
     }
 

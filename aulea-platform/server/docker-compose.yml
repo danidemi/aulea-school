@@ -3,15 +3,15 @@ services:
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_USER: aulea_platform
-      POSTGRES_PASSWORD: aulea_platform
-      POSTGRES_DB: aulea_platform
+      POSTGRES_USER: learning_platform
+      POSTGRES_PASSWORD: learning_platform
+      POSTGRES_DB: learning_platform
     ports:
       - '5432:5432'
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U aulea_platform']
+      test: ['CMD-SHELL', 'pg_isready -U learning_platform']
       interval: 5s
       timeout: 5s
       retries: 5

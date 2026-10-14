@@ -34,6 +34,18 @@ function createTestApp() {
   const quizSessions = createFakeSessionRepository(quizzes, courses)
   const quizSessionConnections = createFakeConnectionRepository(quizSessions)
   const quizSessionAnswers = createFakeQuizSessionAnswerRepository()
+  // SESSION-DELETE-001: lets the fake session repository cascade like the real one.
+  quizSessions.cascade.countAnswers = (sessionIds) =>
+    quizSessionAnswers.rows.filter((a) => quizSessionConnections.rows.some((c) => c.id === a.connectionId && sessionIds.includes(c.sessionId))).length
+  quizSessions.cascade.remove = (sessionIds) => {
+    const connectionIds = quizSessionConnections.rows.filter((c) => sessionIds.includes(c.sessionId)).map((c) => c.id)
+    for (let i = quizSessionAnswers.rows.length - 1; i >= 0; i--) {
+      if (connectionIds.includes(quizSessionAnswers.rows[i].connectionId)) quizSessionAnswers.rows.splice(i, 1)
+    }
+    for (let i = quizSessionConnections.rows.length - 1; i >= 0; i--) {
+      if (sessionIds.includes(quizSessionConnections.rows[i].sessionId)) quizSessionConnections.rows.splice(i, 1)
+    }
+  }
   const app = createApp({ users, tenants, courses, quizzes, quizSessions, quizSessionConnections, quizSessionAnswers, sessionMiddleware: createTestSessionMiddleware() })
   return { app, users, courses, quizzes, quizSessions, quizSessionConnections, quizSessionAnswers }
 }
@@ -305,6 +317,123 @@ describe('GET /api/quizzes/:quizId/sessions (QUIZ-SESSION-HISTORY-001)', () => {
     const response = await agent.get('/api/quizzes/does-not-exist/sessions')
 
     expect(response.status).toBe(404)
+  })
+})
+
+describe('POST /api/quizzes/:quizId/sessions/delete (SESSION-DELETE-001)', () => {
+  async function setupWithAnswers() {
+    const ctx = createTestApp()
+    const agent = await signInAgent(ctx.users, ctx.app, 'trainer@example.com')
+    const { quizId } = await createCourseAndQuiz(agent)
+    const first = (await agent.post(`/api/quizzes/${quizId}/sessions`)).body.id as string
+    const second = (await agent.post(`/api/quizzes/${quizId}/sessions`)).body.id as string
+    const connection = (await request(ctx.app).post(`/api/quiz-sessions/${first}/connections`)).body.id as string
+    for (const itemIdentifier of ['q1', 'q2']) {
+      await ctx.quizSessionAnswers.create({ connectionId: connection, itemIdentifier, itemPath: 'quiz.xml', responses: null, gradingStatus: 'ungraded', maxScore: 1 })
+    }
+    return { ...ctx, agent, quizId, first, second }
+  }
+
+  it('returns 401 when not signed in', async () => {
+    // given: no session / when: deleting / then: 401
+    const { app } = createTestApp()
+    const response = await request(app).post('/api/quizzes/some-id/sessions/delete').send({ sessionIds: ['x'] })
+    expect(response.status).toBe(401)
+  })
+
+  it('returns 400 for a missing or malformed sessionIds list', async () => {
+    // given: a signed-in trainer with a quiz
+    const { app, users } = createTestApp()
+    const agent = await signInAgent(users, app, 'trainer@example.com')
+    const { quizId } = await createCourseAndQuiz(agent)
+
+    // when: sending no ids, an empty list, and non-string ids
+    const responses = await Promise.all([{}, { sessionIds: [] }, { sessionIds: [1] }].map((body) => agent.post(`/api/quizzes/${quizId}/sessions/delete`).send(body)))
+
+    // then: all rejected
+    expect(responses.map((r) => r.status)).toEqual([400, 400, 400])
+  })
+
+  it('dry run reports session and answer counts and deletes nothing', async () => {
+    // given: two sessions, the first with one connection and two answers
+    const { agent, quizId, first, second, quizSessions, quizSessionAnswers } = await setupWithAnswers()
+
+    // when: a dry run over both
+    const response = await agent.post(`/api/quizzes/${quizId}/sessions/delete`).send({ sessionIds: [first, second], dryRun: true })
+
+    // then: counts are reported and nothing is removed
+    expect(response.status).toBe(200)
+    expect(response.body).toEqual({ sessionCount: 2, answerCount: 2 })
+    expect(quizSessions.rows).toHaveLength(2)
+    expect(quizSessionAnswers.rows).toHaveLength(2)
+  })
+
+  it('deletes the sessions with their connections and answers, leaving others', async () => {
+    // given: two sessions, the first with a connection and answers
+    const { agent, quizId, first, second, quizSessions, quizSessionConnections, quizSessionAnswers } = await setupWithAnswers()
+
+    // when: deleting only the first
+    const response = await agent.post(`/api/quizzes/${quizId}/sessions/delete`).send({ sessionIds: [first] })
+
+    // then: it and its dependents are gone, the second remains
+    expect(response.status).toBe(200)
+    expect(response.body).toEqual({ sessionCount: 1, answerCount: 2 })
+    expect(quizSessions.rows.map((r) => r.id)).toEqual([second])
+    expect(quizSessionConnections.rows).toHaveLength(0)
+    expect(quizSessionAnswers.rows).toHaveLength(0)
+  })
+
+  it('rejects with 409 and deletes nothing when any selected session is running', async () => {
+    // given: one closed session and one running session
+    const { agent, quizId, first, second, quizSessions } = await setupWithAnswers()
+    await agent.post(`/api/quiz-sessions/${second}/start`).send({})
+
+    // when: deleting both
+    const response = await agent.post(`/api/quizzes/${quizId}/sessions/delete`).send({ sessionIds: [first, second] })
+
+    // then: all-or-nothing
+    expect(response.status).toBe(409)
+    expect(response.body).toEqual({ error: 'session_running' })
+    expect(quizSessions.rows).toHaveLength(2)
+  })
+
+  it('deletes a stopped session', async () => {
+    // given: a started then stopped session
+    const { agent, quizId, second, quizSessions } = await setupWithAnswers()
+    await agent.post(`/api/quiz-sessions/${second}/start`).send({})
+    await agent.post(`/api/quiz-sessions/${second}/stop`)
+
+    // when: deleting it
+    const response = await agent.post(`/api/quizzes/${quizId}/sessions/delete`).send({ sessionIds: [second] })
+
+    // then: it is removed
+    expect(response.status).toBe(200)
+    expect(quizSessions.rows.map((r) => r.id)).not.toContain(second)
+  })
+
+  it('returns 404 and deletes nothing when a session belongs to another tenant', async () => {
+    // given: trainer A's sessions and a signed-in trainer B
+    const { app, users, quizId, first, quizSessions } = await setupWithAnswers()
+    const agentB = await signInAgent(users, app, 'trainer-b@example.com')
+
+    // when: B tries to delete A's session through A's quiz id
+    const response = await agentB.post(`/api/quizzes/${quizId}/sessions/delete`).send({ sessionIds: [first] })
+
+    // then: 404 and nothing deleted
+    expect(response.status).toBe(404)
+    expect(quizSessions.rows).toHaveLength(2)
+  })
+
+  it('returns 404 and deletes nothing when one id is unknown or malformed', async () => {
+    // given: a valid session and an unknown one
+    const { agent, quizId, first, quizSessions } = await setupWithAnswers()
+
+    // when: deleting the valid id together with a malformed one
+    const response = await agent.post(`/api/quizzes/${quizId}/sessions/delete`).send({ sessionIds: [first, 'nope'] })
+
+    // then: 404, nothing deleted
+    expect(response.status).toBe(404)
+    expect(quizSessions.rows).toHaveLength(2)
   })
 })
 

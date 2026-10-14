@@ -1,6 +1,6 @@
-import { and, desc, eq } from 'drizzle-orm'
+import { and, desc, eq, inArray, sql } from 'drizzle-orm'
 import { createDb } from './client.js'
-import { quizSessions, quizzes, courses } from './schema.js'
+import { quizSessions, quizSessionConnections, quizSessionAnswers, quizzes, courses } from './schema.js'
 
 /**
  * Raw persisted shape — no derived `status` here (see
@@ -52,7 +52,23 @@ export interface SessionRepository {
   // repository — an empty array means the quiz exists but has no sessions
   // yet.
   listForQuiz(quizId: string, tenantId: string): Promise<QuizSession[] | null>
+  // SESSION-DELETE-001: all-or-nothing hard delete of several sessions of
+  // one quiz (and their connections and answers). `not_found`: some id is
+  // not a session of this quiz in this tenant. `running`: some session is
+  // running per `isRunning`, checked under a row lock in the same
+  // transaction as the delete. `dryRun` only reports the counts.
+  deleteForQuiz(
+    quizId: string,
+    tenantId: string,
+    sessionIds: string[],
+    options: { dryRun: boolean; isRunning: (session: QuizSession) => boolean },
+  ): Promise<DeleteSessionsResult>
 }
+
+export type DeleteSessionsResult =
+  | { outcome: 'ok'; sessionCount: number; answerCount: number }
+  | { outcome: 'not_found' }
+  | { outcome: 'running' }
 
 const SELECT_COLUMNS = {
   id: quizSessions.id,
@@ -134,6 +150,37 @@ export function createSessionRepository(databaseUrl: string): SessionRepository 
     async listForQuiz(quizId, tenantId) {
       if (!(await quizBelongsToTenant(quizId, tenantId))) return null
       return db.select(SELECT_COLUMNS).from(quizSessions).where(eq(quizSessions.quizId, quizId)).orderBy(desc(quizSessions.createdAt))
+    },
+
+    async deleteForQuiz(quizId, tenantId, sessionIds, { dryRun, isRunning }) {
+      const ids = [...new Set(sessionIds)]
+      return db.transaction(async (tx) => {
+        const found = await tx
+          .select(SELECT_COLUMNS)
+          .from(quizSessions)
+          .innerJoin(quizzes, eq(quizSessions.quizId, quizzes.id))
+          .innerJoin(courses, eq(quizzes.courseId, courses.id))
+          .where(and(eq(quizSessions.quizId, quizId), eq(courses.tenantId, tenantId), inArray(quizSessions.id, ids)))
+          .for('update', { of: quizSessions })
+        if (found.length !== ids.length) return { outcome: 'not_found' as const }
+        if (found.some((row) => isRunning(row))) return { outcome: 'running' as const }
+
+        const connectionIds = tx
+          .select({ id: quizSessionConnections.id })
+          .from(quizSessionConnections)
+          .where(inArray(quizSessionConnections.sessionId, ids))
+        const [{ count }] = await tx
+          .select({ count: sql<number>`count(*)::int` })
+          .from(quizSessionAnswers)
+          .where(inArray(quizSessionAnswers.connectionId, connectionIds))
+        const result = { outcome: 'ok' as const, sessionCount: ids.length, answerCount: count }
+        if (dryRun) return result
+
+        await tx.delete(quizSessionAnswers).where(inArray(quizSessionAnswers.connectionId, connectionIds))
+        await tx.delete(quizSessionConnections).where(inArray(quizSessionConnections.sessionId, ids))
+        await tx.delete(quizSessions).where(inArray(quizSessions.id, ids))
+        return result
+      })
     },
   }
 }

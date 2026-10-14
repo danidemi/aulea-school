@@ -112,7 +112,7 @@ describe('POST /api/signup/expedite (SIGNUP-EXPEDITE-001)', () => {
     // when: signing up
     const response = await request(app)
       .post('/api/signup/expedite')
-      .send({ email: 'dev@example.com', password: 'longenough' })
+      .send({ email: 'dev@example.com', password: 'longenough', passwordConfirmation: 'longenough' })
 
     // then: the account is created
     expect(response.status).toBe(201)
@@ -128,7 +128,7 @@ describe('POST /api/signup/expedite (SIGNUP-EXPEDITE-001)', () => {
     // when: signing up anyway
     const response = await request(app)
       .post('/api/signup/expedite')
-      .send({ email: 'dev@example.com', password: 'longenough' })
+      .send({ email: 'dev@example.com', password: 'longenough', passwordConfirmation: 'longenough' })
 
     // then: it is rejected regardless of what the client sends
     expect(response.status).toBe(403)
@@ -139,16 +139,35 @@ describe('POST /api/signup/expedite (SIGNUP-EXPEDITE-001)', () => {
     // given: an email that already has an account
     const users = createFakeUserRepository()
     const app = createTestApp({ users })
-    await request(app).post('/api/signup/expedite').send({ email: 'dev@example.com', password: 'longenough' })
+    await request(app).post('/api/signup/expedite').send({ email: 'dev@example.com', password: 'longenough', passwordConfirmation: 'longenough' })
 
     // when: signing up again with the same email
     const response = await request(app)
       .post('/api/signup/expedite')
-      .send({ email: 'dev@example.com', password: 'anotherlongone' })
+      .send({ email: 'dev@example.com', password: 'anotherlongone', passwordConfirmation: 'anotherlongone' })
 
     // then: it is rejected as a duplicate
     expect(response.status).toBe(409)
     expect(response.body).toEqual({ error: 'email_taken' })
+  })
+
+  it('returns 400 password_mismatch and creates no account when the confirmation differs or is missing', async () => {
+    // given: no account exists yet
+    const users = createFakeUserRepository()
+    const app = createTestApp({ users })
+
+    // when: the confirmation differs, then is omitted
+    const differs = await request(app)
+      .post('/api/signup/expedite')
+      .send({ email: 'dev@example.com', password: 'longenough', passwordConfirmation: 'different1' })
+    const missing = await request(app).post('/api/signup/expedite').send({ email: 'dev@example.com', password: 'longenough' })
+
+    // then: both are rejected and nothing is stored
+    expect(differs.status).toBe(400)
+    expect(differs.body).toEqual({ error: 'password_mismatch' })
+    expect(missing.status).toBe(400)
+    expect(missing.body).toEqual({ error: 'password_mismatch' })
+    expect(users.rows).toHaveLength(0)
   })
 
   it('returns 400 when the password is shorter than 8 characters', async () => {
@@ -158,7 +177,7 @@ describe('POST /api/signup/expedite (SIGNUP-EXPEDITE-001)', () => {
     // when: signing up
     const response = await request(app)
       .post('/api/signup/expedite')
-      .send({ email: 'dev@example.com', password: 'short7x' })
+      .send({ email: 'dev@example.com', password: 'short7x', passwordConfirmation: 'short7x' })
 
     // then: it is rejected
     expect(response.status).toBe(400)
@@ -170,7 +189,7 @@ describe('POST /api/signup/expedite (SIGNUP-EXPEDITE-001)', () => {
     const app = createTestApp({ users: createFakeUserRepository() })
 
     // when: signing up
-    const response = await request(app).post('/api/signup/expedite').send({ password: 'longenough' })
+    const response = await request(app).post('/api/signup/expedite').send({ password: 'longenough', passwordConfirmation: 'longenough' })
 
     // then: it is rejected rather than reaching the insert
     expect(response.status).toBe(400)
@@ -223,7 +242,7 @@ describe('POST /api/signup (SIGN-UP-001)', () => {
     // when: signing up
     const response = await request(app)
       .post('/api/signup')
-      .send({ email: 'newuser@example.com', password: 'longenough' })
+      .send({ email: 'newuser@example.com', password: 'longenough', passwordConfirmation: 'longenough' })
 
     // then: the account is created, unconfirmed, no session started
     expect(response.status).toBe(201)
@@ -243,14 +262,33 @@ describe('POST /api/signup (SIGN-UP-001)', () => {
     // given: an email that already has an account
     const users = createFakeUserRepository()
     const app = createTestApp({ users })
-    await request(app).post('/api/signup').send({ email: 'dup@example.com', password: 'longenough' })
+    await request(app).post('/api/signup').send({ email: 'dup@example.com', password: 'longenough', passwordConfirmation: 'longenough' })
 
     // when: signing up again with the same email
-    const response = await request(app).post('/api/signup').send({ email: 'dup@example.com', password: 'anotherlongone' })
+    const response = await request(app).post('/api/signup').send({ email: 'dup@example.com', password: 'anotherlongone', passwordConfirmation: 'anotherlongone' })
 
     // then: it is rejected as a duplicate
     expect(response.status).toBe(409)
     expect(response.body).toEqual({ error: 'email_taken' })
+  })
+
+  it('returns 400 password_mismatch and creates no account when the confirmation differs or is missing', async () => {
+    // given: no account exists yet
+    const users = createFakeUserRepository()
+    const app = createTestApp({ users })
+
+    // when: the confirmation differs, then is omitted
+    const differs = await request(app)
+      .post('/api/signup')
+      .send({ email: 'dev@example.com', password: 'longenough', passwordConfirmation: 'different1' })
+    const missing = await request(app).post('/api/signup').send({ email: 'dev@example.com', password: 'longenough' })
+
+    // then: both are rejected and nothing is stored
+    expect(differs.status).toBe(400)
+    expect(differs.body).toEqual({ error: 'password_mismatch' })
+    expect(missing.status).toBe(400)
+    expect(missing.body).toEqual({ error: 'password_mismatch' })
+    expect(users.rows).toHaveLength(0)
   })
 
   it('returns 400 when the password is shorter than 8 characters', async () => {
@@ -258,7 +296,7 @@ describe('POST /api/signup (SIGN-UP-001)', () => {
     const app = createTestApp()
 
     // when: signing up
-    const response = await request(app).post('/api/signup').send({ email: 'dev@example.com', password: 'short7x' })
+    const response = await request(app).post('/api/signup').send({ email: 'dev@example.com', password: 'short7x', passwordConfirmation: 'short7x' })
 
     // then: it is rejected
     expect(response.status).toBe(400)
@@ -270,7 +308,7 @@ describe('POST /api/signup (SIGN-UP-001)', () => {
     const app = createTestApp()
 
     // when: signing up
-    const response = await request(app).post('/api/signup').send({ password: 'longenough' })
+    const response = await request(app).post('/api/signup').send({ password: 'longenough', passwordConfirmation: 'longenough' })
 
     // then: it is rejected rather than reaching the insert
     expect(response.status).toBe(400)
@@ -280,7 +318,7 @@ describe('POST /api/signup (SIGN-UP-001)', () => {
 
 describe('GET /api/confirm (SIGN-UP-001)', () => {
   async function signUp(app: ReturnType<typeof createTestApp>, email: string) {
-    await request(app).post('/api/signup').send({ email, password: 'longenough' })
+    await request(app).post('/api/signup').send({ email, password: 'longenough', passwordConfirmation: 'longenough' })
   }
 
   it('confirms the account and redirects to status=ok for a valid, unused token', async () => {

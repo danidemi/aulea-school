@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import AppHeader from './components/AppHeader'
 import Breadcrumb from './components/Breadcrumb'
+import { Button } from './components/ui/button'
+import { Checkbox } from './components/ui/checkbox'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle } from './components/ui/dialog'
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from './components/ui/table'
 import { useSignedInUser } from './lib/session'
 
@@ -26,6 +29,8 @@ function formatDateTime(iso: string) {
  * existing `QuizSessionMonitorPage` — no new per-session UI, no
  * editing/deleting past sessions, no cross-session aggregate reporting
  * (see the story's grooming notes for what's explicitly out of scope).
+ * SESSION-DELETE-001 adds a checkbox column and a "Delete selected"
+ * button; a `running` session cannot be selected.
  *
  * Reached from `QuizzesSection`'s new "Sessions" action per quiz row.
  */
@@ -34,6 +39,11 @@ function QuizSessionHistoryPage() {
   const { user, logout } = useSignedInUser()
   const [sessions, setSessions] = useState<QuizSessionSummary[] | null>(null)
   const [loadError, setLoadError] = useState(false)
+  const [selected, setSelected] = useState<string[]>([])
+  const [reloadCount, setReloadCount] = useState(0)
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const [counts, setCounts] = useState<{ sessionCount: number; answerCount: number } | null>(null)
+  const [deleteError, setDeleteError] = useState<string | null>(null)
 
   useEffect(() => {
     if (!quizId) return
@@ -51,7 +61,42 @@ function QuizSessionHistoryPage() {
     return () => {
       cancelled = true
     }
-  }, [quizId])
+  }, [quizId, reloadCount])
+
+  function toggle(sessionId: string, checked: boolean) {
+    setSelected((current) => (checked ? [...current, sessionId] : current.filter((id) => id !== sessionId)))
+  }
+
+  function postDelete(dryRun: boolean) {
+    return fetch(`/api/quizzes/${quizId}/sessions/delete`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionIds: selected, dryRun }),
+    })
+  }
+
+  async function openDeleteDialog() {
+    setDeleteError(null)
+    setCounts(null)
+    setDialogOpen(true)
+    const response = await postDelete(true)
+    if (response.status === 200) {
+      setCounts(await response.json())
+    } else {
+      setDeleteError('Could not prepare the deletion. Reload the page and try again.')
+    }
+  }
+
+  async function confirmDelete() {
+    const response = await postDelete(false)
+    if (response.status === 200) {
+      setDialogOpen(false)
+      setSelected([])
+      setReloadCount((n) => n + 1)
+    } else {
+      setDeleteError('Could not delete the selected sessions. Reload the page and try again.')
+    }
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-paper">
@@ -60,7 +105,14 @@ function QuizSessionHistoryPage() {
       <Breadcrumb />
 
       <main className="flex-1 px-6 py-section-gap">
-        <h1 className="mb-4 text-lg font-semibold text-ink">Sessions</h1>
+        <div className="mb-4 flex items-center justify-between">
+          <h1 className="text-lg font-semibold text-ink">Sessions</h1>
+          {user && sessions && sessions.length > 0 && (
+            <Button variant="outline" size="sm" disabled={selected.length === 0} onClick={openDeleteDialog}>
+              Delete selected
+            </Button>
+          )}
+        </div>
 
         {!user ? (
           <p className="text-ink/70">
@@ -79,6 +131,7 @@ function QuizSessionHistoryPage() {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead className="w-10" />
                 <TableHead>Status</TableHead>
                 <TableHead>Started</TableHead>
                 <TableHead>Stopped</TableHead>
@@ -88,6 +141,14 @@ function QuizSessionHistoryPage() {
             <TableBody>
               {sessions.map((session) => (
                 <TableRow key={session.id} className="cursor-pointer hover:bg-brass-50" onClick={() => window.location.assign(`/quiz-sessions/${session.id}`)}>
+                  <TableCell onClick={(event) => event.stopPropagation()}>
+                    <Checkbox
+                      aria-label={`Select session ${session.id}`}
+                      disabled={session.status === 'running'}
+                      checked={selected.includes(session.id)}
+                      onCheckedChange={(checked) => toggle(session.id, checked === true)}
+                    />
+                  </TableCell>
                   <TableCell className="text-ink">{session.status}</TableCell>
                   <TableCell className="text-ink/70">{session.startedAt ? formatDateTime(session.startedAt) : 'not started yet'}</TableCell>
                   <TableCell className="text-ink/70">{session.stoppedAt ? formatDateTime(session.stoppedAt) : '—'}</TableCell>
@@ -100,6 +161,26 @@ function QuizSessionHistoryPage() {
           </Table>
         )}
       </main>
+
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent>
+          <DialogTitle>Delete sessions</DialogTitle>
+          <DialogDescription>
+            {counts
+              ? `This permanently deletes ${counts.sessionCount} ${counts.sessionCount === 1 ? 'session' : 'sessions'} and ${counts.answerCount} ${counts.answerCount === 1 ? 'answer' : 'answers'} from all their connections. This cannot be undone.`
+              : deleteError ?? 'Counting what will be deleted…'}
+          </DialogDescription>
+          {counts && deleteError && <p className="mt-2 text-sm text-error">{deleteError}</p>}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button disabled={!counts} onClick={confirmDelete}>
+              Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

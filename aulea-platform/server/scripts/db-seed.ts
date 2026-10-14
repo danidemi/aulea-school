@@ -219,7 +219,7 @@ async function cleanupSeedData(db: ReturnType<typeof createDb>['db']) {
 
 async function signupExpedite(baseUrl: string, email: string, password: string) {
   const agent = new HttpAgent(baseUrl)
-  const result = await agent.post('/api/signup/expedite', { json: { email, password } })
+  const result = await agent.post('/api/signup/expedite', { json: { email, password, passwordConfirmation: password } })
   if (result.status === 201) return
   if (result.status === 409) {
     // Already exists — cleanupSeedData should have removed it, but
@@ -232,7 +232,7 @@ async function signupExpedite(baseUrl: string, email: string, password: string) 
 
 async function login(baseUrl: string, email: string, password: string): Promise<HttpAgent> {
   const agent = new HttpAgent(baseUrl)
-  expect(await agent.post('/api/login', { json: { email, password } }), 200, `login as ${email}`)
+  expect(await agent.post('/api/login', { json: { email, password, passwordConfirmation: password } }), 200, `login as ${email}`)
   return agent
 }
 

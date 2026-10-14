@@ -17,6 +17,8 @@ import AppHeader from './components/AppHeader'
 function SignUpPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [confirmTouched, setConfirmTouched] = useState(false)
   const [expediteEnabled, setExpediteEnabled] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
 
@@ -35,13 +37,18 @@ function SignUpPage() {
     }
   }, [])
 
+  const passwordsDiffer = password !== confirmPassword
+  const showMismatch = confirmTouched && passwordsDiffer
+
   async function handleSignUp(event: FormEvent) {
     event.preventDefault()
+    setConfirmTouched(true)
+    if (passwordsDiffer) return
     setMessage(null)
     const response = await fetch('/api/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password, passwordConfirmation: confirmPassword }),
     })
     const body = await response.json()
     if (response.status === 201) {
@@ -52,11 +59,13 @@ function SignUpPage() {
   }
 
   async function handleExpediteSignUp() {
+    setConfirmTouched(true)
+    if (passwordsDiffer) return
     setMessage(null)
     const response = await fetch('/api/signup/expedite', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password, passwordConfirmation: confirmPassword }),
     })
     const body = await response.json()
     if (response.status === 201) {
@@ -91,9 +100,28 @@ function SignUpPage() {
                 onChange={(event) => setPassword(event.target.value)}
               />
             </div>
-            <Button type="submit">Sign up</Button>
+            <div>
+              <Label htmlFor="signup-confirm-password">Confirm password</Label>
+              <Input
+                id="signup-confirm-password"
+                type="password"
+                value={confirmPassword}
+                aria-invalid={showMismatch}
+                aria-describedby={showMismatch ? 'signup-confirm-error' : undefined}
+                onChange={(event) => setConfirmPassword(event.target.value)}
+                onBlur={() => setConfirmTouched(true)}
+              />
+              {showMismatch && (
+                <p id="signup-confirm-error" role="alert" className="mt-1 text-sm text-red-600">
+                  Passwords do not match.
+                </p>
+              )}
+            </div>
+            <Button type="submit" disabled={passwordsDiffer}>
+              Sign up
+            </Button>
             {expediteEnabled && (
-              <Button type="button" variant="outline" onClick={handleExpediteSignUp}>
+              <Button type="button" variant="outline" disabled={passwordsDiffer} onClick={handleExpediteSignUp}>
                 Expedite sign up
               </Button>
             )}

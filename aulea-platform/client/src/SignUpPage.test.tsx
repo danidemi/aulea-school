@@ -62,7 +62,8 @@ describe('SignUpPage (SIGNUP-EXPEDITE-001)', () => {
 
     // then: the normal sign-up fields and submit are present regardless
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/password/i)).toBeInTheDocument()
+    expect(screen.getByLabelText('Password')).toBeInTheDocument()
+    expect(screen.getByLabelText('Confirm password')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /^sign up$/i })).toBeInTheDocument()
   })
 })
@@ -93,7 +94,8 @@ describe('SignUpPage (SIGN-UP-001)', () => {
 
     // when: filling in the form and submitting it
     fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'new@example.com' } })
-    fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'longenough' } })
+    fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'longenough' } })
+    fireEvent.change(screen.getByLabelText('Confirm password'), { target: { value: 'longenough' } })
     fireEvent.click(screen.getByRole('button', { name: /^sign up$/i }))
 
     // then: POST /api/signup was called and a confirmation message is shown
@@ -104,7 +106,7 @@ describe('SignUpPage (SIGN-UP-001)', () => {
       '/api/signup',
       expect.objectContaining({
         method: 'POST',
-        body: JSON.stringify({ email: 'new@example.com', password: 'longenough' }),
+        body: JSON.stringify({ email: 'new@example.com', password: 'longenough', passwordConfirmation: 'longenough' }),
       }),
     )
   })
@@ -124,12 +126,74 @@ describe('SignUpPage (SIGN-UP-001)', () => {
 
     // when: submitting the form
     fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'taken@example.com' } })
-    fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'longenough' } })
+    fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'longenough' } })
+    fireEvent.change(screen.getByLabelText('Confirm password'), { target: { value: 'longenough' } })
     fireEvent.click(screen.getByRole('button', { name: /^sign up$/i }))
 
     // then: the failure is shown
     await waitFor(() => {
       expect(screen.getByRole('status')).toHaveTextContent(/email_taken/i)
     })
+  })
+})
+
+// Covers SIGNUP-002's DoD (active_sprint/password-confirmation.md).
+
+describe('SignUpPage (SIGNUP-002)', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
+  function stubConfigOnly() {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => Promise.resolve({ json: () => Promise.resolve({ expediteSignupEnabled: false }) })),
+    )
+  }
+
+  it('shows an inline error and disables submit when the confirmation differs, on blur', () => {
+    // given: the page with a password typed
+    stubConfigOnly()
+    render(<SignUpPage />)
+    fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'longenough' } })
+
+    // when: a different confirmation is typed and the field loses focus
+    fireEvent.change(screen.getByLabelText('Confirm password'), { target: { value: 'different1' } })
+    fireEvent.blur(screen.getByLabelText('Confirm password'))
+
+    // then: the error shows and submit is disabled
+    expect(screen.getByRole('alert')).toHaveTextContent(/do not match/i)
+    expect(screen.getByRole('button', { name: /^sign up$/i })).toBeDisabled()
+  })
+
+  it('clears the error and re-enables submit once the values match', () => {
+    // given: a visible mismatch error
+    stubConfigOnly()
+    render(<SignUpPage />)
+    fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'longenough' } })
+    fireEvent.change(screen.getByLabelText('Confirm password'), { target: { value: 'different1' } })
+    fireEvent.blur(screen.getByLabelText('Confirm password'))
+
+    // when: the confirmation is corrected
+    fireEvent.change(screen.getByLabelText('Confirm password'), { target: { value: 'longenough' } })
+
+    // then: the error is gone and submit is enabled
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /^sign up$/i })).toBeEnabled()
+  })
+
+  it('does not call the sign-up API while the values differ', () => {
+    // given: mismatching values
+    stubConfigOnly()
+    render(<SignUpPage />)
+    fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'longenough' } })
+    fireEvent.change(screen.getByLabelText('Confirm password'), { target: { value: 'different1' } })
+
+    // when: submitting the form
+    fireEvent.submit(screen.getByRole('button', { name: /^sign up$/i }).closest('form')!)
+
+    // then: only the config fetch happened and the error is shown
+    expect(vi.mocked(fetch)).not.toHaveBeenCalledWith('/api/signup', expect.anything())
+    expect(screen.getByRole('alert')).toBeInTheDocument()
   })
 })

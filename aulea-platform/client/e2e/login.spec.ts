@@ -14,7 +14,8 @@ test('signs in from /login and lands on /courses (a bookmark to /login still wor
   await page.goto('/')
   await page.getByRole('link', { name: /sign up/i }).click()
   await page.getByLabel('Email').fill(email)
-  await page.getByLabel('Password').fill(password)
+  await page.getByLabel('Password', { exact: true }).fill(password)
+  await page.getByLabel('Confirm password').fill(password)
   await page.getByRole('button', { name: /expedite sign up/i }).click()
   await page.getByRole('status').waitFor()
 

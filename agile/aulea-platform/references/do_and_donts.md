@@ -152,3 +152,14 @@ Newest entries at the bottom.
   to the PBI file — explicit human ask this retro, echoing a gap flagged repeatedly in earlier
   sprints (`sprint_26_09_19_00_00`, `sprint_26_09_20_22_55`, `sprint_26_09_21_19_34`) that kept
   recurring because it was being treated as a GUI-only rule rather than a general one.
+
+## sprint_26_10_14_22_40
+
+* **DO** exercise a new feature end-to-end against real Postgres in an e2e spec and take the
+  screenshots from that run. SESSION-DELETE-001's row locks and cascade order are real SQL that
+  the DB-free fakes only mirror; the e2e run is what actually exercised them.
+* **DON'T** scope a PBI that introduces a UX pattern (table, destructive action, confirmation
+  dialog, sortable header) to one screen without grepping every other screen for the same pattern.
+  SESSION-DELETE-001 added a delete dialog while quiz delete in `QuizzesSection` still deletes with
+  no confirmation, and only one table has sortable headers. State in the PBI which screens are
+  covered and which are deferred (as separate PBIs).
