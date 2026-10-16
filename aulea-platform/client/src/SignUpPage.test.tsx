@@ -1,6 +1,15 @@
 import { describe, it, expect, vi, afterEach } from 'vitest'
 import { render, screen, waitFor, fireEvent } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
 import SignUpPage from './SignUpPage'
+
+function renderPage() {
+  return render(
+    <MemoryRouter>
+      <SignUpPage />
+    </MemoryRouter>,
+  )
+}
 
 // Covers SIGNUP-EXPEDITE-001's DoD (active_sprint/story_expedite_sign_up.md):
 // the expedite option is shown only once GET /api/config confirms the flag,
@@ -16,7 +25,7 @@ describe('SignUpPage (SIGNUP-EXPEDITE-001)', () => {
     vi.stubGlobal('fetch', vi.fn(() => new Promise(() => {})))
 
     // when: the signup page renders
-    render(<SignUpPage />)
+    renderPage()
 
     // then: the expedite option is not shown yet
     expect(screen.queryByRole('button', { name: /expedite sign up/i })).not.toBeInTheDocument()
@@ -30,7 +39,7 @@ describe('SignUpPage (SIGNUP-EXPEDITE-001)', () => {
     )
 
     // when: the signup page renders and the config fetch resolves
-    render(<SignUpPage />)
+    renderPage()
 
     // then: the expedite option appears
     await waitFor(() => {
@@ -46,7 +55,7 @@ describe('SignUpPage (SIGNUP-EXPEDITE-001)', () => {
     )
 
     // when: the signup page renders and the config fetch resolves
-    render(<SignUpPage />)
+    renderPage()
     await waitFor(() => expect(vi.mocked(fetch)).toHaveBeenCalled())
 
     // then: the expedite option stays absent
@@ -58,7 +67,7 @@ describe('SignUpPage (SIGNUP-EXPEDITE-001)', () => {
     vi.stubGlobal('fetch', vi.fn(() => new Promise(() => {})))
 
     // when: the signup page renders
-    render(<SignUpPage />)
+    renderPage()
 
     // then: the normal sign-up fields and submit are present regardless
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument()
@@ -90,7 +99,7 @@ describe('SignUpPage (SIGN-UP-001)', () => {
         })
       }),
     )
-    render(<SignUpPage />)
+    renderPage()
 
     // when: filling in the form and submitting it
     fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'new@example.com' } })
@@ -122,7 +131,7 @@ describe('SignUpPage (SIGN-UP-001)', () => {
         return Promise.resolve({ status: 409, json: () => Promise.resolve({ error: 'email_taken' }) })
       }),
     )
-    render(<SignUpPage />)
+    renderPage()
 
     // when: submitting the form
     fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'taken@example.com' } })
@@ -154,7 +163,7 @@ describe('SignUpPage (SIGNUP-002)', () => {
   it('shows an inline error and disables submit when the confirmation differs, on blur', () => {
     // given: the page with a password typed
     stubConfigOnly()
-    render(<SignUpPage />)
+    renderPage()
     fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'longenough' } })
 
     // when: a different confirmation is typed and the field loses focus
@@ -169,7 +178,7 @@ describe('SignUpPage (SIGNUP-002)', () => {
   it('clears the error and re-enables submit once the values match', () => {
     // given: a visible mismatch error
     stubConfigOnly()
-    render(<SignUpPage />)
+    renderPage()
     fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'longenough' } })
     fireEvent.change(screen.getByLabelText('Confirm password'), { target: { value: 'different1' } })
     fireEvent.blur(screen.getByLabelText('Confirm password'))
@@ -185,7 +194,7 @@ describe('SignUpPage (SIGNUP-002)', () => {
   it('does not call the sign-up API while the values differ', () => {
     // given: mismatching values
     stubConfigOnly()
-    render(<SignUpPage />)
+    renderPage()
     fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'longenough' } })
     fireEvent.change(screen.getByLabelText('Confirm password'), { target: { value: 'different1' } })
 
@@ -195,5 +204,106 @@ describe('SignUpPage (SIGNUP-002)', () => {
     // then: only the config fetch happened and the error is shown
     expect(vi.mocked(fetch)).not.toHaveBeenCalledWith('/api/signup', expect.anything())
     expect(screen.getByRole('alert')).toBeInTheDocument()
+  })
+})
+
+// Covers SIGNUP-CONFIRMATION-001's DoD (active_sprint/confirmation_page_after_signup.md):
+// a successful sign up replaces the form with a confirmation view.
+
+describe('SignUpPage (SIGNUP-CONFIRMATION-001)', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
+  function stubServer(signupStatus: number, signupBody: object) {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn((url: string) => {
+        if (url === '/api/config') {
+          return Promise.resolve({ json: () => Promise.resolve({ expediteSignupEnabled: true }) })
+        }
+        return Promise.resolve({ status: signupStatus, json: () => Promise.resolve(signupBody) })
+      }),
+    )
+  }
+
+  async function fillForm(email: string) {
+    await screen.findByRole('button', { name: /expedite sign up/i })
+    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: email } })
+    fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'longenough' } })
+    fireEvent.change(screen.getByLabelText('Confirm password'), { target: { value: 'longenough' } })
+  }
+
+  function expectFormGone() {
+    expect(screen.queryByLabelText(/email/i)).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('Password')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('Confirm password')).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /^sign up$/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /expedite sign up/i })).not.toBeInTheDocument()
+  }
+
+  it('replaces the form with "Check your email" after a 201 on sign up', async () => {
+    // given: the server accepts the sign up
+    stubServer(201, { id: '1', email: 'a@b.it' })
+    renderPage()
+    await fillForm('a@b.it')
+
+    // when: submitting the normal sign up
+    fireEvent.click(screen.getByRole('button', { name: /^sign up$/i }))
+
+    // then: the confirmation view shows the address, the 24 h note and the login link; no form remains
+    const status = await screen.findByRole('status')
+    expect(status).toHaveTextContent(/check your email/i)
+    expect(status).toHaveTextContent('a@b.it')
+    expect(status).toHaveTextContent(/24 hours/i)
+    expect(screen.getByRole('link', { name: /login/i })).toHaveAttribute('href', '/login')
+    expectFormGone()
+  })
+
+  it('replaces the form with "Account created" after a 201 on expedite sign up', async () => {
+    // given: the server accepts the expedite sign up
+    stubServer(201, { id: '1', email: 'a@b.it' })
+    renderPage()
+    await fillForm('a@b.it')
+
+    // when: using the expedite button
+    fireEvent.click(screen.getByRole('button', { name: /expedite sign up/i }))
+
+    // then: the view says "Account created", without the email note, and links to login
+    const status = await screen.findByRole('status')
+    expect(status).toHaveTextContent(/account created/i)
+    expect(status).not.toHaveTextContent(/check your email/i)
+    expect(status).not.toHaveTextContent(/24 hours/i)
+    expect(screen.getByRole('link', { name: /login/i })).toHaveAttribute('href', '/login')
+    expectFormGone()
+  })
+
+  it('keeps the form and shows the error after a 409', async () => {
+    // given: the email is already taken
+    stubServer(409, { error: 'email_taken' })
+    renderPage()
+    await fillForm('taken@b.it')
+
+    // when: submitting
+    fireEvent.click(screen.getByRole('button', { name: /^sign up$/i }))
+
+    // then: the error is shown and the form is still there
+    expect(await screen.findByRole('status')).toHaveTextContent(/email_taken/)
+    expect(screen.getByRole('button', { name: /^sign up$/i })).toBeInTheDocument()
+    expect(screen.queryByText(/check your email/i)).not.toBeInTheDocument()
+  })
+
+  it('keeps the form and shows the error after a 400', async () => {
+    // given: the server rejects the input
+    stubServer(400, { error: 'password_too_short' })
+    renderPage()
+    await fillForm('short@b.it')
+
+    // when: submitting
+    fireEvent.click(screen.getByRole('button', { name: /^sign up$/i }))
+
+    // then: the error is shown and the form is still there
+    expect(await screen.findByRole('status')).toHaveTextContent(/password_too_short/)
+    expect(screen.getByLabelText('Password')).toBeInTheDocument()
   })
 })

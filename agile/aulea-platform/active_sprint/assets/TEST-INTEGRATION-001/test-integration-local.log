@@ -1,0 +1,13 @@
+
+> aulea-platform-server@0.0.0 test:integration
+> vitest run --config vitest.integration.config.ts
+
+
+ RUN  v4.1.11 /home/user/prj/cdr/piattaforma-corsi/aulea-platform/server
+
+
+ Test Files  1 passed (1)
+      Tests  7 passed (7)
+   Start at  23:42:40
+   Duration  9.18s (transform 131ms, setup 0ms, import 1.13s, tests 7.89s, environment 0ms)
+

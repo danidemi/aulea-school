@@ -9,6 +9,7 @@
     "postbuild": "tsx scripts/write-version.ts",
     "start": "node dist/index.js",
     "test": "vitest run",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
     "db:up": "docker compose up -d",
     "db:down": "docker compose down",
     "db:generate": "drizzle-kit generate",
@@ -32,6 +33,7 @@
     "sax": "^1.6.1"
   },
   "devDependencies": {
+    "@testcontainers/postgresql": "^12.2.1",
     "@types/adm-zip": "^0.5.8",
     "@types/connect-pg-simple": "^7.0.3",
     "@types/express": "^4.17.21",
@@ -44,6 +46,7 @@
     "@types/supertest": "^6.0.2",
     "drizzle-kit": "^0.31.10",
     "supertest": "^7.0.0",
+    "testcontainers": "^12.2.1",
     "tsx": "^4.16.5",
     "typescript": "^5.5.4",
     "vitest": "^4.1.11"

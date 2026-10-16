@@ -1,0 +1,13 @@
+
+> aulea-platform-server@0.0.0 test
+> vitest run
+
+
+ RUN  v4.1.11 /home/user/prj/cdr/piattaforma-corsi/aulea-platform/server
+
+
+ Test Files  14 passed (14)
+      Tests  230 passed (230)
+   Start at  23:42:50
+   Duration  17.09s (transform 3.05s, setup 0ms, import 19.51s, tests 26.86s, environment 4ms)
+

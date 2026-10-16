@@ -27,6 +27,8 @@ One-line entries. Long definitions live in `ul/<slug>.md`, linked from here.
 - **Quiz Take Page** (aka: quiz-taking page, take page) — the student-facing page for answering a
   quiz session's questions in sequence.
 - **Student** — a course participant who takes quizzes during a quiz session.
+- **Brand Block** — the large Wordmark with the Tagline under it, shown in the page body of the login and
+  home pages (BRANDING-001). The header never carries the Tagline.
 - **Tagline** — the phrase "AI AUTHORING FOR HUMAN TEACHERS" shown under the Wordmark on the login and
   home pages only.
 - **Tenant** (aka: workspace) — an organizational account boundary; every user and course belongs

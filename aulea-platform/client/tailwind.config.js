@@ -24,6 +24,13 @@ export default {
           700: '#182238',
         },
         paper: '#F5F3EE',
+        // BRANDING-001: brand teal sampled from logo.png (on the navy header);
+        // 700 is the darker variant that keeps contrast on the paper background.
+        teal: {
+          DEFAULT: '#12A58B',
+          700: '#087A63',
+        },
+        tagline: '#5F6879',
         brass: {
           DEFAULT: '#B8862B',
           50: '#FBF3E3',
@@ -42,6 +49,7 @@ export default {
       },
       fontFamily: {
         display: ['"Source Serif 4"', 'Georgia', 'serif'],
+        wordmark: ['"Outfit Variable"', 'system-ui', 'sans-serif'], // ADR-0015
         sans: ['Inter', 'system-ui', 'sans-serif'],
         mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
       },

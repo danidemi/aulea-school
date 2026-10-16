@@ -6,6 +6,18 @@ import LoginPage from './LoginPage'
 // page has email/password fields, a "Don't have an account yet? Create
 // one" link to /signup, and submits to POST /api/login.
 
+describe('LoginPage (BRANDING-001)', () => {
+  it('shows the tagline in the page body and the wordmark in the header', () => {
+    // given/when: the login page renders
+    render(<LoginPage />)
+
+    // then: the header carries the product name, the body carries the tagline
+    expect(screen.getByRole('banner')).toHaveTextContent('Aulea.school')
+    expect(screen.getByRole('banner')).not.toHaveTextContent(/ai authoring/i)
+    expect(screen.getByText(/ai authoring for human teachers/i).closest('header')).toBeNull()
+  })
+})
+
 describe('LoginPage (AUTH-UX-001)', () => {
   afterEach(() => {
     vi.unstubAllGlobals()

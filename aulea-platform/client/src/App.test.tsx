@@ -33,9 +33,23 @@ describe('App (home page, HOME-001 / AUTH-UX-001)', () => {
 
     // when: the page has rendered
     // then: the header states the product name and links to /
-    const link = screen.getByRole('link', { name: 'Learning Platform' })
+    const link = screen.getByRole('link', { name: 'Aulea.school' })
     expect(link.closest('header')).not.toBeNull()
     expect(link).toHaveAttribute('href', '/')
+    expect(screen.queryByText(/learning platform/i)).not.toBeInTheDocument()
+  })
+
+  // BRANDING-001: the Tagline is shown on the home page (below the header, in the page body).
+  it('shows the tagline on the home page, outside the header', () => {
+    // given: an unregistered user opens the home page
+    stubFetch({ status: 401 })
+
+    // when: the page has rendered
+    render(<App />)
+
+    // then: the tagline is present and is not part of the header
+    const tagline = screen.getByText(/ai authoring for human teachers/i)
+    expect(tagline.closest('header')).toBeNull()
   })
 
   it('shows a "Sign in" link to /login in the header before /api/me resolves', () => {

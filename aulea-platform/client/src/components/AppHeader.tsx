@@ -2,6 +2,8 @@ import { Button } from './ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu'
 import { avatarInitials } from '../lib/avatarInitials'
 import VersionInfoMenu from './VersionInfoMenu'
+import BrandIcon from './BrandIcon'
+import Wordmark from './Wordmark'
 import type { SignedInUser } from '../lib/session'
 
 interface AppHeaderProps {
@@ -27,8 +29,9 @@ function AppHeader({ user, onLogout }: AppHeaderProps) {
   return (
     <header className="flex items-center justify-between border-b-2 border-brass bg-ink px-6 py-4 text-paper">
       <div className="flex items-center gap-section-gap">
-        <a href="/" className="font-display text-xl font-semibold tracking-tight text-paper no-underline">
-          Learning Platform
+        <a href="/" aria-label="Aulea.school" className="flex items-center gap-3 no-underline">
+          <BrandIcon className="h-8 w-8 shrink-0" />
+          <Wordmark surface="on-dark" className="text-xl" />
         </a>
         {user && (
           <a href="/courses" className="text-sm font-medium text-paper/90 hover:text-paper">

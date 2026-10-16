@@ -1,0 +1,33 @@
+
+Running 22 tests using 1 worker
+
+  ✓   1 [chromium] › e2e/branding.spec.ts:16:1 › has the Aulea.school title, the icon links, and every linked icon answers 200 (603ms)
+  ✓   2 [chromium] › e2e/branding.spec.ts:38:1 › shows the Wordmark in the header, and the Tagline only on the home and login pages (554ms)
+  ✓   3 [chromium] › e2e/branding.spec.ts:58:5 › screenshots: header on login and a signed-in page (light, desktop) (1.6s)
+  ✓   4 [chromium] › e2e/branding.spec.ts:58:5 › screenshots: header on login and a signed-in page (light, mobile) (1.2s)
+  ✓   5 [chromium] › e2e/branding.spec.ts:58:5 › screenshots: header on login and a signed-in page (dark, desktop) (1.2s)
+  ✓   6 [chromium] › e2e/branding.spec.ts:58:5 › screenshots: header on login and a signed-in page (dark, mobile) (1.1s)
+  ✓   7 [chromium] › e2e/branding.spec.ts:78:1 › screenshot: the 16 px and 32 px frames of the served favicon.ico, on a tab-like strip (123ms)
+  ✓   8 [chromium] › e2e/course-detail.spec.ts:9:1 › clicking a course row opens its detail page with breadcrumb and quizzes section (1.3s)
+  ✓   9 [chromium] › e2e/courses.spec.ts:8:1 › creates a course from the dashboard and sees it listed (1.2s)
+  ✓  10 [chromium] › e2e/home.spec.ts:6:1 › shows the sign-in form directly on the home page (280ms)
+  ✓  11 [chromium] › e2e/home.spec.ts:15:1 › shows a sign-up link to create an account (390ms)
+  ✓  12 [chromium] › e2e/login.spec.ts:9:1 › signs in from /login and lands on /courses (a bookmark to /login still works) (1.0s)
+  ✓  13 [chromium] › e2e/quiz-session-delete.spec.ts:15:1 › deletes selected sessions after a confirmation showing the answer count (3.8s)
+  ✓  14 [chromium] › e2e/quiz-session-monitor.spec.ts:13:1 › creating a session opens its monitor page, and it can be started, stopped, and reopened (1.7s)
+  ✓  15 [chromium] › e2e/quiz-session-shuffle.spec.ts:51:1 › a shuffled item renders correctly, and two students in the same session get independently generated orders (2.4s)
+  ✓  16 [chromium] › e2e/quiz-session-shuffle.spec.ts:170:1 › checking "force shuffle answers" before Start shuffles an authored shuffle="false" item per student (2.1s)
+  ✓  17 [chromium] › e2e/quiz-session-take.spec.ts:64:1 › a student takes a real multi-item choice-only quiz end to end, and the trainer sees it counted as answered (5.3s)
+  ✓  18 [chromium] › e2e/quiz-session-take.spec.ts:120:1 › opening the take-URL before the session starts, or after it stops, shows a message instead of quiz content (2.9s)
+  ✓  19 [chromium] › e2e/signup.spec.ts:8:1 › creates an account via expedite sign up, reached from the home page (603ms)
+  ✓  20 [chromium] › e2e/signup.spec.ts:29:1 › shows a mismatch error under the confirm field, then signs up once the values match (556ms)
+  ✓  21 [chromium] › e2e/signup.spec.ts:58:3 › replaces the form with "Check your email" after sign up (light) (713ms)
+  ✓  22 [chromium] › e2e/signup.spec.ts:58:3 › replaces the form with "Check your email" after sign up (dark) (743ms)
+ Container aulea-platform-e2e-postgres-1 Stopping 
+ Container aulea-platform-e2e-postgres-1 Stopped 
+ Container aulea-platform-e2e-postgres-1 Removing 
+ Container aulea-platform-e2e-postgres-1 Removed 
+ Network aulea-platform-e2e_default Removing 
+ Network aulea-platform-e2e_default Removed 
+
+  22 passed (53.5s)

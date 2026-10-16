@@ -83,8 +83,13 @@ const SELECT_COLUMNS = {
   updatedAt: quizSessions.updatedAt,
 }
 
-export function createSessionRepository(databaseUrl: string): SessionRepository {
-  const { db } = createDb(databaseUrl)
+// `connection` lets an integration test (ADR-0014) hand in a pool it owns and closes
+// itself; production code passes only the URL.
+export function createSessionRepository(
+  databaseUrl: string,
+  connection: ReturnType<typeof createDb> = createDb(databaseUrl),
+): SessionRepository {
+  const { db } = connection
 
   async function quizBelongsToTenant(quizId: string, tenantId: string): Promise<boolean> {
     const rows = await db

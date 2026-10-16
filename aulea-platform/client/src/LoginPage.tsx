@@ -1,6 +1,7 @@
 import { Card } from './components/ui/card'
 import AppHeader from './components/AppHeader'
 import SignInForm from './components/SignInForm'
+import BrandBlock from './components/BrandBlock'
 
 /**
  * `/login` screen (AUTH-UX-001, restyled by UI-FOUNDATION-001 — ADR-0006).
@@ -12,7 +13,8 @@ function LoginPage() {
   return (
     <div className="min-h-screen flex flex-col bg-paper">
       <AppHeader user={null} />
-      <main className="flex flex-1 items-center justify-center px-6 py-section-gap">
+      <main className="flex flex-1 flex-col items-center justify-center gap-section-gap px-6 py-section-gap">
+        <BrandBlock />
         <Card className="w-full max-w-sm">
           <h1 className="mb-group-gap font-display text-2xl font-semibold text-ink">Sign in</h1>
           <SignInForm />

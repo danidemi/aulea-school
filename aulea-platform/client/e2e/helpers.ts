@@ -16,7 +16,7 @@ export async function signUpAndLogIn(page: Page, email: string, password: string
 
   // Back to the home page via the header's brand link — not a typed URL —
   // then sign in with the freshly-created account.
-  await page.getByRole('link', { name: /learning platform/i }).click()
+  await page.getByRole('link', { name: /aulea\.school/i }).click()
   await page.getByLabel('Email').fill(email)
   await page.getByLabel('Password').fill(password)
   await page.getByRole('button', { name: /sign in/i }).click()

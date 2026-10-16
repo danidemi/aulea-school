@@ -3,6 +3,7 @@ import { Button } from './components/ui/button'
 import { Card } from './components/ui/card'
 import AppHeader from './components/AppHeader'
 import SignInForm from './components/SignInForm'
+import BrandBlock from './components/BrandBlock'
 import { useSignedInUser } from './lib/session'
 
 /**
@@ -88,9 +89,10 @@ function App() {
       )}
 
       <main className="flex flex-1 flex-col items-center justify-center gap-group-gap px-6 py-section-gap text-center">
+        {!user && <BrandBlock />}
         <h1 className="font-display text-3xl font-semibold text-ink">Plan courses. Author quizzes. Teach with confidence.</h1>
         <p className="max-w-md text-base text-ink/70">
-          The Learning Platform helps trainers build and manage adult-education courses from
+          Aulea.school helps trainers build and manage adult-education courses from
           one place.
         </p>
         {!user && (
