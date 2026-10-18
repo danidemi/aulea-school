@@ -1,0 +1,30 @@
+## vulnerable dependency added (lodash@4.17.20) in server/, stop_hook_active=false
+NEW findings (fail) (2)
+  [high] lodash GHSA-35jh-r3h4-6jhm (npm-audit:server, prod, fix available)
+  [high] lodash GHSA-r5fr-rjxr-66jc (npm-audit:server, prod, fix available)
+
+Allowlisted findings (accepted) (3)
+  [moderate] esbuild GHSA-67mh-4wv8-2f99 (npm-audit:server, dev, fix available) | allowed until 2027-04-18: DEPS-001: dev-only @esbuild-kit/* chain under drizzle-kit. The only fix is a drizzle-kit pre-release. The advisory is about esbuild's dev server accepting cross-origin requests, and drizzle-kit generate/migrate never start one.
+  [moderate] react-router GHSA-wrjc-x8rr-h8h6 (npm-audit:client, prod, fix available) | allowed until 2027-04-18: DEPS-001: react-router-dom stays on v6 (v7 needs Node >=20, baseline is 18.19.1, ADR-0004). The advisory is about open redirects and SSR hydration. The app has no SSR and feeds no attacker-controlled path to <Link> or useNavigate.
+  [moderate] react-router GHSA-337j-9hxr-rhxg (npm-audit:client, prod, fix available) | allowed until 2027-04-18: DEPS-001: react-router-dom stays on v6 (v7 needs Node >=20, baseline is 18.19.1, ADR-0004). The advisory is about open redirects and SSR hydration. The app has no SSR and feeds no attacker-controlled path to <Link> or useNavigate.
+
+Reported only (not blocking) (7)
+  [moderate] lodash GHSA-29mw-wpgm-hmr9 (npm-audit:server, prod, fix available)
+  [moderate] lodash GHSA-f23m-r3pf-42rh (npm-audit:server, prod, fix available)
+  [moderate] lodash GHSA-xxjr-mmjv-4gpg (npm-audit:server, prod, fix available)
+  [high] source-map-js GHSA-68fv-2mgg-jv7q (npm-audit:server, dev, fix available)
+  [high] braces GHSA-vfj7-8cjw-p6xm (npm-audit:client, dev, fix available)
+  [moderate] postcss-selector-parser GHSA-rj75-hqrm-r3gf (npm-audit:client, dev, fix available)
+  [high] source-map-js GHSA-68fv-2mgg-jv7q (npm-audit:client, dev, fix available)
+
+Security check: FAIL: new findings (exit 1)
+
+Security check found new findings (see above). Address them before you stop:
+* fix the finding, for example by upgrading the dependency to a version that has a fix;
+* or, if the risk is accepted, add an entry to aulea-platform/security/allowlist.json with a reason and an expiry date (at most 6 months), and say so to the human;
+* or report the finding to the human and explain why it cannot be fixed now.
+Do NOT run `npm audit fix --force`: it makes breaking upgrades and hides the finding instead of solving it.
+exit: 2
+
+## same state, stop_hook_active=true
+exit: 0
