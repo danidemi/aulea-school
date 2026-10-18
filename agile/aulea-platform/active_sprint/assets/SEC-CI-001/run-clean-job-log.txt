@@ -1,0 +1,307 @@
+﻿2026-10-18T20:40:36.2832023Z Current runner version: '2.337.0'
+2026-10-18T20:40:36.2847169Z ##[group]Runner Image Provisioner
+2026-10-18T20:40:36.2847978Z Hosted Compute Agent
+2026-10-18T20:40:36.2848417Z Version: 20261012.601
+2026-10-18T20:40:36.2848794Z Commit: f3dc54e1fb89da6852db922499a0233137369e1d
+2026-10-18T20:40:36.2849282Z Build Date: 2026-10-12T17:48:21Z
+2026-10-18T20:40:36.2849701Z Worker ID: {cca86ce0-42ed-431b-a805-d842e0e7bd39}
+2026-10-18T20:40:36.2850152Z Region: centralus
+2026-10-18T20:40:36.2850533Z Cloud: Azure
+2026-10-18T20:40:36.2850869Z ##[endgroup]
+2026-10-18T20:40:36.2851743Z ##[group]Operating System
+2026-10-18T20:40:36.2852113Z Ubuntu
+2026-10-18T20:40:36.2852422Z 24.04.5
+2026-10-18T20:40:36.2852851Z LTS
+2026-10-18T20:40:36.2853173Z ##[endgroup]
+2026-10-18T20:40:36.2853765Z ##[group]Runner Image
+2026-10-18T20:40:36.2854133Z Image: ubuntu-24.04
+2026-10-18T20:40:36.2854496Z Version: 20261012.334.1
+2026-10-18T20:40:36.2855293Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-18T20:40:36.2856208Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+2026-10-18T20:40:36.2856778Z ##[endgroup]
+2026-10-18T20:40:36.2857827Z ##[group]GITHUB_TOKEN Permissions
+2026-10-18T20:40:36.2859242Z Contents: read
+2026-10-18T20:40:36.2859585Z Metadata: read
+2026-10-18T20:40:36.2859995Z SecurityEvents: write
+2026-10-18T20:40:36.2860352Z ##[endgroup]
+2026-10-18T20:40:36.2861666Z Secret source: Actions
+2026-10-18T20:40:36.2862330Z Cache mode: write
+2026-10-18T20:40:36.2862765Z Prepare workflow directory
+2026-10-18T20:40:36.3110268Z Prepare all required actions
+2026-10-18T20:40:36.3141169Z Getting action download info
+2026-10-18T20:40:36.5383260Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-10-18T20:40:36.6371243Z Download action repository 'actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38' (SHA:249970729cb0ef3589644e2896645e5dc5ba9c38)
+2026-10-18T20:40:36.7354934Z Download action repository 'actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9' (SHA:cf430e030ddbb5b0abf93d22962f4752f3646cd9)
+2026-10-18T20:40:37.1829399Z Download action repository 'github/codeql-action@6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee' (SHA:6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee)
+2026-10-18T20:40:37.7498836Z Complete job name: security-check
+2026-10-18T20:40:37.7952752Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-10-18T20:40:37.7953265Z with:
+2026-10-18T20:40:37.7953516Z   repository: danidemi/aulea-school
+2026-10-18T20:40:37.7955700Z   token: ***
+2026-10-18T20:40:37.7955935Z   ssh-strict: true
+2026-10-18T20:40:37.7956389Z   ssh-user: git
+2026-10-18T20:40:37.7956635Z   persist-credentials: true
+2026-10-18T20:40:37.7956905Z   clean: true
+2026-10-18T20:40:37.7957152Z   sparse-checkout-cone-mode: true
+2026-10-18T20:40:37.7957437Z   fetch-depth: 1
+2026-10-18T20:40:37.7957852Z   fetch-tags: false
+2026-10-18T20:40:37.7958116Z   show-progress: true
+2026-10-18T20:40:37.7958372Z   lfs: false
+2026-10-18T20:40:37.7958607Z   submodules: false
+2026-10-18T20:40:37.7958857Z   set-safe-directory: true
+2026-10-18T20:40:37.7959139Z   allow-unsafe-pr-checkout: false
+2026-10-18T20:40:37.7959522Z ##[endgroup]
+2026-10-18T20:40:37.8589033Z Syncing repository: danidemi/aulea-school
+2026-10-18T20:40:37.8590630Z ##[group]Getting Git version info
+2026-10-18T20:40:37.8591264Z Working directory is '/home/runner/work/aulea-school/aulea-school'
+2026-10-18T20:40:37.8592207Z [command]/usr/bin/git version
+2026-10-18T20:40:37.8635167Z git version 2.55.0
+2026-10-18T20:40:37.8650901Z ##[endgroup]
+2026-10-18T20:40:37.8656091Z Temporarily overriding HOME='/home/runner/work/_temp/a9c6db91-4c94-47fb-be85-f247c7d75996' before making global git config changes
+2026-10-18T20:40:37.8657264Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-18T20:40:37.8677716Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/aulea-school/aulea-school
+2026-10-18T20:40:37.8702413Z Deleting the contents of '/home/runner/work/aulea-school/aulea-school'
+2026-10-18T20:40:37.8704589Z ##[group]Determining repository object format
+2026-10-18T20:40:37.8705543Z ##[endgroup]
+2026-10-18T20:40:37.8706155Z ##[group]Initializing the repository
+2026-10-18T20:40:37.8708059Z [command]/usr/bin/git init /home/runner/work/aulea-school/aulea-school
+2026-10-18T20:40:37.8943015Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-18T20:40:37.8944094Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-18T20:40:37.8945343Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-18T20:40:37.8945993Z hint: call:
+2026-10-18T20:40:37.8946335Z hint:
+2026-10-18T20:40:37.8946793Z hint: 	git config --global init.defaultBranch <name>
+2026-10-18T20:40:37.8947327Z hint:
+2026-10-18T20:40:37.8948130Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-18T20:40:37.8949019Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-18T20:40:37.8949668Z hint:
+2026-10-18T20:40:37.8950021Z hint: 	git branch -m <name>
+2026-10-18T20:40:37.8950423Z hint:
+2026-10-18T20:40:37.8950974Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-18T20:40:37.8951901Z Initialized empty Git repository in /home/runner/work/aulea-school/aulea-school/.git/
+2026-10-18T20:40:37.8953650Z [command]/usr/bin/git remote add origin https://github.com/danidemi/aulea-school
+2026-10-18T20:40:37.8996050Z ##[endgroup]
+2026-10-18T20:40:37.8996733Z ##[group]Disabling automatic garbage collection
+2026-10-18T20:40:37.8998336Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-18T20:40:37.9111662Z ##[endgroup]
+2026-10-18T20:40:37.9112242Z ##[group]Setting up auth
+2026-10-18T20:40:37.9112581Z Removing SSH command configuration
+2026-10-18T20:40:37.9115814Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-18T20:40:37.9145466Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-18T20:40:37.9429109Z Removing HTTP extra header
+2026-10-18T20:40:37.9432642Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-18T20:40:37.9458586Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-18T20:40:37.9626422Z Removing includeIf entries pointing to credentials config files
+2026-10-18T20:40:37.9630186Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-18T20:40:37.9657770Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-18T20:40:37.9863593Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-f79abc8f-8c87-4cda-8c65-36d5e24f856e.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-18T20:40:37.9892833Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/aulea-school/aulea-school/.git.path /home/runner/work/_temp/git-credentials-f79abc8f-8c87-4cda-8c65-36d5e24f856e.config
+2026-10-18T20:40:37.9920024Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/aulea-school/aulea-school/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-f79abc8f-8c87-4cda-8c65-36d5e24f856e.config
+2026-10-18T20:40:37.9950508Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-f79abc8f-8c87-4cda-8c65-36d5e24f856e.config
+2026-10-18T20:40:37.9979230Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-f79abc8f-8c87-4cda-8c65-36d5e24f856e.config
+2026-10-18T20:40:38.0005427Z ##[endgroup]
+2026-10-18T20:40:38.0006072Z ##[group]Fetching the repository
+2026-10-18T20:40:38.0010853Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +3d0cb056b89846e0ea8e025e99a54a0da1d5cf05:refs/remotes/origin/master
+2026-10-18T20:40:38.8972017Z From https://github.com/danidemi/aulea-school
+2026-10-18T20:40:38.8974069Z  * [new ref]         3d0cb056b89846e0ea8e025e99a54a0da1d5cf05 -> origin/master
+2026-10-18T20:40:38.8980526Z [command]/usr/bin/git branch --list --remote origin/master
+2026-10-18T20:40:38.9005343Z   origin/master
+2026-10-18T20:40:38.9011954Z [command]/usr/bin/git rev-parse refs/remotes/origin/master
+2026-10-18T20:40:38.9035052Z 3d0cb056b89846e0ea8e025e99a54a0da1d5cf05
+2026-10-18T20:40:38.9038745Z ##[endgroup]
+2026-10-18T20:40:38.9039777Z ##[group]Determining the checkout info
+2026-10-18T20:40:38.9040813Z ##[endgroup]
+2026-10-18T20:40:38.9041624Z [command]/usr/bin/git sparse-checkout disable
+2026-10-18T20:40:38.9086417Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-18T20:40:38.9115200Z ##[group]Checking out the ref
+2026-10-18T20:40:38.9117319Z [command]/usr/bin/git checkout --progress --force -B master refs/remotes/origin/master
+2026-10-18T20:40:38.9637429Z Reset branch 'master'
+2026-10-18T20:40:38.9642727Z branch 'master' set up to track 'origin/master'.
+2026-10-18T20:40:38.9650526Z ##[endgroup]
+2026-10-18T20:40:38.9687028Z [command]/usr/bin/git log -1 --format=%H
+2026-10-18T20:40:38.9710636Z 3d0cb056b89846e0ea8e025e99a54a0da1d5cf05
+2026-10-18T20:40:38.9968313Z ##[group]Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+2026-10-18T20:40:38.9969284Z with:
+2026-10-18T20:40:38.9969796Z   node-version: 24
+2026-10-18T20:40:38.9970344Z   cache: npm
+2026-10-18T20:40:38.9971491Z   cache-dependency-path: aulea-platform/server/package-lock.json
+aulea-platform/client/package-lock.json
+
+2026-10-18T20:40:38.9972867Z   check-latest: false
+2026-10-18T20:40:38.9979042Z   token: ***
+2026-10-18T20:40:38.9979599Z   package-manager-cache: true
+2026-10-18T20:40:38.9980241Z ##[endgroup]
+2026-10-18T20:40:39.0842005Z Found in cache @ /opt/hostedtoolcache/node/24.21.0/x64
+2026-10-18T20:40:39.0844614Z ##[group]Environment details
+2026-10-18T20:40:39.3863659Z node: v24.21.0
+2026-10-18T20:40:39.3864813Z npm: 11.19.0
+2026-10-18T20:40:39.3865626Z yarn: 1.22.22
+2026-10-18T20:40:39.3867232Z ##[endgroup]
+2026-10-18T20:40:39.3877461Z [command]/opt/hostedtoolcache/node/24.21.0/x64/bin/npm config get cache
+2026-10-18T20:40:39.4664466Z /home/runner/.npm
+2026-10-18T20:40:39.5923023Z npm cache is not found
+2026-10-18T20:40:39.6030536Z ##[group]Run npm ci
+2026-10-18T20:40:39.6030767Z [36;1mnpm ci[0m
+2026-10-18T20:40:39.6355242Z shell: /usr/bin/bash -e {0}
+2026-10-18T20:40:39.6355462Z ##[endgroup]
+2026-10-18T20:40:41.5083523Z npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+2026-10-18T20:40:41.5140449Z npm warn deprecated @esbuild-kit/esm-loader@2.6.5: Merged into tsx: https://tsx.hirok.io
+2026-10-18T20:40:41.5811590Z npm warn deprecated @esbuild-kit/core-utils@3.3.2: Merged into tsx: https://tsx.hirok.io
+2026-10-18T20:40:49.0152588Z 
+2026-10-18T20:40:49.0153373Z added 378 packages, and audited 379 packages in 9s
+2026-10-18T20:40:49.0153708Z 
+2026-10-18T20:40:49.0154074Z 65 packages are looking for funding
+2026-10-18T20:40:49.0154469Z   run `npm fund` for details
+2026-10-18T20:40:49.0209782Z 
+2026-10-18T20:40:49.0210610Z 5 vulnerabilities (4 moderate, 1 high)
+2026-10-18T20:40:49.0211294Z 
+2026-10-18T20:40:49.0212058Z To address issues that do not require attention, run:
+2026-10-18T20:40:49.0212413Z   npm audit fix
+2026-10-18T20:40:49.0212537Z 
+2026-10-18T20:40:49.0212744Z To address all issues (including breaking changes), run:
+2026-10-18T20:40:49.0213654Z   npm audit fix --force
+2026-10-18T20:40:49.0213786Z 
+2026-10-18T20:40:49.0213870Z Run `npm audit` for details.
+2026-10-18T20:40:49.0224520Z npm warn install-scripts 6 packages have install scripts not yet covered by allowScripts:
+2026-10-18T20:40:49.0225510Z npm warn install-scripts   esbuild@0.18.20 (postinstall: node install.js)
+2026-10-18T20:40:49.0226387Z npm warn install-scripts   cpu-features@0.0.10 (install: node buildcheck.js > buildcheck.gypi && node-gyp rebuild)
+2026-10-18T20:40:49.0227205Z npm warn install-scripts   esbuild@0.25.12 (postinstall: node install.js)
+2026-10-18T20:40:49.0228008Z npm warn install-scripts   esbuild@0.28.2 (postinstall: node install.js)
+2026-10-18T20:40:49.0228678Z npm warn install-scripts   protobufjs@7.6.6 (postinstall: node scripts/postinstall)
+2026-10-18T20:40:49.0229335Z npm warn install-scripts   ssh2@1.17.0 (install: node install.js)
+2026-10-18T20:40:49.0229866Z npm warn install-scripts
+2026-10-18T20:40:49.0230550Z npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+2026-10-18T20:40:49.0716830Z ##[group]Run npm ci
+2026-10-18T20:40:49.0716991Z [36;1mnpm ci[0m
+2026-10-18T20:40:49.0772907Z shell: /usr/bin/bash -e {0}
+2026-10-18T20:40:49.0773067Z ##[endgroup]
+2026-10-18T20:40:49.9110289Z npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+2026-10-18T20:40:53.1881886Z 
+2026-10-18T20:40:53.1882823Z added 349 packages, and audited 350 packages in 4s
+2026-10-18T20:40:53.1903651Z 
+2026-10-18T20:40:53.1904470Z 52 packages are looking for funding
+2026-10-18T20:40:53.1905003Z   run `npm fund` for details
+2026-10-18T20:40:53.2264219Z 
+2026-10-18T20:40:53.2264824Z 10 vulnerabilities (4 moderate, 6 high)
+2026-10-18T20:40:53.2265023Z 
+2026-10-18T20:40:53.2265199Z To address issues that do not require attention, run:
+2026-10-18T20:40:53.2265398Z   npm audit fix
+2026-10-18T20:40:53.2265471Z 
+2026-10-18T20:40:53.2265628Z To address all issues (including breaking changes), run:
+2026-10-18T20:40:53.2265894Z   npm audit fix --force
+2026-10-18T20:40:53.2265979Z 
+2026-10-18T20:40:53.2266052Z Run `npm audit` for details.
+2026-10-18T20:40:53.2271536Z npm warn install-scripts 1 package has install scripts not yet covered by allowScripts:
+2026-10-18T20:40:53.2272296Z npm warn install-scripts   esbuild@0.28.2 (postinstall: node install.js)
+2026-10-18T20:40:53.2272724Z npm warn install-scripts
+2026-10-18T20:40:53.2273334Z npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+2026-10-18T20:40:53.2595688Z ##[group]Run mkdir -p security-report
+2026-10-18T20:40:53.2595907Z [36;1mmkdir -p security-report[0m
+2026-10-18T20:40:53.2596053Z [36;1mset +e[0m
+2026-10-18T20:40:53.2596330Z [36;1mscripts/security-check.sh --json security-report/security-check.json | tee security-report/security-check.txt[0m
+2026-10-18T20:40:53.2596636Z [36;1mcode=${PIPESTATUS[0]}[0m
+2026-10-18T20:40:53.2596813Z [36;1mecho "exit-code=$code" >> "$GITHUB_OUTPUT"[0m
+2026-10-18T20:40:53.2596978Z [36;1m{[0m
+2026-10-18T20:40:53.2597092Z [36;1m  echo '## Security check'[0m
+2026-10-18T20:40:53.2597229Z [36;1m  echo[0m
+2026-10-18T20:40:53.2597403Z [36;1m  echo "Exit code: $code (0 clean, 1 new findings, 2 tool could not run)"[0m
+2026-10-18T20:40:53.2597782Z [36;1m  echo[0m
+2026-10-18T20:40:53.2597895Z [36;1m  echo '```'[0m
+2026-10-18T20:40:53.2598034Z [36;1m  cat security-report/security-check.txt[0m
+2026-10-18T20:40:53.2598193Z [36;1m  echo '```'[0m
+2026-10-18T20:40:53.2598344Z [36;1m} >> "$GITHUB_STEP_SUMMARY"[0m
+2026-10-18T20:40:53.2598480Z [36;1mexit 0[0m
+2026-10-18T20:40:53.2651933Z shell: /usr/bin/bash -e {0}
+2026-10-18T20:40:53.2652081Z ##[endgroup]
+2026-10-18T20:40:54.5126660Z Allowlisted findings (accepted) (3)
+2026-10-18T20:40:54.5128235Z   [moderate] esbuild GHSA-67mh-4wv8-2f99 (npm-audit:server, dev, fix available) | allowed until 2027-04-18: DEPS-001: dev-only @esbuild-kit/* chain under drizzle-kit. The only fix is a drizzle-kit pre-release. The advisory is about esbuild's dev server accepting cross-origin requests, and drizzle-kit generate/migrate never start one.
+2026-10-18T20:40:54.5129684Z   [moderate] react-router GHSA-wrjc-x8rr-h8h6 (npm-audit:client, prod, fix available) | allowed until 2027-04-18: DEPS-001: react-router-dom stays on v6 (v7 needs Node >=20, baseline is 18.19.1, ADR-0004). The advisory is about open redirects and SSR hydration. The app has no SSR and feeds no attacker-controlled path to <Link> or useNavigate.
+2026-10-18T20:40:54.5130920Z   [moderate] react-router GHSA-337j-9hxr-rhxg (npm-audit:client, prod, fix available) | allowed until 2027-04-18: DEPS-001: react-router-dom stays on v6 (v7 needs Node >=20, baseline is 18.19.1, ADR-0004). The advisory is about open redirects and SSR hydration. The app has no SSR and feeds no attacker-controlled path to <Link> or useNavigate.
+2026-10-18T20:40:54.5131533Z 
+2026-10-18T20:40:54.5131621Z Reported only (not blocking) (4)
+2026-10-18T20:40:54.5131863Z   [high] source-map-js GHSA-68fv-2mgg-jv7q (npm-audit:server, dev, fix available)
+2026-10-18T20:40:54.5132191Z   [high] braces GHSA-vfj7-8cjw-p6xm (npm-audit:client, dev, fix available)
+2026-10-18T20:40:54.5132550Z   [moderate] postcss-selector-parser GHSA-rj75-hqrm-r3gf (npm-audit:client, dev, fix available)
+2026-10-18T20:40:54.5132911Z   [high] source-map-js GHSA-68fv-2mgg-jv7q (npm-audit:client, dev, fix available)
+2026-10-18T20:40:54.5133091Z 
+2026-10-18T20:40:54.5133163Z Security check: PASS (exit 0)
+2026-10-18T20:40:54.5300662Z ##[group]Run actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+2026-10-18T20:40:54.5300879Z with:
+2026-10-18T20:40:54.5300996Z   name: security-check-report
+2026-10-18T20:40:54.5301261Z   path: aulea-platform/security-report/security-check.json
+aulea-platform/security-report/security-check.txt
+
+2026-10-18T20:40:54.5301531Z   if-no-files-found: warn
+2026-10-18T20:40:54.5301656Z   retention-days: 90
+2026-10-18T20:40:54.5301772Z   compression-level: 6
+2026-10-18T20:40:54.5301900Z   overwrite: false
+2026-10-18T20:40:54.5302016Z   include-hidden-files: false
+2026-10-18T20:40:54.5302144Z   archive: true
+2026-10-18T20:40:54.5302255Z ##[endgroup]
+2026-10-18T20:40:54.6170759Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-10-18T20:40:54.6172502Z The least common ancestor is /home/runner/work/aulea-school/aulea-school/aulea-platform/security-report. This will be the root directory of the artifact
+2026-10-18T20:40:54.6173175Z With the provided path, there will be 2 files uploaded
+2026-10-18T20:40:54.6174001Z Artifact name is valid!
+2026-10-18T20:40:54.6174456Z Root directory input is valid!
+2026-10-18T20:40:54.8624123Z Uploading artifact: security-check-report.zip
+2026-10-18T20:40:54.8653277Z Beginning upload of artifact content to blob storage
+2026-10-18T20:40:55.0341558Z Uploaded bytes 1911
+2026-10-18T20:40:55.0741889Z Finished uploading artifact content to blob storage!
+2026-10-18T20:40:55.0742449Z SHA256 digest of uploaded artifact is 7f127547812bbe3804f573cc1007258a7c85198f615c0b82885b1b998755e8c7
+2026-10-18T20:40:55.0742900Z Finalizing artifact upload
+2026-10-18T20:40:55.3863864Z Artifact security-check-report successfully finalized. Artifact ID 12149677619
+2026-10-18T20:40:55.3864542Z Artifact security-check-report has been successfully uploaded! Final size is 1911 bytes. Artifact ID is 12149677619
+2026-10-18T20:40:55.3866867Z Artifact download URL: https://github.com/danidemi/aulea-school/actions/runs/39164384801/artifacts/12149677619
+2026-10-18T20:40:55.4348141Z ##[group]Run code='0'
+2026-10-18T20:40:55.4348413Z [36;1mcode='0'[0m
+2026-10-18T20:40:55.4348556Z [36;1mif [ "$code" = 1 ]; then[0m
+2026-10-18T20:40:55.4348826Z [36;1m  echo '::error::Security check found new high or critical findings in production dependencies.'[0m
+2026-10-18T20:40:55.4349089Z [36;1m  exit 1[0m
+2026-10-18T20:40:55.4349204Z [36;1mfi[0m
+2026-10-18T20:40:55.4349323Z [36;1mif [ "$code" != 0 ]; then[0m
+2026-10-18T20:40:55.4349631Z [36;1m  if [ 'push' = schedule ]; then[0m
+2026-10-18T20:40:55.4349930Z [36;1m    echo "::error::Security check could not run (exit $code). Failing the scheduled run so the maintainer is notified."[0m
+2026-10-18T20:40:55.4350214Z [36;1m    exit 1[0m
+2026-10-18T20:40:55.4350334Z [36;1m  fi[0m
+2026-10-18T20:40:55.4350533Z [36;1m  echo "::warning::Security check could not run (exit $code). Not failing this run."[0m
+2026-10-18T20:40:55.4350765Z [36;1mfi[0m
+2026-10-18T20:40:55.4403028Z shell: /usr/bin/bash -e {0}
+2026-10-18T20:40:55.4403209Z ##[endgroup]
+2026-10-18T20:40:55.4520294Z Post job cleanup.
+2026-10-18T20:40:55.5420294Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/aulea-school/aulea-school --files-from manifest.txt --use-compress-program zstdmt
+2026-10-18T20:40:56.7956467Z Sent 58851328 of 70215675 (83.8%), 56.1 MBs/sec
+2026-10-18T20:40:57.4384636Z Sent 70215675 of 70215675 (100.0%), 40.8 MBs/sec
+2026-10-18T20:40:57.6008465Z Cache saved with the key: node-cache-Linux-x64-npm-8c3c8e3136d3c4f9df8b8c9dad5f545c7782d8c0a31d7b2e298a0a81b5d82d60
+2026-10-18T20:40:57.6123025Z Post job cleanup.
+2026-10-18T20:40:57.6635967Z [command]/usr/bin/git version
+2026-10-18T20:40:57.6666930Z git version 2.55.0
+2026-10-18T20:40:57.6693828Z Temporarily overriding HOME='/home/runner/work/_temp/5800d7c7-c3d8-44da-8643-ae48fbbf5043' before making global git config changes
+2026-10-18T20:40:57.6694593Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-18T20:40:57.6696563Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/aulea-school/aulea-school
+2026-10-18T20:40:57.6723572Z Removing SSH command configuration
+2026-10-18T20:40:57.6727090Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-18T20:40:57.6757088Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-18T20:40:57.6937482Z Removing HTTP extra header
+2026-10-18T20:40:57.6941831Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-18T20:40:57.6970004Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-18T20:40:57.7151552Z Removing includeIf entries pointing to credentials config files
+2026-10-18T20:40:57.7156547Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-18T20:40:57.7183900Z includeif.gitdir:/home/runner/work/aulea-school/aulea-school/.git.path
+2026-10-18T20:40:57.7184430Z includeif.gitdir:/home/runner/work/aulea-school/aulea-school/.git/worktrees/*.path
+2026-10-18T20:40:57.7184830Z includeif.gitdir:/github/workspace/.git.path
+2026-10-18T20:40:57.7185069Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-18T20:40:57.7192171Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/aulea-school/aulea-school/.git.path
+2026-10-18T20:40:57.7214522Z /home/runner/work/_temp/git-credentials-f79abc8f-8c87-4cda-8c65-36d5e24f856e.config
+2026-10-18T20:40:57.7221621Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/aulea-school/aulea-school/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-f79abc8f\-8c87\-4cda\-8c65\-36d5e24f856e\.config
+2026-10-18T20:40:57.7253111Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/aulea-school/aulea-school/.git/worktrees/*.path
+2026-10-18T20:40:57.7273990Z /home/runner/work/_temp/git-credentials-f79abc8f-8c87-4cda-8c65-36d5e24f856e.config
+2026-10-18T20:40:57.7280454Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/aulea-school/aulea-school/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-f79abc8f\-8c87\-4cda\-8c65\-36d5e24f856e\.config
+2026-10-18T20:40:57.7308829Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-18T20:40:57.7328619Z /github/runner_temp/git-credentials-f79abc8f-8c87-4cda-8c65-36d5e24f856e.config
+2026-10-18T20:40:57.7333066Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-f79abc8f\-8c87\-4cda\-8c65\-36d5e24f856e\.config
+2026-10-18T20:40:57.7359908Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-18T20:40:57.7379897Z /github/runner_temp/git-credentials-f79abc8f-8c87-4cda-8c65-36d5e24f856e.config
+2026-10-18T20:40:57.7384659Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-f79abc8f\-8c87\-4cda\-8c65\-36d5e24f856e\.config
+2026-10-18T20:40:57.7412481Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-18T20:40:57.7572843Z Removing credentials config '/home/runner/work/_temp/git-credentials-f79abc8f-8c87-4cda-8c65-36d5e24f856e.config'
+2026-10-18T20:40:57.7680492Z Cleaning up orphan processes

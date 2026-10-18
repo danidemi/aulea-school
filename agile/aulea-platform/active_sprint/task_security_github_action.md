@@ -1,6 +1,6 @@
 ID: SEC-CI-001
 
-Status: IN_PROGRESS
+Status: IN_REVIEW
 
 Priority: High
 
@@ -45,5 +45,9 @@ Implemented (sprint, 2026-10-18):
 * Gate: a final step fails the job on exit 1. Exit 2 (tool could not run) fails scheduled runs, so the maintainer gets the failed-workflow notification, and only warns on pull requests and pushes. Allowlist policy comes from the script (ADR-0016), so dev findings and allowlisted ones do not fail.
 * Permissions: workflow default `contents: read`; the single job adds `security-events: write` (it is the job that uploads SARIF). All third-party actions are pinned to a commit SHA with the version in a comment (checkout v7.0.1, setup-node v6.5.0, upload-artifact v7.0.2, codeql-action v4.39.0); SHAs resolved from `git ls-remote` tags.
 * `aulea-platform/.gitignore` ignores `security-report/`. YAML parses; the same command run locally exits 0 ([see SEC-CHECK-001 evidence](assets/SEC-CHECK-001/run-output-after-bumps.txt)).
-* **Not done (needs the Product Owner / GitHub):** the DoD's manual verification on GitHub (a clean run and a failing run on a throwaway branch with a vulnerable dependency, links and screenshots under `assets/SEC-CI-001/`). Nothing was committed or pushed. The workflow was not run on GitHub, so path filters, the summary, the artifact retention and the scheduled-failure notification are untested. Status stays `IN_PROGRESS` until then.
+* Manual verification on GitHub (PO, 2026-10-18, repo `danidemi/aulea-school`), job logs saved under `assets/SEC-CI-001/`:
+  * Clean run, green: [run-clean-job-log.txt](assets/SEC-CI-001/run-clean-job-log.txt), [run 39164384801](https://github.com/danidemi/aulea-school/actions/runs/39164384801). The script printed `Security check: PASS (exit 0)`, the artifact `security-check-report` was uploaded (`retention-days: 90`), and the gate step passed with exit code 0.
+  * Failing run, red: [run-failing-job-log.txt](assets/SEC-CI-001/run-failing-job-log.txt), [run 39163979168](https://github.com/danidemi/aulea-school/actions/runs/39163979168). `adm-zip` was downgraded on purpose in `package.json`. The script reported 5 new high findings in `server` production dependencies and `Security check: FAIL: new findings (exit 1)`. The artifact was still uploaded (`if: always()`), then the gate step ended with `##[error]Security check found new high or critical findings in production dependencies.` and exit code 1.
+  * Dev-only high findings (`source-map-js`, `braces`) appear in both runs as "reported only" and do not fail the job.
+* **Gaps against the DoD:** the attachments are job logs, not screenshots. Not exercised on GitHub: the job summary page (`$GITHUB_STEP_SUMMARY`; the step ran, the rendered page was not looked at), the SARIF upload (skipped by design, no SARIF yet), the weekly schedule and the failed-scheduled-run notification (exit 2 on a schedule), and the path filters.
 * do_and_donts.md: "check tool availability live" (`gh` missing, so used `git ls-remote`); "blast radius" (the script's exit codes and JSON are unchanged; SEC-CODEQL-001 and SEC-DEPENDABOT-001 can reuse these triggers). The GUI and table entries do not apply.
