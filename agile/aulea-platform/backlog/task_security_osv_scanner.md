@@ -1,6 +1,6 @@
 ID: SEC-OSV-001
 
-Status: DRAFT
+Status: READY
 
 Priority: Medium
 

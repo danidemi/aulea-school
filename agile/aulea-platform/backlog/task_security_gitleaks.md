@@ -1,6 +1,6 @@
 ID: SEC-GITLEAKS-001
 
-Status: DRAFT
+Status: READY
 
 Priority: Medium
 

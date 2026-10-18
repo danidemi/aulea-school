@@ -1,6 +1,6 @@
 ID: SEC-DEPENDABOT-001
 
-Status: DRAFT
+Status: READY
 
 Priority: Low
 
