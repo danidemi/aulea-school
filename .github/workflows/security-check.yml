@@ -1,0 +1,100 @@
+name: Security check
+
+# SEC-CI-001 / ADR-0016: runs the same aulea-platform/scripts/security-check.sh as the Claude Code
+# Stop hook (SEC-HOOK-001). No check logic lives here. The weekly run catches new CVEs without
+# any code change. Exit codes of the script: 0 clean, 1 new findings, 2 tool could not run.
+on:
+  pull_request:
+    branches: [master]
+    paths: ['aulea-platform/**', '.github/workflows/security-check.yml']
+  push:
+    branches: [master]
+    paths: ['aulea-platform/**', '.github/workflows/security-check.yml']
+  schedule:
+    - cron: '17 5 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  security-check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: aulea-platform
+    permissions:
+      contents: read
+      # Only to upload SARIF to Code Scanning.
+      security-events: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            aulea-platform/server/package-lock.json
+            aulea-platform/client/package-lock.json
+
+      - run: npm ci
+        working-directory: aulea-platform/server
+
+      - run: npm ci
+        working-directory: aulea-platform/client
+
+      - name: Run security check
+        id: check
+        run: |
+          mkdir -p security-report
+          set +e
+          scripts/security-check.sh --json security-report/security-check.json | tee security-report/security-check.txt
+          code=${PIPESTATUS[0]}
+          echo "exit-code=$code" >> "$GITHUB_OUTPUT"
+          {
+            echo '## Security check'
+            echo
+            echo "Exit code: $code (0 clean, 1 new findings, 2 tool could not run)"
+            echo
+            echo '```'
+            cat security-report/security-check.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit 0
+
+      - name: Upload JSON report
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: security-check-report
+          path: |
+            aulea-platform/security-report/security-check.json
+            aulea-platform/security-report/security-check.txt
+          if-no-files-found: warn
+          retention-days: 90
+
+      # Skipped while no tool produces SARIF (only npm audit exists), and on fork pull requests,
+      # whose token cannot write to Code Scanning.
+      - name: Upload SARIF to Code Scanning
+        if: >-
+          always() &&
+          hashFiles('aulea-platform/security-report/*.sarif') != '' &&
+          (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork != true)
+        uses: github/codeql-action/upload-sarif@6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee # v4.39.0
+        with:
+          sarif_file: aulea-platform/security-report
+
+      - name: Apply gate
+        run: |
+          code='${{ steps.check.outputs.exit-code }}'
+          if [ "$code" = 1 ]; then
+            echo '::error::Security check found new high or critical findings in production dependencies.'
+            exit 1
+          fi
+          if [ "$code" != 0 ]; then
+            if [ '${{ github.event_name }}' = schedule ]; then
+              echo "::error::Security check could not run (exit $code). Failing the scheduled run so the maintainer is notified."
+              exit 1
+            fi
+            echo "::warning::Security check could not run (exit $code). Not failing this run."
+          fi

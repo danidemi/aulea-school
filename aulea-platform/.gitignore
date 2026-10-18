@@ -10,3 +10,6 @@ client/blob-report/
 
 # QUIZ-PACKAGE-STORAGE-001: manual-UAT .zip built from server/test-fixtures/qti-samples/
 server/test-fixtures/qti-samples/.generated/
+
+# SEC-CI-001: local output of scripts/security-check.sh in CI
+security-report/

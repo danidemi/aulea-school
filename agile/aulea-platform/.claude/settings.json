@@ -1,5 +1,18 @@
 {
   "enabledPlugins": {
     "frontend-design@claude-code-plugins": true
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"$(git rev-parse --show-toplevel)/aulea-platform/server\" && ./node_modules/.bin/tsx scripts/security-stop-hook/main.ts",
+            "timeout": 400
+          }
+        ]
+      }
+    ]
   }
 }
