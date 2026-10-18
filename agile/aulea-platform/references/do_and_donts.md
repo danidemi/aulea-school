@@ -163,3 +163,12 @@ Newest entries at the bottom.
   SESSION-DELETE-001 added a delete dialog while quiz delete in `QuizzesSection` still deletes with
   no confirmation, and only one table has sortable headers. State in the PBI which screens are
   covered and which are deferred (as separate PBIs).
+
+## sprint_26_10_18 (retrospective, 2026-10-18)
+
+* **DO** treat sortable column headers (click a header to sort rows) as the default behaviour of
+  every table, without the PBI having to ask for it. Build tables on one shared, reusable table
+  component that provides sorting, and have new tables use it instead of hand-rolling markup.
+* **DON'T** implement a table as one-off markup on a single screen, or rely on the Product Owner
+  restating "sortable headers" in each PBI. Only one table had sortable headers after
+  `sprint_26_10_14_22_40`; a table that is not sortable needs an explicit, written reason in its PBI.

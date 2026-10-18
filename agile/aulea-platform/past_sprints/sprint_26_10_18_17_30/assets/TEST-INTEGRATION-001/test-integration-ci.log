@@ -1,0 +1,13 @@
+2026-10-16T22:20:13.2460220Z ##[group]Run npm run test:integration
+2026-10-16T22:20:13.2460767Z npm run test:integration
+2026-10-16T22:20:13.2527698Z shell: /usr/bin/bash -e {0}
+2026-10-16T22:20:13.2527991Z ##[endgroup]
+2026-10-16T22:20:13.3570875Z > aulea-platform-server@0.0.0 test:integration
+2026-10-16T22:20:13.3571546Z > vitest run --config vitest.integration.config.ts
+2026-10-16T22:20:13.6773801Z  RUN  v4.1.11 /home/runner/work/aulea-school/aulea-school/aulea-platform/server
+2026-10-16T22:20:21.7225351Z  ✓ src/db/quizSessions.integration.test.ts (7 tests) 7052ms
+2026-10-16T22:20:21.7226512Z      ✓ cannot delete a session that starts between the running check and the delete (row lock) 509ms
+2026-10-16T22:20:21.7259137Z  Test Files  1 passed (1)
+2026-10-16T22:20:21.7260304Z       Tests  7 passed (7)
+2026-10-16T22:20:21.7261104Z    Start at  22:20:13
+2026-10-16T22:20:21.7265269Z    Duration  8.04s (transform 89ms, setup 0ms, import 844ms, tests 7.05s, environment 0ms)

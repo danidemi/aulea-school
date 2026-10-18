@@ -12,6 +12,8 @@ One-line entries. Long definitions live in `ul/<slug>.md`, linked from here.
   and resulting score.
 - **Course** — a collection of quizzes belonging to a tenant, browsable and selectable by a
   trainer.
+- **Data Table** (aka: sortable table) — the shared table component used by every screen; clicking a
+  column header sorts the rows (ascending, descending, original order). See DATA-TABLE-001.
 - **Force Shuffle** (questions / answers) — a per-session trainer setting that shuffles every
   applicable question/choice order per student regardless of the item's own authored `shuffle`
   attribute. Off does not mean "never shuffle" — it means the item/section's own authored

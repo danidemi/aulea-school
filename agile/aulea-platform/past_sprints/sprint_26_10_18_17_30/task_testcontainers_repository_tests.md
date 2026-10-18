@@ -1,6 +1,6 @@
 ID: TEST-INTEGRATION-001
 
-Status: IN_PROGRESS — implemented and green locally; waiting for a green CI run (needs a push)
+Status: DONE — accepted at sprint review 2026-10-18; green CI run attached
 
 Priority: Medium
 
@@ -57,5 +57,5 @@ Implemented (2026-10-16):
 * The tests can fail: with `.for('update', ...)` removed from `deleteForQuiz`, the concurrency test fails (the started session is deleted) and the other 6 still pass. The change was reverted.
 * CI: new `.github/workflows/integration-tests.yml` (push and pull request on `master`, `ubuntu-latest`, `npm ci` + `npm run test:integration` in `aulea-platform/server`). Action versions `checkout@v7` (as in `docker-image.yml`) and `setup-node@v6` are not verified until the workflow runs. The workflow has never run.
 * Verification, local: `npm run test:integration` 7/7 in about 9 s ([log](assets/TEST-INTEGRATION-001/test-integration-local.log)); `npm test` in `server/` 230/230 with no Docker needed ([log](assets/TEST-INTEGRATION-001/npm-test-db-free.log)); client vitest 120/120; full Playwright suite 22/22 ([log](assets/TEST-INTEGRATION-001/e2e-full.log)); server `npm run build` ok. Docker 29.4.0 was checked live.
-* **Open, needs the human:** the green CI run. Push the branch (or open a PR) so the workflow runs, then attach the run's log or URL here. Until then the DoD line "CI job is green" is not met, so this PBI stays `IN_PROGRESS`.
+* CI: the new job ran on GitHub Actions on 2026-10-16 and is green, 7/7 tests in 8.04 s ([log](assets/TEST-INTEGRATION-001/test-integration-ci.log), excerpt of the `Run npm run test:integration` step pasted by the human). The DoD line "CI job is green" is met.
 * do_and_donts applied: tool availability checked live; real Postgres exercised (the point of the PBI); logs attached to the PBI; disposable containers and ports, no manual `db:migrate`.

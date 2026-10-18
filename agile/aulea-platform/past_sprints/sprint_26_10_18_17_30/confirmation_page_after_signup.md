@@ -1,6 +1,6 @@
 ID: SIGNUP-CONFIRMATION-001
 
-Status: IN_REVIEW
+Status: DONE — accepted at sprint review 2026-10-18
 
 Priority: Medium
 
