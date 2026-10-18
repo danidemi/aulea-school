@@ -19,8 +19,17 @@ Claude Code Stop hook, a GitHub Action, a developer's shell) with identical resu
 * **Reported only**: everything else, including all dev-dependency findings.
 * **Tool could not run** (exit 2, e.g. no network): distinct from "findings", so callers can warn
   instead of blocking.
+* If a run has both new findings and a check that could not run, the exit code is 1 (a known
+  failure is not hidden by a flaky tool). A broken or unreadable allowlist is also exit 2.
 * Output: a human summary on stdout and a JSON summary (stable shape, also used by CI) written to a
   file path given by `--json`.
+  The JSON has `version`, `generatedAt`, `exitCode`, `result` (`pass`/`fail`/`error`), `checks`,
+  `counts` (`new`, `expired`, `allowed`, `reported`) and `findings` (each with `check`, `id`,
+  `package`, `severity`, `dependency`, `fixAvailable`, `status`, plus `reason` and `expires` when
+  allowlisted). Changing this shape needs a new `version`.
+* Findings are per advisory and package. An entry matches on `id` (GHSA id, or the numeric npm
+  advisory id when there is none) and `package`. An entry is accepted through the end of its
+  `expires` day (UTC).
 * Allowlist: `aulea-platform/security/allowlist.json`, entries `{ id, package, reason, expires }`.
   An entry is added by a human-approved change that states the reason and an expiry date (at most
   6 months). An expired entry stops being accepted. `npm audit fix --force` is never the answer.

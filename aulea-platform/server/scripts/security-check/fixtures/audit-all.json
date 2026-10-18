@@ -1,0 +1,31 @@
+{
+  "auditReportVersion": 2,
+  "vulnerabilities": {
+    "adm-zip": {
+      "name": "adm-zip",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        { "source": 1123686, "name": "adm-zip", "dependency": "adm-zip", "title": "adm-zip: crafted zip", "url": "https://github.com/advisories/GHSA-xcpc-8h2w-3j85", "severity": "high" }
+      ],
+      "fixAvailable": true
+    },
+    "esbuild": {
+      "name": "esbuild",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        { "source": 1102341, "name": "esbuild", "dependency": "esbuild", "title": "dev server cross-origin", "url": "https://github.com/advisories/GHSA-67mh-4wv8-2f99", "severity": "moderate" }
+      ],
+      "fixAvailable": false
+    },
+    "drizzle-kit": {
+      "name": "drizzle-kit",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": ["esbuild"],
+      "fixAvailable": false
+    }
+  },
+  "metadata": { "vulnerabilities": { "total": 3 } }
+}

@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "generatedAt": "2026-10-18T19:25:36.923Z",
+  "exitCode": 0,
+  "result": "pass",
+  "checks": [
+    {
+      "name": "npm-audit:server",
+      "status": "ok"
+    },
+    {
+      "name": "npm-audit:client",
+      "status": "ok"
+    }
+  ],
+  "counts": {
+    "new": 0,
+    "expired": 0,
+    "allowed": 3,
+    "reported": 4
+  },
+  "findings": [
+    {
+      "check": "npm-audit:server",
+      "id": "GHSA-67mh-4wv8-2f99",
+      "package": "esbuild",
+      "severity": "moderate",
+      "dependency": "dev",
+      "fixAvailable": true,
+      "title": "esbuild enables any website to send any requests to the development server and read the response",
+      "url": "https://github.com/advisories/GHSA-67mh-4wv8-2f99",
+      "status": "allowed",
+      "reason": "DEPS-001: dev-only @esbuild-kit/* chain under drizzle-kit. The only fix is a drizzle-kit pre-release. The advisory is about esbuild's dev server accepting cross-origin requests, and drizzle-kit generate/migrate never start one.",
+      "expires": "2027-04-18"
+    },
+    {
+      "check": "npm-audit:server",
+      "id": "GHSA-68fv-2mgg-jv7q",
+      "package": "source-map-js",
+      "severity": "high",
+      "dependency": "dev",
+      "fixAvailable": true,
+      "title": "source-map-js allows event-loop denial of service through indexed source-map section offsets",
+      "url": "https://github.com/advisories/GHSA-68fv-2mgg-jv7q",
+      "status": "reported"
+    },
+    {
+      "check": "npm-audit:client",
+      "id": "GHSA-wrjc-x8rr-h8h6",
+      "package": "react-router",
+      "severity": "moderate",
+      "dependency": "prod",
+      "fixAvailable": true,
+      "title": "React Router: Open redirect via backslash in <Link> and useNavigate (CVE-2025-68470 bypass)",
+      "url": "https://github.com/advisories/GHSA-wrjc-x8rr-h8h6",
+      "status": "allowed",
+      "reason": "DEPS-001: react-router-dom stays on v6 (v7 needs Node >=20, baseline is 18.19.1, ADR-0004). The advisory is about open redirects and SSR hydration. The app has no SSR and feeds no attacker-controlled path to <Link> or useNavigate.",
+      "expires": "2027-04-18"
+    },
+    {
+      "check": "npm-audit:client",
+      "id": "GHSA-337j-9hxr-rhxg",
+      "package": "react-router",
+      "severity": "moderate",
+      "dependency": "prod",
+      "fixAvailable": true,
+      "title": "React Router: Arbitrary Constructor Injection via deserializeErrors() in React Router SSR Hydration",
+      "url": "https://github.com/advisories/GHSA-337j-9hxr-rhxg",
+      "status": "allowed",
+      "reason": "DEPS-001: react-router-dom stays on v6 (v7 needs Node >=20, baseline is 18.19.1, ADR-0004). The advisory is about open redirects and SSR hydration. The app has no SSR and feeds no attacker-controlled path to <Link> or useNavigate.",
+      "expires": "2027-04-18"
+    },
+    {
+      "check": "npm-audit:client",
+      "id": "GHSA-vfj7-8cjw-p6xm",
+      "package": "braces",
+      "severity": "high",
+      "dependency": "dev",
+      "fixAvailable": true,
+      "title": "braces vulnerable to stack-exhaustion denial of service through deeply nested patterns",
+      "url": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+      "status": "reported"
+    },
+    {
+      "check": "npm-audit:client",
+      "id": "GHSA-rj75-hqrm-r3gf",
+      "package": "postcss-selector-parser",
+      "severity": "moderate",
+      "dependency": "dev",
+      "fixAvailable": true,
+      "title": "PostCSS: Quadratic complexity in flat selector parsing allows CPU exhaustion",
+      "url": "https://github.com/advisories/GHSA-rj75-hqrm-r3gf",
+      "status": "reported"
+    },
+    {
+      "check": "npm-audit:client",
+      "id": "GHSA-68fv-2mgg-jv7q",
+      "package": "source-map-js",
+      "severity": "high",
+      "dependency": "dev",
+      "fixAvailable": true,
+      "title": "source-map-js allows event-loop denial of service through indexed source-map section offsets",
+      "url": "https://github.com/advisories/GHSA-68fv-2mgg-jv7q",
+      "status": "reported"
+    }
+  ]
+}

@@ -14,6 +14,12 @@ Applies to all development carried out during a sprint on this project:
 - If a change adds a new kind of entity, or changes an API shape that `server/scripts/db-seed.ts`
   (TESTDATA-001) relies on, update that seed script in the same change so it keeps producing a
   representative, working seed rather than silently drifting out of date.
+- The security check is part of the definition of done: run `../../aulea-platform/scripts/security-check.sh`
+  (from the repo root: `aulea-platform/scripts/security-check.sh`) before declaring a change done. It
+  fails (exit 1) on new high or critical findings in production dependencies. Accepted risks go in
+  `aulea-platform/security/allowlist.json` with a reason and an expiry (ADR-0016). Never use
+  `npm audit fix --force` to silence it. Exit 2 means the tool could not run (e.g. no network): say so,
+  do not report it as a pass.
 
 ## Drizzle migration naming
 

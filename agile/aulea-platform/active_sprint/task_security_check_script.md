@@ -1,6 +1,6 @@
 ID: SEC-CHECK-001
 
-Status: READY
+Status: IN_REVIEW
 
 Priority: High
 
@@ -44,3 +44,16 @@ Implementation plan (sprint planning, 2026-10-18):
 * `agile/aulea-platform/CLAUDE.md` "Development practices": add the security check line.
 * Lands in `.github`: nothing here; CI is `SEC-CI-001`.
 * Blast radius: `uat.sh` prints the audit; it does not call the script, no change. `SEC-HOOK-001`, `SEC-CI-001`, `SEC-OSV-001`, `SEC-TRIVY-001`, `SEC-GITLEAKS-001` depend on the exit codes and the JSON shape above, so freeze them in the ADR.
+
+Implemented (sprint, 2026-10-18):
+* `aulea-platform/scripts/security-check.sh` is a thin wrapper (runs from any directory; exit 2 with a message when `tsx` is not installed). Logic is in `aulea-platform/server/scripts/security-check/`: `parse`, `allowlist` (policy and expiry), `report` (JSON summary, human text, exit code), `npmAudit` (the `Check` for one workspace; the only part that starts `npm`), `main`, `types`. Later scanners add one `Check` file and do not touch the policy.
+* Runs `npm audit --json --omit=dev` and a full `npm audit --json` per workspace. Findings only in the full audit are `dev` and never block. Only stdout is read, because npm prints notices on stderr and exits 1 whenever it finds anything.
+* Allowlist: `aulea-platform/security/allowlist.json`, seeded with the DEPS-001 risks and their reasons (`react-router` GHSA-wrjc-x8rr-h8h6 and GHSA-337j-9hxr-rhxg; `esbuild` GHSA-67mh-4wv8-2f99), expiry 2027-04-18.
+* ADR-0016 updated (exit-code priority, JSON shape, entry matching). `agile/aulea-platform/CLAUDE.md` "Development practices" now says the security check is part of the definition of done.
+* Tests: 35 new unit tests (given / when / then, recorded `npm audit` fixtures): new fails, allowlisted passes, expired fails, expiry-day boundary, dev never blocks, exit codes, JSON shape, could-not-run (npm cannot start, error report, empty `error.summary` with the reason in `message`). Full server suite: 264 passed. The new files type-check with `tsc --noEmit`.
+* Manual runs from `/tmp` (not the repo): [run-output.txt](assets/SEC-CHECK-001/run-output.txt) and [summary.json](assets/SEC-CHECK-001/summary.json) (exit 1); [exit-code-2-runs.txt](assets/SEC-CHECK-001/exit-code-2-runs.txt) (offline registry and missing allowlist, both exit 2). A second run gave an identical summary apart from the timestamp. No secret is in the new files (grep for `client_secret` / `GOCSPX` found nothing).
+* **Finding for the Product Owner:** the first real run fails with 11 new high or critical findings in `server` production dependencies, all with a fix available: `adm-zip` (5), `multer` (3), `nodemailer` (2), `proxy-addr` (1, critical). They appeared after DEPS-001. I did not allowlist them, because accepting a risk is the Product Owner's decision and a fix exists. Until they are fixed or accepted, `SEC-HOOK-001` and `SEC-CI-001` would fail on every run. A PBI to bump these packages is needed.
+* Gap against the DoD: "one run on a clean checkout" was done on the working tree with dependencies installed, because the new files are not committed yet.
+* do_and_donts.md: "check tool availability live" (ran `npm audit` live, found the real output shape and the `npm notice` stderr noise); "blast radius" (`uat.sh` only prints the audit and is unchanged; later SEC PBIs depend on the frozen exit codes and JSON, recorded in the ADR); "attach evidence" (run logs under `assets/SEC-CHECK-001/`). The GUI and disposable-port entries do not apply (no UI, no server started).
+
+Follow-up (PO request, 2026-10-18): the 11 findings above were fixed by upgrading `server` dependencies: `adm-zip` 0.5.18→0.6.1, `multer` 2.2.0→2.4.0, `nodemailer` 9.0.5→10.1.7, `express` 4.22.2→4.22.3 (pulls `proxy-addr` 2.0.8, `qs` 6.16.1, `body-parser` 1.20.8). `nodemailer` 10 needs Node >=20; production image uses Node 22 and CI Node 24, so it is safe. `tsc -b` clean, 265 server tests pass, security check exits 0 ([run-output-after-bumps.txt](assets/SEC-CHECK-001/run-output-after-bumps.txt)). Not exercised: a real SMTP send and a real zip upload against a running stack.

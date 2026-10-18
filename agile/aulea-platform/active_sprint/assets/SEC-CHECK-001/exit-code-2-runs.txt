@@ -1,0 +1,9 @@
+--- offline (bad registry) ---
+COULD NOT RUN: npm-audit:server: request to http://127.0.0.1:9/-/npm/v1/security/advisories/bulk failed, reason: connect ECONNREFUSED 127.0.0.1:9
+COULD NOT RUN: npm-audit:client: request to http://127.0.0.1:9/-/npm/v1/security/advisories/bulk failed, reason: connect ECONNREFUSED 127.0.0.1:9
+Security check: ERROR: a check could not run (exit 2)
+exit 2
+
+--- missing allowlist ---
+Security check: cannot read allowlist at /nonexistent.json
+exit 2

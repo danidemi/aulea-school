@@ -1,0 +1,22 @@
+{
+  "entries": [
+    {
+      "id": "GHSA-wrjc-x8rr-h8h6",
+      "package": "react-router",
+      "reason": "DEPS-001: react-router-dom stays on v6 (v7 needs Node >=20, baseline is 18.19.1, ADR-0004). The advisory is about open redirects and SSR hydration. The app has no SSR and feeds no attacker-controlled path to <Link> or useNavigate.",
+      "expires": "2027-04-18"
+    },
+    {
+      "id": "GHSA-337j-9hxr-rhxg",
+      "package": "react-router",
+      "reason": "DEPS-001: react-router-dom stays on v6 (v7 needs Node >=20, baseline is 18.19.1, ADR-0004). The advisory is about open redirects and SSR hydration. The app has no SSR and feeds no attacker-controlled path to <Link> or useNavigate.",
+      "expires": "2027-04-18"
+    },
+    {
+      "id": "GHSA-67mh-4wv8-2f99",
+      "package": "esbuild",
+      "reason": "DEPS-001: dev-only @esbuild-kit/* chain under drizzle-kit. The only fix is a drizzle-kit pre-release. The advisory is about esbuild's dev server accepting cross-origin requests, and drizzle-kit generate/migrate never start one.",
+      "expires": "2027-04-18"
+    }
+  ]
+}
