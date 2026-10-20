@@ -1,0 +1,23 @@
+ ✓ src/db/quizSessions.integration.test.ts > SessionRepository.deleteForQuiz on real Postgres > deletes answers, connections and sessions in the right order, without a foreign-key error 114ms
+ ✓ src/db/quizSessions.integration.test.ts > SessionRepository.deleteForQuiz on real Postgres > rejects a running session and deletes nothing 42ms
+ ✓ src/db/quizSessions.integration.test.ts > SessionRepository.deleteForQuiz on real Postgres > answers not_found for a session of another tenant and deletes nothing 37ms
+ ✓ src/db/quizSessions.integration.test.ts > SessionRepository.deleteForQuiz on real Postgres > answers not_found for a session of another quiz of the same tenant and deletes nothing 29ms
+ ✓ src/db/signupPending.integration.test.ts > deleteExpiredPendingByEmail (SIGNUP-EXPIRY-001) > deletes an expired pending account and its tokens, and reports it 33ms
+ ✓ src/db/signupPending.integration.test.ts > deleteExpiredPendingByEmail (SIGNUP-EXPIRY-001) > leaves a young pending account and its tokens alone 12ms
+ ✓ src/db/signupPending.integration.test.ts > deleteExpiredPendingByEmail (SIGNUP-EXPIRY-001) > never deletes a confirmed account, whatever its age 12ms
+ ✓ src/db/signupPending.integration.test.ts > deleteExpiredPendingByEmail (SIGNUP-EXPIRY-001) > only touches the account with the given email 23ms
+ ✓ src/db/signupPending.integration.test.ts > deleteExpiredPendingByEmail (SIGNUP-EXPIRY-001) > rolls back the token delete when the user delete fails 27ms
+ ✓ src/db/quizSessions.integration.test.ts > SessionRepository.deleteForQuiz on real Postgres > reports the counts and deletes nothing on a dry run 43ms
+ ✓ src/db/quizSessions.integration.test.ts > SessionRepository.deleteForQuiz on real Postgres > deletes nothing when any one id fails (all-or-nothing) 41ms
+ ✓ src/db/signupPending.integration.test.ts > deleteExpiredPendingByEmail (SIGNUP-EXPIRY-001) > frees the address: a new account with the same email can be created after the purge, and not before 32ms
+ ✓ src/db/signupPending.integration.test.ts > deleteExpiredPendingByEmail (SIGNUP-EXPIRY-001) > findByEmail returns the creation time 11ms
+ ✓ src/db/signupPending.integration.test.ts > deleteUnusedForUser (RESEND-CONFIRMATION-001) > deletes the unused tokens of the account except the kept one, and nobody else’s 38ms
+ ✓ src/db/signupPending.integration.test.ts > resend request windows (RESEND-CONFIRMATION-001) > is empty before anything is recorded 6ms
+ ✓ src/db/signupPending.integration.test.ts > resend request windows (RESEND-CONFIRMATION-001) > counts by email hash within the window, with oldest and newest 16ms
+ ✓ src/db/signupPending.integration.test.ts > resend request windows (RESEND-CONFIRMATION-001) > counts by IP across different addresses 10ms
+ ✓ src/db/signupPending.integration.test.ts > resend request windows (RESEND-CONFIRMATION-001) > record writes a row that the next window query sees 7ms
+ ✓ src/db/signupPending.integration.test.ts > resend request windows (RESEND-CONFIRMATION-001) > lets exactly one of ten parallel requests through when the cooldown allows one 44ms
+ ✓ src/db/signupPending.integration.test.ts > resend request windows (RESEND-CONFIRMATION-001) > does not deadlock when callers share an IP but not an address, or an address but not an IP 65ms
+ ✓ src/db/quizSessions.integration.test.ts > SessionRepository.deleteForQuiz on real Postgres > cannot delete a session that starts between the running check and the delete (row lock) 536ms
+ Test Files  2 passed (2)
+      Tests  21 passed (21)

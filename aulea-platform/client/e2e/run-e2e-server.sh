@@ -15,6 +15,8 @@ PROJECT_NAME="aulea-platform-e2e"
 
 E2E_DB_PORT="${E2E_DB_PORT:-5433}"
 E2E_APP_PORT="${E2E_PORT:-3100}"
+export E2E_SMTP_PORT="${E2E_SMTP_PORT:-1026}"
+export E2E_MAIL_API_PORT="${E2E_MAIL_API_PORT:-8026}"
 
 log() {
   printf '\n[e2e] %s\n' "$1"
@@ -57,5 +59,11 @@ export PORT="$E2E_APP_PORT"
 export EXPEDITE_SIGNUP_ENABLED=true
 export SESSION_SECRET="e2e-test-secret"
 export APP_BASE_URL="http://localhost:${E2E_APP_PORT}"
+# RESEND-CONFIRMATION-001: mail goes to the disposable Mailpit. Every spec calls from
+# 127.0.0.1, so the per-IP resend limit is raised far above what one run can reach;
+# the per-address cooldown and daily cap keep their defaults, as the 429 spec needs them.
+export SMTP_HOST=localhost
+export SMTP_PORT="$E2E_SMTP_PORT"
+export RESEND_IP_MAX_PER_HOUR=1000
 cd "$SERVER_DIR"
 exec node dist/index.js

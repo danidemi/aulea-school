@@ -1,0 +1,312 @@
+ ✓ scripts/security-check/parse.test.ts > parseAuditReport > given text that is not JSON, when parsed, then it throws AuditParseError 3ms
+ ✓ scripts/security-check/parse.test.ts > parseAuditReport > given an npm error object (e.g. no network), when parsed, then it throws with the npm summary 2ms
+ ✓ scripts/security-check/parse.test.ts > parseAuditReport > given an npm error with an empty summary (registry unreachable), when parsed, then the top-level message is used 0ms
+ ✓ scripts/security-check/parse.test.ts > parseAuditReport > given JSON without vulnerabilities, when parsed, then it throws 1ms
+ ✓ scripts/security-check/parse.test.ts > findingsFromAudit > given a recorded audit, when converted, then each advisory becomes one finding with its GHSA id 2ms
+ ✓ scripts/security-check/parse.test.ts > findingsFromAudit > given a chain node that only names a parent package, when converted, then it adds no finding 1ms
+ ✓ scripts/security-check/parse.test.ts > findingsFromAudit > given an advisory without a GHSA url, when converted, then the numeric source is the id 1ms
+ ✓ scripts/security-check/parse.test.ts > mergeScopes > given a full audit with an extra advisory, when merged with the prod audit, then the extra one is dev 2ms
+ ✓ scripts/security-check/allowlist.test.ts > evaluate > given a high prod finding not in the allowlist, when evaluated, then it is new 2ms
+ ✓ scripts/security-check/allowlist.test.ts > evaluate > given a critical prod finding not in the allowlist, when evaluated, then it is new 0ms
+ ✓ scripts/security-check/allowlist.test.ts > evaluate > given a high prod finding with an active entry, when evaluated, then it is allowed with the reason 2ms
+ ✓ scripts/security-check/allowlist.test.ts > evaluate > given an entry that expired yesterday, when evaluated, then the finding is expired and fails again 0ms
+ ✓ scripts/security-check/allowlist.test.ts > evaluate > given an entry that expires today, when evaluated, then it is still accepted 0ms
+ ✓ scripts/security-check/allowlist.test.ts > evaluate > given an entry for the same id but another package, when evaluated, then it does not match 0ms
+ ✓ scripts/security-check/allowlist.test.ts > evaluate > given a moderate prod finding, when evaluated, then it is only reported 0ms
+ ✓ scripts/security-check/allowlist.test.ts > evaluate > given a high dev finding, when evaluated, then it is only reported and never blocks 0ms
+ ✓ scripts/security-check/allowlist.test.ts > evaluate > given a dev finding with an expired entry, when evaluated, then it stays reported 1ms
+ ✓ scripts/security-check/allowlist.test.ts > parseAllowlist > given a valid file, when parsed, then the entries are returned 1ms
+ ✓ scripts/security-check/allowlist.test.ts > parseAllowlist > given an entry without id, when parsed, then it throws 1ms
+ ✓ scripts/security-check/allowlist.test.ts > parseAllowlist > given an entry without package, when parsed, then it throws 0ms
+ ✓ scripts/security-check/allowlist.test.ts > parseAllowlist > given an entry without reason, when parsed, then it throws 0ms
+ ✓ scripts/security-check/allowlist.test.ts > parseAllowlist > given an entry without expires, when parsed, then it throws 1ms
+ ✓ scripts/security-check/allowlist.test.ts > parseAllowlist > given a bad expiry date, when parsed, then it throws 1ms
+ ✓ scripts/security-check/allowlist.test.ts > parseAllowlist > given text that is not JSON, when parsed, then it throws 0ms
+ ✓ scripts/security-stop-hook/decide.test.ts > decide > given no relevant change, when the turn ends, then it allows the stop without running the check 5ms
+ ✓ scripts/security-stop-hook/decide.test.ts > decide > given no changed files at all, when the turn ends, then it allows the stop 1ms
+ ✓ scripts/security-stop-hook/decide.test.ts > decide > given a relevant change and new findings, when the turn ends, then it blocks with the findings and the guidance 1ms
+ ✓ scripts/security-stop-hook/decide.test.ts > decide > given a relevant change and a clean result, when the turn ends, then it allows the stop silently 1ms
+ ✓ scripts/security-stop-hook/decide.test.ts > decide > given stop_hook_active is set and new findings exist, when the turn ends, then it does not block a second time 1ms
+ ✓ scripts/security-stop-hook/decide.test.ts > decide > given the script cannot run (exit 2), when the turn ends, then it warns and does not block 0ms
+ ✓ scripts/security-stop-hook/decide.test.ts > decide > given the script is unavailable (cannot be started), when the turn ends, then it warns and does not block 1ms
+ ✓ scripts/security-stop-hook/decide.test.ts > isRelevantChange > given aulea-platform/server/package.json, when checked, then it is relevant 0ms
+ ✓ scripts/security-stop-hook/decide.test.ts > isRelevantChange > given aulea-platform/client/package.json, when checked, then it is relevant 1ms
+ ✓ scripts/security-stop-hook/decide.test.ts > isRelevantChange > given aulea-platform/server/package-lock.json, when checked, then it is relevant 1ms
+ ✓ scripts/security-stop-hook/decide.test.ts > isRelevantChange > given aulea-platform/client/package-lock.json, when checked, then it is relevant 0ms
+ ✓ scripts/security-stop-hook/decide.test.ts > isRelevantChange > given aulea-platform/Dockerfile, when checked, then it is relevant 0ms
+ ✓ scripts/security-stop-hook/decide.test.ts > isRelevantChange > given aulea-platform/docker/Dockerfile.dev, when checked, then it is relevant 0ms
+ ✓ scripts/security-stop-hook/decide.test.ts > isRelevantChange > given aulea-platform/server/src/index.ts, when checked, then it is relevant 0ms
+ ✓ scripts/security-stop-hook/decide.test.ts > isRelevantChange > given aulea-platform/server/src/routes/deep/file.ts, when checked, then it is relevant 0ms
+ ✓ scripts/security-stop-hook/decide.test.ts > isRelevantChange > given aulea-platform/client/src/App.tsx, when checked, then it is not relevant 0ms
+ ✓ scripts/security-stop-hook/decide.test.ts > isRelevantChange > given aulea-platform/server/scripts/db-seed.ts, when checked, then it is not relevant 0ms
+ ✓ scripts/security-stop-hook/decide.test.ts > isRelevantChange > given aulea-platform/README.md, when checked, then it is not relevant 0ms
+ ✓ scripts/security-stop-hook/decide.test.ts > isRelevantChange > given agile/aulea-platform/active_sprint/x.md, when checked, then it is not relevant 0ms
+ ✓ scripts/security-stop-hook/decide.test.ts > isRelevantChange > given other/package.json, when checked, then it is not relevant 0ms
+ ✓ src/auth/password.test.ts > password hashing (SIGNUP-EXPEDITE-001) > hashes a password to something other than the plain text 100ms
+ ✓ src/qti/answerBreakdown.test.ts > computeAnswerBreakdown (QUIZ-CLASS-REVIEW-001) > buckets a qti-choice-interaction item by every offered option, marking the correct one 16ms
+ ✓ src/qti/answerBreakdown.test.ts > computeAnswerBreakdown (QUIZ-CLASS-REVIEW-001) > groups a non-choice item by exact raw text, with duplicates counted together 3ms
+ ✓ src/qti/answerBreakdown.test.ts > computeAnswerBreakdown (QUIZ-CLASS-REVIEW-001) > counts a connection with no row for the item as a separate no-answer count, not a bucket 2ms
+ ✓ src/qti/answerBreakdown.test.ts > computeAnswerBreakdown (QUIZ-CLASS-REVIEW-001) > carries the question text through from the interaction-level qti-prompt (how real quiz items author it) 1ms
+ ✓ src/qti/answerBreakdown.test.ts > computeAnswerBreakdown with a multi-select choice interaction (BUG-ANSWER-BREAKDOWN-MULTISELECT) > counts each identifier in a multi-select response array as a pick of its own bucket 2ms
+ ✓ src/qti/answerBreakdown.test.ts > computeAnswerBreakdown with a multi-select choice interaction (BUG-ANSWER-BREAKDOWN-MULTISELECT) > counts an empty multi-select response array as no answer, not a dropped answer 4ms
+ ✓ src/qti/answerBreakdown.test.ts > computeAnswerBreakdown with a multi-select choice interaction (BUG-ANSWER-BREAKDOWN-MULTISELECT) > leaves single-select behavior unchanged when the response is a plain string 1ms
+ ✓ src/qti/validateQti3.test.ts > validateQti3 (QTI3-MIGRATION-001) > accepts a well-formed, minimally-complete qti-assessment-item 6ms
+ ✓ src/qti/validateQti3.test.ts > validateQti3 (QTI3-MIGRATION-001) > rejects malformed XML with a line number 1ms
+ ✓ src/qti/validateQti3.test.ts > validateQti3 (QTI3-MIGRATION-001) > rejects a document with the wrong root element 0ms
+ ✓ src/qti/validateQti3.test.ts > validateQti3 (QTI3-MIGRATION-001) > rejects a QTI 2.2 file as wrong root element, now that QTI 2.2 is unsupported 1ms
+ ✓ src/qti/validateQti3.test.ts > validateQti3 (QTI3-MIGRATION-001) > rejects a qti-assessment-item missing the required "identifier" attribute 1ms
+ ✓ src/qti/validateQti3.test.ts > validateQti3 (QTI3-MIGRATION-001) > rejects a qti-assessment-item missing the required "title" attribute 1ms
+ ✓ src/qti/validateQti3.test.ts > validateQti3 (QTI3-MIGRATION-001) > rejects a qti-assessment-item missing the required qti-item-body element 1ms
+ ✓ src/qti/validateQti3.test.ts > validateQti3 (QTI3-MIGRATION-001) > rejects a root element in the wrong namespace 1ms
+ ✓ src/qti/validateQti3.test.ts > validateQti3 (QTI3-MIGRATION-001) > rejects an empty file 1ms
+ ✓ src/qti/validateQti3.test.ts > validateQti3 (QTI3-MIGRATION-001) > accepts a qti-assessment-test root without requiring qti-item-body 1ms
+ ✓ src/qti/validateQti3.test.ts > validateQti3 (QTI3-MIGRATION-001) > collects multiple errors at once rather than stopping at the first 0ms
+ ✓ src/qti/validateQti3.test.ts > validateQti3 against the QTI-UAT-SAMPLES-001 fixtures > accepts sample-accept-single-choice-basic.xml 1ms
+ ✓ src/qti/validateQti3.test.ts > validateQti3 against the QTI-UAT-SAMPLES-001 fixtures > accepts sample-accept-multiple-choice-basic.xml 2ms
+ ✓ src/qti/validateQti3.test.ts > validateQti3 against the QTI-UAT-SAMPLES-001 fixtures > accepts sample-accept-multi-item-test.xml 1ms
+ ✓ src/qti/validateQti3.test.ts > validateQti3 against the QTI-UAT-SAMPLES-001 fixtures > rejects sample-reject-malformed-xml.xml 1ms
+ ✓ src/qti/validateQti3.test.ts > validateQti3 against the QTI-UAT-SAMPLES-001 fixtures > rejects sample-reject-wrong-root-element.xml 1ms
+ ✓ src/qti/validateQti3.test.ts > validateQti3 against the QTI-UAT-SAMPLES-001 fixtures > rejects sample-reject-missing-identifier.xml 1ms
+ ✓ src/qti/validateQti3.test.ts > validateQtiPackage (QUIZ-PACKAGE-STORAGE-001) > accepts a well-formed package, returning every file to store 26ms
+ ✓ src/qti/validateQti3.test.ts > validateQtiPackage (QUIZ-PACKAGE-STORAGE-001) > rejects a buffer that is not a valid zip archive 1ms
+ ✓ src/qti/validateQti3.test.ts > validateQtiPackage (QUIZ-PACKAGE-STORAGE-001) > rejects a package missing imsmanifest.xml 4ms
+ ✓ src/qti/validateQti3.test.ts > validateQtiPackage (QUIZ-PACKAGE-STORAGE-001) > rejects a package missing test.xml 4ms
+ ✓ src/qti/validateQti3.test.ts > validateQtiPackage (QUIZ-PACKAGE-STORAGE-001) > rejects a package with a dangling item-ref href 3ms
+ ✓ src/qti/validateQti3.test.ts > validateQtiPackage (QUIZ-PACKAGE-STORAGE-001) > rejects a package whose referenced item file is itself structurally invalid, naming the file 14ms
+ ✓ src/qti/validateQti3.test.ts > validateQtiPackage (QUIZ-PACKAGE-STORAGE-001) > rejects an empty zip archive 1ms
+ ✓ src/qti/scoreAnswer.test.ts > scoreChoiceAnswer with a multi-select choice interaction > scores full credit when the response array matches every correct identifier, in the qti3-player-react serialize() shape 26ms
+ ✓ src/qti/scoreAnswer.test.ts > scoreChoiceAnswer with a multi-select choice interaction > scores no credit when the response array does not match the correct identifiers 2ms
+ ✓ src/qti/scoreAnswer.test.ts > scoreChoiceAnswer with a multi-select choice interaction > scores no credit for an empty response array 8ms
+ ✓ src/qti/deliveryOrder.test.ts > resolveDeliveryOrder / applyDeliveryOrder (QUIZ-SESSION-PER-STUDENT-DELIVERY-001) > question order: an authored shuffle="true" section is reordered even with force off 61ms
+ ✓ src/qti/deliveryOrder.test.ts > resolveDeliveryOrder / applyDeliveryOrder (QUIZ-SESSION-PER-STUDENT-DELIVERY-001) > question order: an authored shuffle="false" section stays in authored order with force off 13ms
+ ✓ src/qti/deliveryOrder.test.ts > resolveDeliveryOrder / applyDeliveryOrder (QUIZ-SESSION-PER-STUDENT-DELIVERY-001) > question order: force on reorders an authored shuffle="false" section too 24ms
+ ✓ src/qti/deliveryOrder.test.ts > resolveDeliveryOrder / applyDeliveryOrder (QUIZ-SESSION-PER-STUDENT-DELIVERY-001) > question order: force on ALSO reorders an authored shuffle="true" section (the fourth combination) 15ms
+ ✓ scripts/security-check/npmAudit.test.ts > npmAuditCheck > given prod and full audits, when run, then dev-only findings are marked dev 4ms
+ ✓ scripts/security-check/npmAudit.test.ts > npmAuditCheck > given npm cannot start, when run, then it could not run 2ms
+ ✓ scripts/security-check/npmAudit.test.ts > npmAuditCheck > given npm returns an error report (no network), when run, then it could not run with npm summary 1ms
+ ✓ scripts/security-check/report.test.ts > exitCodeFor > given only allowed and reported findings, when computed, then the exit code is 0 3ms
+ ✓ scripts/security-check/report.test.ts > exitCodeFor > given a new finding, when computed, then the exit code is 1 0ms
+ ✓ scripts/security-check/report.test.ts > exitCodeFor > given an expired finding, when computed, then the exit code is 1 0ms
+ ✓ scripts/security-check/report.test.ts > exitCodeFor > given a check that could not run and no findings, when computed, then the exit code is 2 1ms
+ ✓ scripts/security-check/report.test.ts > exitCodeFor > given a new finding and a check that could not run, when computed, then findings win with 1 0ms
+ ✓ scripts/security-check/report.test.ts > buildSummary > given mixed findings, when summarised, then the JSON shape has version, result and counts 2ms
+ ✓ scripts/security-check/report.test.ts > formatHuman > given a new finding, when formatted, then it is listed under NEW and the verdict is FAIL 1ms
+ ✓ scripts/security-check/report.test.ts > formatHuman > given a check that could not run, when formatted, then the reason is shown 1ms
+ ✓ src/auth/tokens.test.ts > tokens (SIGN-UP-001) > generates tokens long enough to resist guessing 3ms
+ ✓ src/auth/tokens.test.ts > tokens (SIGN-UP-001) > generates a different token on each call 1ms
+ ✓ src/auth/tokens.test.ts > tokens (SIGN-UP-001) > hashes the same token to the same digest 1ms
+ ✓ src/auth/tokens.test.ts > tokens (SIGN-UP-001) > hashes different tokens to different digests 1ms
+ ✓ src/qti/deliveryOrder.test.ts > resolveDeliveryOrder / applyDeliveryOrder (QUIZ-SESSION-PER-STUDENT-DELIVERY-001) > question order: force off leaves every section following its own attribute, sections in document order 27ms
+ ✓ src/qti/deliveryOrder.test.ts > resolveDeliveryOrder / applyDeliveryOrder (QUIZ-SESSION-PER-STUDENT-DELIVERY-001) > choice order: authored shuffle="true" item is shuffled even with force off 13ms
+ ✓ src/qti/deliveryOrder.test.ts > resolveDeliveryOrder / applyDeliveryOrder (QUIZ-SESSION-PER-STUDENT-DELIVERY-001) > choice order: authored shuffle="false" item is NOT shuffled with force off (absent from choiceOrder, byte-identical XML) 14ms
+ ✓ src/qti/deliveryOrder.test.ts > resolveDeliveryOrder / applyDeliveryOrder (QUIZ-SESSION-PER-STUDENT-DELIVERY-001) > choice order: force on shuffles an authored shuffle="false" item too 9ms
+ ✓ src/qti/deliveryOrder.test.ts > resolveDeliveryOrder / applyDeliveryOrder (QUIZ-SESSION-PER-STUDENT-DELIVERY-001) > choice order: force on ALSO shuffles an authored shuffle="true" item (the fourth combination) 7ms
+ ✓ src/qti/deliveryOrder.test.ts > resolveDeliveryOrder / applyDeliveryOrder (QUIZ-SESSION-PER-STUDENT-DELIVERY-001) > choice order: force off + authored shuffle="false" leaves an unsupported/no-interaction item alone 9ms
+ ✓ src/qti/deliveryOrder.test.ts > resolveDeliveryOrder / applyDeliveryOrder (QUIZ-SESSION-PER-STUDENT-DELIVERY-001) > is stable across repeated calls with the same RNG behavior, matching the "generate once, persist" contract 13ms
+ ✓ src/qti/deliveryOrder.test.ts > resolveDeliveryOrder / applyDeliveryOrder (QUIZ-SESSION-PER-STUDENT-DELIVERY-001) > applyDeliveryOrder's reordered item still parses via parseQtiXml with the same identifier and the same set of choice identifiers, only order differs 17ms
+ ✓ src/qti/deliveryOrder.test.ts > resolveDeliveryOrder / applyDeliveryOrder (QUIZ-SESSION-PER-STUDENT-DELIVERY-001) > applyDeliveryOrder re-sequences items per itemOrder and tolerates a stored identifier no longer present 8ms
+ ✓ src/qti/deliveryOrder.test.ts > resolveDeliveryOrder / applyDeliveryOrder (QUIZ-SESSION-PER-STUDENT-DELIVERY-001) > reorderChoicesInXml leaves XML with no qti-choice-interaction unchanged 1ms
+ ✓ src/qti/deliveryOrder.test.ts > resolveDeliveryOrder / applyDeliveryOrder (QUIZ-SESSION-PER-STUDENT-DELIVERY-001) > with no test.xml (standalone single-item quiz), the item order is just that one item, never shuffled 3ms
+ ✓ src/auth/password.test.ts > password hashing (SIGNUP-EXPEDITE-001) > verifies the correct password against its own hash 186ms
+ ✓ src/auth/password.test.ts > password hashing (SIGNUP-EXPEDITE-001) > rejects an incorrect password against an existing hash 198ms
+ ✓ src/db/users.test.ts > isUniqueViolation (SIGNUP-EXPEDITE-001) > matches the wrapped shape drizzle-orm/node-postgres actually throws 2ms
+ ✓ src/db/users.test.ts > isUniqueViolation (SIGNUP-EXPEDITE-001) > matches a flat pg error shape with .code set directly 1ms
+ ✓ src/db/users.test.ts > isUniqueViolation (SIGNUP-EXPEDITE-001) > does not match an unrelated error 0ms
+ ✓ src/db/users.test.ts > isUniqueViolation (SIGNUP-EXPEDITE-001) > does not match a different SQLSTATE code 0ms
+ ✓ src/routes/version.test.ts > GET /api/version (VERSION-INFO-001) > given the server is running from source (no dist/version.json), when GET /api/version, then it reports live git fields labeled "Dev build" 60ms
+ ✓ src/routes/version.test.ts > GET /api/version (VERSION-INFO-001) > given two requests, when GET /api/version is called twice, then the reported startedAt does not change between calls 11ms
+ ✓ src/app.test.ts > server app > responds ok on the health check endpoint 36ms
+ ✓ src/app.test.ts > server app > serves the built client for the root path 15ms
+ ✓ src/routes/quizzes.test.ts > GET /api/courses/:courseId/quizzes (QUIZ-DASHBOARD-001) > returns 401 when not signed in 35ms
+ ✓ src/routes/courses.test.ts > GET /api/courses (COURSE-001) > returns 401 when not signed in 36ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quizzes/:quizId (BUG-BREADCRUMB-NAV) > returns 401 when not signed in 42ms
+ ✓ src/routes/signup.test.ts > POST /api/signup/expedite (SIGNUP-EXPEDITE-001) > creates the account and returns 201 when the flag is on and input is valid 152ms
+ ✓ src/routes/signup.test.ts > POST /api/signup/expedite (SIGNUP-EXPEDITE-001) > returns 403 when the feature flag is off, even with valid input 7ms
+ ✓ src/routes/login.test.ts > POST /api/login (AUTH-UX-001) > creates a session and returns 200 for a confirmed user with the right password 273ms
+ ✓ src/routes/login.test.ts > POST /api/login (AUTH-UX-001) > rejects with a generic error when the email does not exist 9ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quizzes/:quizId (BUG-BREADCRUMB-NAV) > returns the quiz title, courseId, and course title 283ms
+ ✓ src/routes/courses.test.ts > GET /api/courses (COURSE-001) > lists only the caller's tenant's courses 436ms
+ ✓ src/routes/quizzes.test.ts > GET /api/courses/:courseId/quizzes (QUIZ-DASHBOARD-001) > returns 404 for a course belonging to a different tenant 462ms
+ ✓ src/routes/signup.test.ts > POST /api/signup/expedite (SIGNUP-EXPEDITE-001) > returns 409 when the email is already taken 286ms
+ ✓ src/routes/signup.test.ts > POST /api/signup/expedite (SIGNUP-EXPEDITE-001) > returns 400 password_mismatch and creates no account when the confirmation differs or is missing 10ms
+ ✓ src/routes/signup.test.ts > POST /api/signup/expedite (SIGNUP-EXPEDITE-001) > returns 400 when the password is shorter than 8 characters 4ms
+ ✓ src/routes/signup.test.ts > POST /api/signup/expedite (SIGNUP-EXPEDITE-001) > returns 400 when the email is missing 3ms
+ ✓ src/routes/signup.test.ts > GET /api/config (SIGNUP-EXPEDITE-001) > reports the expedite flag as enabled when EXPEDITE_SIGNUP_ENABLED=true 7ms
+ ✓ src/routes/signup.test.ts > GET /api/config (SIGNUP-EXPEDITE-001) > reports the expedite flag as disabled when the env var is unset 4ms
+ ✓ src/routes/signup.test.ts > GET /api/config (SIGNUP-EXPEDITE-001) > reports the pending max age and the resend cooldown, from env with defaults (SIGNUP-EXPIRY-001, RESEND-CONFIRMATION-001) 6ms
+ ✓ src/routes/login.test.ts > POST /api/login (AUTH-UX-001) > rejects with the same generic error when the password is wrong 187ms
+ ✓ src/routes/login.test.ts > POST /api/login (AUTH-UX-001) > rejects with the same generic error when the account is unconfirmed 90ms
+ ✓ src/routes/login.test.ts > POST /api/login (AUTH-UX-001) > rejects when email or password is missing from the request body 5ms
+ ✓ src/routes/login.test.ts > GET /api/me (AUTH-UX-001 / TENANT-001) > returns 401 when no session exists 4ms
+ ✓ src/routes/quizzes.test.ts > GET /api/courses/:courseId/quizzes (QUIZ-DASHBOARD-001) > lists the quizzes belonging to the course 208ms
+ ✓ src/routes/signup.test.ts > POST /api/signup (SIGN-UP-001) > creates an unconfirmed account, stores a token, and sends a confirmation email 99ms
+ ✓ src/routes/courses.test.ts > GET /api/courses (COURSE-001) > sorts by the requested field 206ms
+ ✓ src/routes/signup.test.ts > POST /api/signup (SIGN-UP-001) > returns 409 when the email is already taken 176ms
+ ✓ src/routes/signup.test.ts > POST /api/signup (SIGN-UP-001) > returns 400 password_mismatch and creates no account when the confirmation differs or is missing 5ms
+ ✓ src/routes/signup.test.ts > POST /api/signup (SIGN-UP-001) > returns 400 when the password is shorter than 8 characters 2ms
+ ✓ src/routes/signup.test.ts > POST /api/signup (SIGN-UP-001) > returns 400 when the email is missing 2ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quizzes/:quizId (BUG-BREADCRUMB-NAV) > returns 404 for a quiz belonging to a different tenant 393ms
+ ✓ src/routes/login.test.ts > GET /api/me (AUTH-UX-001 / TENANT-001) > returns the signed-in user and their current tenant after a successful login 178ms
+ ✓ src/routes/quizzes.test.ts > GET /api/courses/:courseId/quizzes (QUIZ-DASHBOARD-001) > returns an empty list for a course with no quizzes yet 175ms
+ ✓ src/routes/quizzes.test.ts > POST /api/courses/:courseId/quizzes (QTI-22-IMPORT) > returns 401 when not signed in 10ms
+ ✓ src/routes/courses.test.ts > GET /api/courses (COURSE-001) > defaults to sorting by title when sortBy is missing or invalid 168ms
+ ✓ src/routes/signup.test.ts > GET /api/confirm (SIGN-UP-001) > confirms the account and redirects to status=ok for a valid, unused token 95ms
+ ✓ src/routes/signup.test.ts > GET /api/confirm (SIGN-UP-001) > redirects to status=used when the link has already been visited 82ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quizzes/:quizId (BUG-BREADCRUMB-NAV) > returns 404 for an unknown quiz id 157ms
+ ✓ src/routes/login.test.ts > POST /api/logout (LOGOUT-001) > destroys the session so a subsequent GET /api/me reports signed out 160ms
+ ✓ src/routes/courses.test.ts > GET /api/courses (COURSE-001) > returns an empty list for a tenant with no courses yet 162ms
+ ✓ src/routes/courses.test.ts > POST /api/courses (COURSE-001) > returns 401 when not signed in 2ms
+ ✓ src/routes/signup.test.ts > GET /api/confirm (SIGN-UP-001) > redirects to status=expired when the token has expired 84ms
+ ✓ src/routes/signup.test.ts > GET /api/confirm (SIGN-UP-001) > redirects to status=invalid for an unrecognized token 2ms
+ ✓ src/routes/signup.test.ts > GET /api/confirm (SIGN-UP-001) > redirects to status=invalid when no token is given 2ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quizzes/:quizId (BUG-BREADCRUMB-NAV) > returns 404 for a malformed quiz id, not a 500 177ms
+ ✓ src/routes/quizSessions.test.ts > deriveStatus (pure) > is closed when never started 0ms
+ ✓ src/routes/quizSessions.test.ts > deriveStatus (pure) > is running once started with no limit 0ms
+ ✓ src/routes/quizSessions.test.ts > deriveStatus (pure) > is running while the deadline has not passed 0ms
+ ✓ src/routes/quizSessions.test.ts > deriveStatus (pure) > is stopped once the deadline has passed, with no explicit stop 0ms
+ ✓ src/routes/quizSessions.test.ts > deriveStatus (pure) > is stopped once explicitly stopped 0ms
+ ✓ src/routes/quizSessions.test.ts > parseTimeLimit (pure) > accepts hours 0ms
+ ✓ src/routes/quizSessions.test.ts > parseTimeLimit (pure) > accepts minutes 0ms
+ ✓ src/routes/quizSessions.test.ts > parseTimeLimit (pure) > is case-insensitive 0ms
+ ✓ src/routes/quizSessions.test.ts > parseTimeLimit (pure) > treats an omitted value as no limit 0ms
+ ✓ src/routes/quizSessions.test.ts > parseTimeLimit (pure) > rejects banana as invalid 0ms
+ ✓ src/routes/quizSessions.test.ts > parseTimeLimit (pure) > rejects 0m as invalid 0ms
+ ✓ src/routes/quizSessions.test.ts > parseTimeLimit (pure) > rejects -5h as invalid 0ms
+ ✓ src/routes/quizSessions.test.ts > parseTimeLimit (pure) > rejects 5 as invalid 0ms
+ ✓ src/routes/quizSessions.test.ts > parseTimeLimit (pure) > rejects h as invalid 0ms
+ ✓ src/routes/quizSessions.test.ts > parseTimeLimit (pure) > rejects 5x as invalid 0ms
+ ✓ src/routes/quizSessions.test.ts > parseForceShuffle (pure) > treats an omitted/null value as false (no trainer action required) 0ms
+ ✓ src/routes/quizSessions.test.ts > parseForceShuffle (pure) > accepts true/false 0ms
+ ✓ src/routes/quizSessions.test.ts > parseForceShuffle (pure) > rejects a non-boolean true as invalid 0ms
+ ✓ src/routes/quizSessions.test.ts > parseForceShuffle (pure) > rejects a non-boolean 1 as invalid 0ms
+ ✓ src/routes/quizSessions.test.ts > parseForceShuffle (pure) > rejects a non-boolean 0 as invalid 0ms
+ ✓ src/routes/quizSessions.test.ts > parseForceShuffle (pure) > rejects a non-boolean false as invalid 0ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quizzes/:quizId/sessions > returns 401 when not signed in 3ms
+ ✓ src/routes/quizzes.test.ts > POST /api/courses/:courseId/quizzes (QTI-22-IMPORT) > returns 404 for a course belonging to a different tenant 349ms
+ ✓ src/routes/login.test.ts > POST /api/logout (LOGOUT-001) > clears the session cookie 174ms
+ ✓ src/routes/login.test.ts > POST /api/logout (LOGOUT-001) > is idempotent — logging out with no session succeeds without error 3ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quizzes/:quizId/sessions > creates a closed session for a quiz the caller owns 179ms
+ ✓ src/routes/signup.test.ts > sign up over an expired pending account (SIGNUP-EXPIRY-001) > replaces an expired pending account and answers 201 167ms
+ ✓ src/routes/courses.test.ts > POST /api/courses (COURSE-001) > creates a course and returns 201 165ms
+ ✓ src/routes/login.test.ts > TENANT-001: tenant assignment on login > assigns the same tenant across repeated logins, not a new one each time 278ms
+ ✓ src/routes/quizzes.test.ts > POST /api/courses/:courseId/quizzes (QTI-22-IMPORT) > returns 400 when no file is attached 205ms
+ ✓ src/routes/courses.test.ts > POST /api/courses (COURSE-001) > rejects a duplicate title within the same tenant 200ms
+ ✓ src/routes/signup.test.ts > sign up over an expired pending account (SIGNUP-EXPIRY-001) > replaces an expired pending account on the expedite path too 188ms
+ ✓ src/routes/courses.test.ts > POST /api/courses (COURSE-001) > allows the same title in two different tenants 325ms
+ ✓ src/routes/signup.test.ts > sign up over an expired pending account (SIGNUP-EXPIRY-001) > answers 409 for a pending account younger than the maximum age 173ms
+ ✓ src/routes/login.test.ts > TENANT-001: tenant assignment on login > assigns different users their own separate tenants 338ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quizzes/:quizId/sessions > returns 404 for a quiz belonging to a different tenant 387ms
+ ✓ src/routes/quizzes.test.ts > POST /api/courses/:courseId/quizzes (QTI-22-IMPORT) > creates a quiz from a valid QTI 3.0 file, using its declared title 194ms
+ ✓ src/routes/signup.test.ts > sign up over an expired pending account (SIGNUP-EXPIRY-001) > answers 409 for a confirmed account, whatever its age 165ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quizzes/:quizId/sessions > returns 404, not a crash, for a malformed quiz id (ROUTE-ID-GUARD-001 pattern) 159ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quizzes/:quizId/sessions (QUIZ-SESSION-HISTORY-001) > returns 401 when not signed in 3ms
+ ✓ src/routes/quizzes.test.ts > POST /api/courses/:courseId/quizzes (QTI-22-IMPORT) > rejects an invalid QTI file with line/element-level errors, creating nothing 173ms
+ ✓ src/routes/signup.test.ts > sign up over an expired pending account (SIGNUP-EXPIRY-001) > uses the max age from SIGNUP_PENDING_MAX_AGE_DAYS 151ms
+ ✓ src/routes/courses.test.ts > POST /api/courses (COURSE-001) > rejects an empty title 177ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quizzes/:quizId/sessions (QUIZ-SESSION-HISTORY-001) > returns an empty list for a quiz with no sessions yet 176ms
+ ✓ src/routes/quizzes.test.ts > POST /api/courses/:courseId/quizzes (QTI-22-IMPORT) > rejects malformed (non-well-formed) XML the same way 168ms
+ ✓ src/routes/signup.test.ts > sign up over an expired pending account (SIGNUP-EXPIRY-001) > leaves both the account and its tokens in place when the purge fails 167ms
+ ✓ src/routes/courses.test.ts > POST /api/courses (COURSE-001) > rejects a missing title 156ms
+ ✓ src/routes/courses.test.ts > GET /api/courses/:courseId (COURSE-DETAIL-001) > returns 401 when not signed in 2ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quizzes/:quizId/sessions (QUIZ-SESSION-HISTORY-001) > returns every session for the quiz, newest first 172ms
+ ✓ src/routes/quizzes.test.ts > POST /api/courses/:courseId/quizzes — .zip package (QUIZ-PACKAGE-STORAGE-001) > creates a quiz from a valid multi-item .zip package, storing every file 185ms
+ ✓ src/routes/signup.test.ts > sign up over an expired pending account (SIGNUP-EXPIRY-001) > answers status=invalid for the link of a purged account 162ms
+ ✓ src/routes/signup.test.ts > TRUST_PROXY (RESEND-CONFIRMATION-001) > starts with TRUST_PROXY=false 1ms
+ ✓ src/routes/signup.test.ts > TRUST_PROXY (RESEND-CONFIRMATION-001) > starts with TRUST_PROXY=1 0ms
+ ✓ src/routes/signup.test.ts > TRUST_PROXY (RESEND-CONFIRMATION-001) > starts with TRUST_PROXY=true 0ms
+ ✓ src/routes/signup.test.ts > TRUST_PROXY (RESEND-CONFIRMATION-001) > starts with TRUST_PROXY=10.0.0.0/8 1ms
+ ✓ src/routes/signup.test.ts > TRUST_PROXY (RESEND-CONFIRMATION-001) > uses X-Forwarded-For for the IP limit only when the proxy is trusted 7ms
+ ✓ src/routes/signup.test.ts > POST /api/signup/resend (RESEND-CONFIRMATION-001) > sends a new email with a new token for an unconfirmed account 74ms
+ ✓ src/routes/courses.test.ts > GET /api/courses/:courseId (COURSE-DETAIL-001) > returns the course when it belongs to the caller's tenant 167ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quizzes/:quizId/sessions (QUIZ-SESSION-HISTORY-001) > includes joined/submitted counts per session 166ms
+ ✓ src/routes/quizzes.test.ts > POST /api/courses/:courseId/quizzes — .zip package (QUIZ-PACKAGE-STORAGE-001) > still accepts a standalone single-item upload, stored as a 1-row package with no manifest 165ms
+ ✓ src/routes/courses.test.ts > GET /api/courses/:courseId (COURSE-DETAIL-001) > returns 404 for a course belonging to a different tenant 296ms
+ ✓ src/routes/signup.test.ts > POST /api/signup/resend (RESEND-CONFIRMATION-001) > refuses a second call inside the cooldown with 429 and Retry-After, sending nothing 77ms
+ ✓ src/routes/signup.test.ts > POST /api/signup/resend (RESEND-CONFIRMATION-001) > works again once the cooldown has passed 84ms
+ ✓ src/routes/quizzes.test.ts > POST /api/courses/:courseId/quizzes — .zip package (QUIZ-PACKAGE-STORAGE-001) > rejects a .zip that is not a valid archive, creating nothing 163ms
+ ✓ src/routes/courses.test.ts > GET /api/courses/:courseId (COURSE-DETAIL-001) > returns 404 for a course id that does not exist (or is malformed) 166ms
+ ✓ src/routes/signup.test.ts > POST /api/signup/resend (RESEND-CONFIRMATION-001) > does not extend the cooldown, nor use the daily cap, when a call is refused 85ms
+ ✓ src/routes/signup.test.ts > POST /api/signup/resend (RESEND-CONFIRMATION-001) > refuses once the daily cap is reached, with Retry-After until the oldest send leaves the 24 h window 80ms
+ ✓ src/routes/signup.test.ts > POST /api/signup/resend (RESEND-CONFIRMATION-001) > refuses with 429 when one IP exceeds the hourly limit, even for different addresses 4ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quizzes/:quizId/sessions (QUIZ-SESSION-HISTORY-001) > returns 404 for a quiz belonging to a different tenant 324ms
+ ✓ src/routes/quizzes.test.ts > POST /api/courses/:courseId/quizzes — .zip package (QUIZ-PACKAGE-STORAGE-001) > rejects a package with a dangling item-ref href, creating nothing 168ms
+ ✓ src/routes/signup.test.ts > POST /api/signup/resend (RESEND-CONFIRMATION-001) > gives an unknown address, a confirmed account and a real send the same reply, and 429 behaves the same too 161ms
+ ✓ src/routes/signup.test.ts > POST /api/signup/resend (RESEND-CONFIRMATION-001) > stores no raw email, only its hash 2ms
+ ✓ src/routes/signup.test.ts > POST /api/signup/resend (RESEND-CONFIRMATION-001) > answers 400 for a missing or malformed email 2ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quizzes/:quizId/sessions (QUIZ-SESSION-HISTORY-001) > returns 404, not a crash, for a malformed quiz id (ROUTE-ID-GUARD-001 pattern) 147ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quizzes/:quizId/sessions/delete (SESSION-DELETE-001) > returns 401 when not signed in 3ms
+ ✓ src/routes/quizzes.test.ts > POST /api/courses/:courseId/quizzes — .zip package (QUIZ-PACKAGE-STORAGE-001) > rejects a package missing test.xml, creating nothing 149ms
+ ✓ src/routes/signup.test.ts > POST /api/signup/resend (RESEND-CONFIRMATION-001) > stops the old link and confirms the account with the new one 78ms
+ ✓ src/routes/signup.test.ts > POST /api/signup/resend (RESEND-CONFIRMATION-001) > sends nothing for an expired pending account and answers like an unknown address (SIGNUP-EXPIRY-001) 76ms
+ ✓ src/routes/signup.test.ts > POST /api/signup/resend (RESEND-CONFIRMATION-001) > answers 500 and still counts the request when the mail fails 82ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quizzes/:quizId/sessions/delete (SESSION-DELETE-001) > returns 400 for a missing or malformed sessionIds list 152ms
+ ✓ src/routes/quizzes.test.ts > DELETE /api/courses/:courseId/quizzes/:quizId (QUIZ-DASHBOARD-001) > deletes the quiz row 154ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quizzes/:quizId/sessions/delete (SESSION-DELETE-001) > dry run reports session and answer counts and deletes nothing 159ms
+ ✓ src/routes/quizzes.test.ts > DELETE /api/courses/:courseId/quizzes/:quizId (QUIZ-DASHBOARD-001) > returns 404 for a quiz that does not belong to the course 145ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quizzes/:quizId/sessions/delete (SESSION-DELETE-001) > deletes the sessions with their connections and answers, leaving others 142ms
+ ✓ src/routes/quizzes.test.ts > DELETE /api/courses/:courseId/quizzes/:quizId (QUIZ-DASHBOARD-001) > returns 404 when the course belongs to a different tenant, without deleting anything 273ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quizzes/:quizId/sessions/delete (SESSION-DELETE-001) > rejects with 409 and deletes nothing when any selected session is running 145ms
+ ✓ src/routes/quizzes.test.ts > PUT /api/courses/:courseId/quizzes/:quizId/file (QUIZ-DASHBOARD-001) > replaces the file without creating a new row 142ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quizzes/:quizId/sessions/delete (SESSION-DELETE-001) > deletes a stopped session 145ms
+ ✓ src/routes/quizzes.test.ts > PUT /api/courses/:courseId/quizzes/:quizId/file (QUIZ-DASHBOARD-001) > returns 400 when no file is attached 133ms
+ ✓ src/routes/quizzes.test.ts > PUT /api/courses/:courseId/quizzes/:quizId/file (QUIZ-DASHBOARD-001) > returns 404 for a quiz that does not exist in the course 136ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quizzes/:quizId/sessions/delete (SESSION-DELETE-001) > returns 404 and deletes nothing when a session belongs to another tenant 271ms
+ ✓ src/routes/quizzes.test.ts > malformed course id (ROUTE-ID-GUARD-001) > returns 404, not a crash, for a non-UUID-shaped course id 139ms
+ ✓ src/routes/quizzes.test.ts > malformed course id (ROUTE-ID-GUARD-001) > leaves the server able to answer a following request 140ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quizzes/:quizId/sessions/delete (SESSION-DELETE-001) > returns 404 and deletes nothing when one id is unknown or malformed 146ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quiz-sessions/:sessionId/start > starts a session with a time limit 143ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quiz-sessions/:sessionId/start > starts a session with no time limit 135ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quiz-sessions/:sessionId/start > defaults forceShuffleQuestions/forceShuffleAnswers to false when omitted (QUIZ-SESSION-PER-STUDENT-DELIVERY-001) 139ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quiz-sessions/:sessionId/start > sets forceShuffleQuestions/forceShuffleAnswers from the body, alongside timeLimit 133ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quiz-sessions/:sessionId/start > returns 400 for a non-boolean forceShuffleQuestions 134ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quiz-sessions/:sessionId/start > returns 400 for a non-boolean forceShuffleAnswers 135ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quiz-sessions/:sessionId/start > returns 400 for an unparseable time limit 132ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quiz-sessions/:sessionId/start > reopens a stopped session, resetting the deadline 136ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quiz-sessions/:sessionId/start > returns 404, not a crash, for a malformed session id 130ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quiz-sessions/:sessionId/stop > stops a running session 133ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quiz-sessions/:sessionId/stop > returns 404 for a session belonging to a different tenant 263ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quiz-sessions/:sessionId > returns 401 when not signed in 2ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quiz-sessions/:sessionId > auto-derives stopped once the deadline has passed, without an explicit stop 134ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quiz-sessions/:sessionId > uses APP_BASE_URL for takeUrl, not request-derived context 132ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quiz-sessions/:sessionId > returns 404, not a crash, for a malformed session id 129ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quiz-sessions/:sessionId/connections (QUIZ-SESSION-LIVE-STATUS-001) > joins a session with no session/tenant of any kind, even before it is started 135ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quiz-sessions/:sessionId/connections (QUIZ-SESSION-LIVE-STATUS-001) > returns 404, not a crash, for a malformed session id 1ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quiz-sessions/:sessionId/connections (QUIZ-SESSION-LIVE-STATUS-001) > returns 404 for a session id that does not exist 1ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quiz-sessions/:sessionId/connections rejects a stopped session (QUIZ-CONNECTION-INTEGRITY-001) > returns 409 and creates no connection once the session is stopped 135ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quiz-sessions/:sessionId/connections rejects a stopped session (QUIZ-CONNECTION-INTEGRITY-001) > still accepts a join while closed (pre-start lobby, unchanged) 132ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quiz-sessions/:sessionId/connections rejects a stopped session (QUIZ-CONNECTION-INTEGRITY-001) > still accepts a join while running (unchanged) 134ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quiz-sessions/:sessionId/connections/:connectionId/submit (QUIZ-SESSION-LIVE-STATUS-001) > marks a connection as submitted, reflected in the trainer session view 137ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quiz-sessions/:sessionId/connections/:connectionId/submit (QUIZ-SESSION-LIVE-STATUS-001) > returns 404 for a connection that does not belong to the given session 138ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quiz-sessions/:sessionId/connections/:connectionId/submit (QUIZ-SESSION-LIVE-STATUS-001) > returns 404, not a crash, for a malformed connection id 133ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quiz-sessions/:sessionId/status (QUIZ-TAKE-RENDER-001) > reports closed/running/stopped with no tenant of any kind 142ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quiz-sessions/:sessionId/status (QUIZ-TAKE-RENDER-001) > returns 404, not a crash, for a malformed session id 2ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quiz-sessions/:sessionId/connections/:connectionId/items (QUIZ-TAKE-RENDER-001, replaced by QUIZ-SESSION-PER-STUDENT-DELIVERY-001) > resolves a standalone single-item quiz, marked supported 145ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quiz-sessions/:sessionId/connections/:connectionId/items (QUIZ-TAKE-RENDER-001, replaced by QUIZ-SESSION-PER-STUDENT-DELIVERY-001) > marks a non-choice-interaction item unsupported, not a crash 135ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quiz-sessions/:sessionId/connections/:connectionId/items (QUIZ-TAKE-RENDER-001, replaced by QUIZ-SESSION-PER-STUDENT-DELIVERY-001) > returns 409 while not running, not the questions 133ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quiz-sessions/:sessionId/connections/:connectionId/items (QUIZ-TAKE-RENDER-001, replaced by QUIZ-SESSION-PER-STUDENT-DELIVERY-001) > returns 404, not a crash, for a malformed session id 1ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quiz-sessions/:sessionId/connections/:connectionId/items (QUIZ-TAKE-RENDER-001, replaced by QUIZ-SESSION-PER-STUDENT-DELIVERY-001) > returns 404 for a connection that does not belong to this session 141ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quiz-sessions/:sessionId/connections/:connectionId/items (QUIZ-TAKE-RENDER-001, replaced by QUIZ-SESSION-PER-STUDENT-DELIVERY-001) > is stable across repeated fetches for the same connection (the DoD's 'generated once, persisted' requirement) 174ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quiz-sessions/:sessionId/connections/:connectionId/items (QUIZ-TAKE-RENDER-001, replaced by QUIZ-SESSION-PER-STUDENT-DELIVERY-001) > two concurrent first-fetches for the same connection return identical items (the atomic setOrderIfUnset write is proven separately, at the db layer, against real Postgres — not exercisable with this in-process fake) 156ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quiz-sessions/:sessionId/connections/:connectionId/items (QUIZ-TAKE-RENDER-001, replaced by QUIZ-SESSION-PER-STUDENT-DELIVERY-001) > two different connections in the same shuffled session are independently generated (each gets its own order call) 150ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quiz-sessions/:sessionId/connections/:connectionId/items (QUIZ-TAKE-RENDER-001, replaced by QUIZ-SESSION-PER-STUDENT-DELIVERY-001) > force off: honors each authored shuffle attribute — an authored shuffle="false" item stays byte-identical 140ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quiz-sessions/:sessionId/connections/:connectionId/items (QUIZ-TAKE-RENDER-001, replaced by QUIZ-SESSION-PER-STUDENT-DELIVERY-001) > force on: shuffles an authored shuffle="false" item too, still parseable with the same identifier and choice set 142ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quiz-sessions/:sessionId/connections/:connectionId/answers (QUIZ-TAKE-RENDER-001) > records a pending, max-score-1 answer for a supported choice item 136ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quiz-sessions/:sessionId/connections/:connectionId/answers (QUIZ-TAKE-RENDER-001) > records an ungraded, max-score-0 answer for an unsupported item, ignoring any client-sent responses 137ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quiz-sessions/:sessionId/connections/:connectionId/answers (QUIZ-TAKE-RENDER-001) > returns 404 for a connection that does not belong to the given session 152ms
+ ✓ src/routes/quizSessions.test.ts > POST /api/quiz-sessions/:sessionId/connections/:connectionId/answers (QUIZ-TAKE-RENDER-001) > returns 404, not a crash, for a malformed connection id 139ms
+ ✓ src/routes/quizSessions.test.ts > POST .../submit scores pending answers (QUIZ-AUTO-EVAL-001) > scores a correct choice answer as maxScore on submit, in the response result 137ms
+ ✓ src/routes/quizSessions.test.ts > POST .../submit scores pending answers (QUIZ-AUTO-EVAL-001) > scores an incorrect choice answer as 0 on submit 136ms
+ ✓ src/routes/quizSessions.test.ts > POST .../submit scores pending answers (QUIZ-AUTO-EVAL-001) > leaves an ungraded answer untouched, excluded from the denominator 136ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quiz-sessions/:sessionId/results (QUIZ-AUTO-EVAL-001) > returns 409 while not stopped, not the results 133ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quiz-sessions/:sessionId/results (QUIZ-AUTO-EVAL-001) > returns per-connection scores and a class average once stopped 151ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quiz-sessions/:sessionId/results (QUIZ-AUTO-EVAL-001) > excludes a connection that only ever joined, never submitted (QUIZ-CONNECTION-INTEGRITY-001) 138ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quiz-sessions/:sessionId/results (QUIZ-AUTO-EVAL-001) > includes a genuine zero-answer submission as a real result, not excluded (QUIZ-CONNECTION-INTEGRITY-001) 136ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quiz-sessions/:sessionId/results (QUIZ-AUTO-EVAL-001) > excludes an all-ungraded connection from the class average, not counting it as 0 138ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quiz-sessions/:sessionId/answer-breakdown (QUIZ-CLASS-REVIEW-001) > returns 409 while not stopped, not the breakdown 133ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quiz-sessions/:sessionId/answer-breakdown (QUIZ-CLASS-REVIEW-001) > returns per-option counts once stopped, marking the correct option and a no-answer connection 146ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quiz-sessions/:sessionId/answer-breakdown (QUIZ-CLASS-REVIEW-001) > excludes a connection that only ever joined, never submitted, from the breakdown entirely 135ms
+ ✓ src/routes/quizSessions.test.ts > GET /api/quiz-sessions/:sessionId/answer-breakdown (QUIZ-CLASS-REVIEW-001) > returns 404, not a crash, for a malformed session id 128ms
+ ✓ src/routes/quizSessions.test.ts > reopening keeps Block #2 counts accumulating (QUIZ-SESSION-LIVE-STATUS-001) > does not reset joined/submitted counts on reopen 138ms
+ ✓ src/routes/quizSessions.test.ts > scoring/breakdown attribution survives differing per-connection delivery order (QUIZ-RANDOM-QUESTION-ORDER-001/QUIZ-RANDOM-ANSWER-ORDER-001) > scores each connection correctly by choice identifier, not by the position it was served in 158ms
+ Test Files  19 passed (19)
+      Tests  310 passed (310)

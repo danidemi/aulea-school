@@ -1,6 +1,6 @@
 ID: RESEND-CONFIRMATION-001
 
-Status: READY
+Status: IN_REVIEW
 
 Priority: Medium
 
@@ -63,3 +63,17 @@ Implementation plan (sprint planning, 2026-10-18):
 * UX pattern check (form replaced by a result view, rate-limit message): confined to `SignUpPage`; no other screen has them. No table involved.
 * Seed: `db-seed.ts` is unaffected (no change to the entities it creates). Check that it does not call `/api/signup`; if it does, adapt.
 * Evidence: Playwright with a stubbed or real fake mailer against Postgres, as in the DoD; screenshots of the four states.
+
+
+Implemented (2026-10-20):
+* Server: `POST /api/signup/resend` in `signup.ts`; new table `resend_requests` (migration `0012_add_resend_requests.sql`, journal tag matches); `ResendRequestRepository.admit`, which runs the limit checks and the `record` in one transaction under Postgres advisory locks (IP lock first, then address lock), so parallel requests cannot all pass the checks before any is recorded; `ConfirmationTokenRepository.deleteUnusedForUser`; `config.ts` getters `resendCooldownSeconds`, `resendMaxPerDay`, `resendIpMaxPerHour`; `TRUST_PROXY` wired in `app.ts`. `GET /api/config` also returns `resendCooldownSeconds` so the countdown needs no hard-coded 60.
+* Order inside the route, differs from the plan text on purpose: limits are checked **before** the request is recorded (inside `admit`, so atomic). A refused call leaves no row, so it does not extend the cooldown or eat the daily cap. `Retry-After` is the time until the relevant window frees up (newest row for the cooldown, oldest row for the hourly and daily caps), rounded up, minimum 1. The new token is created and mailed first, then the old unused ones are deleted, so a mail failure leaves the old link working.
+* Client: `useResendConfirmation` hook, `ResendMessage`, `ResendForm` (email-only form, "Already signed up but no email? Resend it" link on the sign up page), button and countdown in `SignUpConfirmation`. Login page untouched.
+* Tests: server unit (cooldown, call after cooldown, daily cap, IP cap, same reply for unknown / confirmed / real, refused calls not logged, no raw email stored, old link invalid, new link confirms, mail failure), Testcontainers (window counting, `deleteUnusedForUser`, 10 parallel `admit` calls leave exactly one row, no deadlock with shared IPs / addresses), `TRUST_PROXY` start-up and `X-Forwarded-For` tests, client unit (button, countdown, 429, form), Playwright (3 specs) against real Postgres and a real Mailpit added to the e2e stack (`docker-compose.e2e.yml`, `run-e2e-server.sh`; the IP limit is raised there because all specs share 127.0.0.1).
+* Config docs: `server/.env.example`, README, `docker-compose.prod.example.yml`.
+* do_and_donts applied: real-Postgres e2e with screenshots taken from that run (`sprint_26_10_14_22_40`, `sprint_26_09_19_00_00`); evidence attached, not only a claim (`sprint_26_09_26_22_30`); disposable server on its own port (`sprint_26_08_22_15_56`); UX pattern check: the rate-limit message and the form-replaced-by-result view exist only on `SignUpPage`; no table involved (`sprint_26_10_18`); blast radius: every `UserRepository` / `ConfirmationTokenRepository` implementation and fake updated, `db-seed.ts` only calls `/api/signup/expedite`, so it is unaffected.
+* Verification (logs and screenshots in `assets/RESEND-CONFIRMATION-001/`): server `npm test` 310 passed, `npm run build` ok, `npm run test:integration` 21 passed, client tests 128 passed, client build ok, Playwright 25 passed, `security-check.sh` exit 0 (`security-check.log`).
+* For review (Product Owner decisions):
+  1. Proxy hop count: confirm `TRUST_PROXY` at deploy time (`1` in the prod compose example). Without it the IP limit counts the proxy's address for everyone. The opposite risk: that example also publishes port 3000 directly; with `TRUST_PROXY=1` and no proxy in front, a client can fake `X-Forwarded-For` and escape the IP limit. `TRUST_PROXY=false` is treated as unset.
+  2. The sign up email itself is not counted in `resend_requests` (only resends are). So the button works right after sign up, and an address can get 6 emails in a day (sign up plus 5 resends). The PBI says "between two sends"; decide whether the sign up email should count.
+  3. Out of scope, noticed: the e2e Playwright run prints a Node crash dump from the app server at the very end (`terminating connection due to administrator command`), because teardown stops Postgres before the server. It happens on specs unrelated to this PBI too; tests are not affected.

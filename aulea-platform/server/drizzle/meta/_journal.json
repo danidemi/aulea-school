@@ -85,6 +85,13 @@
       "when": 1790106697408,
       "tag": "0011_add_force_shuffle_and_connection_order",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1792515832355,
+      "tag": "0012_add_resend_requests",
+      "breakpoints": true
     }
   ]
 }

@@ -1,0 +1,130 @@
+ ✓ src/lib/avatarInitials.test.ts > avatarInitials (USER-MENU-001) > given an email whose local part has 2+ alphabetic characters, when computing initials, then returns the first two, uppercased 14ms
+ ✓ src/lib/avatarInitials.test.ts > avatarInitials (USER-MENU-001) > given an email whose local part has fewer than 2 alphabetic characters, when computing initials, then falls back to the first character as-is, uppercased 1ms
+ ✓ src/lib/avatarInitials.test.ts > avatarInitials (USER-MENU-001) > given an email whose local part is a single letter, when computing initials, then returns that one letter, uppercased 0ms
+ ✓ src/lib/avatarInitials.test.ts > avatarInitials (USER-MENU-001) > given an email with mixed-case letters, when computing initials, then uppercases the result 1ms
+ ✓ src/components/QuizzesSection.test.tsx > QuizzesSection (QUIZ-DASHBOARD-001, extracted by COURSE-DETAIL-001) > shows an empty state when the course has no quizzes yet 124ms
+ ✓ src/components/QuizzesSection.test.tsx > QuizzesSection (QUIZ-DASHBOARD-001, extracted by COURSE-DETAIL-001) > lists quizzes with title, uploaded date, and status 49ms
+ ✓ src/components/QuizzesSection.test.tsx > QuizzesSection (QUIZ-DASHBOARD-001, extracted by COURSE-DETAIL-001) > deletes a quiz row and refreshes the list 102ms
+ ✓ src/components/QuizzesSection.test.tsx > QuizzesSection (QUIZ-DASHBOARD-001, extracted by COURSE-DETAIL-001) > shows an error when delete fails 32ms
+ ✓ src/components/QuizzesSection.test.tsx > QuizzesSection (QUIZ-DASHBOARD-001, extracted by COURSE-DETAIL-001) > uploads a quiz and refreshes the list on success (QTI-22-IMPORT) 29ms
+ ✓ src/components/QuizzesSection.test.tsx > QuizzesSection (QUIZ-DASHBOARD-001, extracted by COURSE-DETAIL-001) > shows line/element-level errors when the server rejects the file as invalid QTI (QTI3-MIGRATION-001) 25ms
+ ✓ src/components/Wordmark.test.tsx > Wordmark (BRANDING-001) > renders "Aulea" in paper and ".school" in teal on a dark surface 74ms
+ ✓ src/components/Wordmark.test.tsx > Wordmark (BRANDING-001) > renders "Aulea" in navy and ".school" in dark teal on a light surface 14ms
+ ✓ src/components/QuizzesSection.test.tsx > QuizzesSection (QUIZ-DASHBOARD-001, extracted by COURSE-DETAIL-001) > shows a generic error for an unexpected upload failure 21ms
+ ✓ src/components/VersionInfoMenu.test.tsx > VersionInfoMenu (VERSION-INFO-001) > given the server reports the same commit as the client, when rendered, then no mismatch flag is shown 104ms
+ ✓ src/components/VersionInfoMenu.test.tsx > VersionInfoMenu (VERSION-INFO-001) > given the server reports a different commit than the client, when rendered, then a mismatch flag is shown 56ms
+ ✓ src/QuizSessionTakePage.test.tsx > QuizSessionTakePage (QUIZ-TAKE-RENDER-001) > joins the session on load, with no sign-in of any kind 147ms
+ ✓ src/QuizSessionTakePage.test.tsx > QuizSessionTakePage (QUIZ-TAKE-RENDER-001) > stores the connectionId on first join, so a later mount can reuse it (BUG-QUIZ-REFRESH-DUP-SESSION) 22ms
+ ✓ src/QuizSessionTakePage.test.tsx > QuizSessionTakePage (QUIZ-TAKE-RENDER-001) > reuses a stored connectionId on mount instead of joining again (BUG-QUIZ-REFRESH-DUP-SESSION) 23ms
+ ✓ src/QuizSessionTakePage.test.tsx > QuizSessionTakePage (QUIZ-TAKE-RENDER-001) > shows an error when the session cannot be joined 31ms
+ ✓ src/components/QuizzesSection.test.tsx > QuizzesSection (QUIZ-DASHBOARD-001, extracted by COURSE-DETAIL-001) > creates a quiz session and navigates to its monitor page 100ms
+ ✓ src/components/QuizzesSection.test.tsx > QuizzesSection (QUIZ-DASHBOARD-001, extracted by COURSE-DETAIL-001) > shows a Sessions button per row that navigates to the quiz's session history 69ms
+ ✓ src/components/QuizzesSection.test.tsx > QuizzesSection (QUIZ-DASHBOARD-001, extracted by COURSE-DETAIL-001) > shows an error when creating a session fails 60ms
+ ✓ src/components/Breadcrumb.test.tsx > Breadcrumb (BUG-BREADCRUMB-NAV) > shows just "Courses" on /courses, with no placeholder segment 214ms
+ ✓ src/components/Breadcrumb.test.tsx > Breadcrumb (BUG-BREADCRUMB-NAV) > shows "Courses > <course>" on a course detail page 44ms
+ ✓ src/components/Breadcrumb.test.tsx > Breadcrumb (BUG-BREADCRUMB-NAV) > shows "Courses > <course> > <quiz>" on the sessions-list page (no session selected there) 24ms
+ ✓ src/components/Breadcrumb.test.tsx > Breadcrumb (BUG-BREADCRUMB-NAV) > shows the full trail, including the session, on the session monitor page 46ms
+ ✓ src/components/Breadcrumb.test.tsx > Breadcrumb (BUG-BREADCRUMB-NAV) > shows "Not started" for a session with no startedAt yet 29ms
+ ✓ src/QuizSessionTakePage.test.tsx > QuizSessionTakePage (QUIZ-TAKE-RENDER-001) > shows a not-started message while the session is closed 16ms
+ ✓ src/QuizSessionTakePage.test.tsx > QuizSessionTakePage (QUIZ-TAKE-RENDER-001) > fetches this connection's own items from the connection-scoped endpoint (QUIZ-SESSION-PER-STUDENT-DELIVERY-001), for a freshly-joined connection 17ms
+ ✓ src/QuizSessionTakePage.test.tsx > QuizSessionTakePage (QUIZ-TAKE-RENDER-001) > fetches this connection's own items from the connection-scoped endpoint for a connection reused from localStorage 59ms
+ ✓ src/QuizSessionTakePage.test.tsx > QuizSessionTakePage (QUIZ-TAKE-RENDER-001) > shows a stopped message once the session has ended 12ms
+ ✓ src/components/AppHeader.test.tsx > AppHeader (BRANDING-001) > shows the Wordmark linking to home, with no "Learning Platform" and no tagline 215ms
+ ✓ src/QuizSessionTakePage.test.tsx > QuizSessionTakePage (QUIZ-TAKE-RENDER-001) > shows the stopped message, not a join error, when the join is rejected because the session ended (QUIZ-CONNECTION-INTEGRITY-001) 14ms
+ ✓ src/CourseDashboardPage.test.tsx > CourseDashboardPage (COURSE-001) > prompts to sign in when not signed in 124ms
+ ✓ src/CourseDashboardPage.test.tsx > CourseDashboardPage (COURSE-001) > shows an empty state when the tenant has no courses yet 60ms
+ ✓ src/QuizSessionMonitorPage.test.tsx > QuizSessionMonitorPage (QUIZ-SESSION-CONTROL-001) > prompts to sign in when not signed in 133ms
+ ✓ src/CourseDetailPage.test.tsx > CourseDetailPage (COURSE-DETAIL-001) > prompts to sign in when not signed in 145ms
+ ✓ src/QuizSessionTakePage.test.tsx > QuizSessionTakePage (QUIZ-TAKE-RENDER-001) > renders the unsupported-interaction-type placeholder, and still advances via Next 169ms
+ ✓ src/QuizSessionTakePage.test.tsx > QuizSessionTakePage (QUIZ-TAKE-RENDER-001) > shows the score line once QUIZ-AUTO-EVAL-001 scoring is present in the submit response 51ms
+ ✓ src/QuizSessionTakePage.test.tsx > QuizSessionTakePage (QUIZ-TAKE-RENDER-001) > shows an error when submit fails 40ms
+ ✓ src/LoginPage.test.tsx > LoginPage (BRANDING-001) > shows the tagline in the page body and the wordmark in the header 246ms
+ ✓ src/LoginPage.test.tsx > LoginPage (AUTH-UX-001) > always shows the email/password form and a submit button 67ms
+ ✓ src/QuizSessionHistoryPage.test.tsx > QuizSessionHistoryPage (QUIZ-SESSION-HISTORY-001) > shows an empty state when the quiz has no sessions yet 182ms
+ ✓ src/SignUpPage.test.tsx > SignUpPage (SIGNUP-EXPEDITE-001) > does not show the expedite option before /api/config resolves 254ms
+ ✓ src/QuizSessionMonitorPage.test.tsx > QuizSessionMonitorPage (QUIZ-SESSION-CONTROL-001) > shows the closed state with a time-limit input and Start button 278ms
+ ✓ src/QuizSessionMonitorPage.test.tsx > QuizSessionMonitorPage (QUIZ-SESSION-CONTROL-001) > shows the take URL as a link and renders a QR code 66ms
+ ✓ src/CourseDetailPage.test.tsx > CourseDetailPage (COURSE-DETAIL-001) > shows a breadcrumb naming the selected course 175ms
+ ✓ src/CourseDetailPage.test.tsx > CourseDetailPage (COURSE-DETAIL-001) > shows the quizzes section for the selected course 41ms
+ ✓ src/App.test.tsx > App (home page, HOME-001 / AUTH-UX-001) > shows a header with the product name, linking back to home 251ms
+ ✓ src/App.test.tsx > App (home page, HOME-001 / AUTH-UX-001) > shows the tagline on the home page, outside the header 23ms
+ ✓ src/App.test.tsx > App (home page, HOME-001 / AUTH-UX-001) > shows a "Sign in" link to /login in the header before /api/me resolves 30ms
+ ✓ src/CourseDashboardPage.test.tsx > CourseDashboardPage (COURSE-001) > lists the tenant's courses with title, created, and updated columns 88ms
+ ✓ src/CourseDashboardPage.test.tsx > CourseDashboardPage (COURSE-001) > navigates directly to the course detail page when a row is clicked (COURSE-DETAIL-001) 55ms
+ ✓ src/LoginPage.test.tsx > LoginPage (AUTH-UX-001) > shows a "Don't have an account yet? Create one" link to /signup 38ms
+ ✓ src/QuizSessionHistoryPage.test.tsx > QuizSessionHistoryPage (QUIZ-SESSION-HISTORY-001) > shows a populated list with the right per-row fields 134ms
+ ✓ src/QuizSessionHistoryPage.test.tsx > QuizSessionHistoryPage (QUIZ-SESSION-HISTORY-001) > navigates to the session's Monitor page when a row is clicked 65ms
+ ✓ src/CourseDetailPage.test.tsx > CourseDetailPage (COURSE-DETAIL-001) > updates the breadcrumb and quizzes when navigating to a different course 94ms
+ ✓ src/CourseDetailPage.test.tsx > CourseDetailPage (COURSE-DETAIL-001) > shows an error when the course cannot be loaded 38ms
+ ✓ src/LoginPage.test.tsx > LoginPage (AUTH-UX-001) > submits email/password to POST /api/login and navigates home on success 116ms
+ ✓ src/LoginPage.test.tsx > LoginPage (AUTH-UX-001) > shows a failure message when the server rejects the sign-in 86ms
+ ✓ src/QuizSessionHistoryPage.test.tsx > QuizSessionHistoryPage (QUIZ-SESSION-HISTORY-001) > shows a sign-in prompt when not signed in 27ms
+ ✓ src/QuizSessionHistoryPage.test.tsx > QuizSessionHistoryPage (QUIZ-SESSION-HISTORY-001) > shows a load error if the sessions cannot be fetched 48ms
+ ✓ src/SignUpPage.test.tsx > SignUpPage (SIGNUP-EXPEDITE-001) > shows the expedite option once /api/config reports the flag enabled 103ms
+ ✓ src/SignUpPage.test.tsx > SignUpPage (SIGNUP-EXPEDITE-001) > keeps the expedite option hidden when the flag is reported disabled 36ms
+ ✓ src/SignUpPage.test.tsx > SignUpPage (SIGNUP-EXPEDITE-001) > always shows the normal email/password sign-up form 53ms
+ ✓ src/SignUpResend.test.tsx > SignUpConfirmation resend button (RESEND-CONFIRMATION-001) > is enabled at first, and after a click is disabled with a countdown that ticks down 470ms
+ ✓ src/CourseDashboardPage.test.tsx > CourseDashboardPage (COURSE-001) > shows just "Courses" in the breadcrumb, with no placeholder segment (BUG-BREADCRUMB-NAV: nothing is ever selected on this page) 156ms
+ ✓ src/QuizSessionMonitorPage.test.tsx > QuizSessionMonitorPage (QUIZ-SESSION-CONTROL-001) > makes the take URL a clickable link that opens in a new tab (QUIZ-TAKE-URL-LINK-001) 74ms
+ ✓ src/SignUpPage.test.tsx > SignUpPage (SIGN-UP-001) > submits email/password to POST /api/signup and shows a success message 128ms
+ ✓ src/SignUpResend.test.tsx > SignUpConfirmation resend button (RESEND-CONFIRMATION-001) > is enabled again once the countdown reaches zero 152ms
+ ✓ src/CourseDashboardPage.test.tsx > CourseDashboardPage (COURSE-001) > opens a "New course" form, submits it, and refreshes the list 190ms
+ ✓ src/QuizSessionMonitorPage.test.tsx > QuizSessionMonitorPage (QUIZ-SESSION-CONTROL-001) > starts the session and shows the running state with a Stop button 224ms
+ ✓ src/App.test.tsx > App (home page, HOME-001 / AUTH-UX-001) > shows the signed-in user's email in the account menu once GET /api/me confirms a session (USER-MENU-001) 317ms
+ ✓ src/SignUpPage.test.tsx > SignUpPage (SIGN-UP-001) > shows a failure message when the server rejects the sign-up 94ms
+ ✓ src/SignUpPage.test.tsx > SignUpPage (SIGNUP-002) > shows an inline error and disables submit when the confirmation differs, on blur 53ms
+ ✓ src/SignUpPage.test.tsx > SignUpPage (SIGNUP-002) > clears the error and re-enables submit once the values match 41ms
+ ✓ src/SignUpResend.test.tsx > SignUpConfirmation resend button (RESEND-CONFIRMATION-001) > puts the countdown back from Retry-After on a 429 110ms
+ ✓ src/SignUpResend.test.tsx > SignUpConfirmation resend button (RESEND-CONFIRMATION-001) > shows an error and stays usable when the email could not be sent 90ms
+ ✓ src/CourseDashboardPage.test.tsx > CourseDashboardPage (COURSE-001) > shows an error and keeps the form open when the title is already taken 110ms
+ ✓ src/CourseDashboardPage.test.tsx > CourseDashboardPage (COURSE-001) > sorts ascending on the first click of a column header 79ms
+ ✓ src/QuizSessionMonitorPage.test.tsx > QuizSessionMonitorPage (QUIZ-SESSION-CONTROL-001) > defaults both force-shuffle toggles off and sends them as false when starting without touching them (QUIZ-RANDOM-QUESTION-ORDER-001/QUIZ-RANDOM-ANSWER-ORDER-001) 106ms
+ ✓ src/QuizSessionMonitorPage.test.tsx > QuizSessionMonitorPage (QUIZ-SESSION-CONTROL-001) > sends the force-shuffle toggles as true when the trainer turns them on 94ms
+ ✓ src/App.test.tsx > App (home page, HOME-001 / AUTH-UX-001) > shows the user's current tenant next to their email in the account menu (TENANT-001 / USER-MENU-001) 172ms
+ ✓ src/App.test.tsx > App (home page, HOME-001 / AUTH-UX-001) > shows a sign-up link pointing to /signup when signed out 35ms
+ ✓ src/SignUpPage.test.tsx > SignUpPage (SIGNUP-002) > does not call the sign-up API while the values differ 42ms
+ ✓ src/SignUpResend.test.tsx > SignUpConfirmation expiry note (SIGNUP-EXPIRY-001) > tells the user the link lasts 24 hours and the registration is dropped after 3 days 70ms
+ ✓ src/QuizSessionHistoryPage.test.tsx > QuizSessionHistoryPage (SESSION-DELETE-001) > disables "Delete selected" until a session is selected, and the running session cannot be selected 253ms
+ ✓ src/CourseDashboardPage.test.tsx > CourseDashboardPage (COURSE-001) > cycles a column through ascending, descending, and unsorted on repeat clicks 102ms
+ ✓ src/CourseDashboardPage.test.tsx > CourseDashboardPage (COURSE-001) > closes the form without creating anything when Cancel is clicked 48ms
+ ✓ src/App.test.tsx > App (home page, HOME-001 / AUTH-UX-001) > hides the sign-up link once signed in 59ms
+ ✓ src/App.test.tsx > App sign-in form and signed-in redirect (HOME-LOGIN-001) > shows the sign-in form directly on the home page when signed out 34ms
+ ✓ src/SignUpPage.test.tsx > SignUpPage (SIGNUP-CONFIRMATION-001) > replaces the form with "Check your email" after a 201 on sign up 112ms
+ ✓ src/SignUpPage.test.tsx > SignUpPage (SIGNUP-CONFIRMATION-001) > replaces the form with "Account created" after a 201 on expedite sign up 75ms
+ ✓ src/QuizSessionMonitorPage.test.tsx > QuizSessionMonitorPage (QUIZ-SESSION-CONTROL-001) > shows an error and stays closed when starting fails 86ms
+ ✓ src/QuizSessionMonitorPage.test.tsx > QuizSessionMonitorPage (QUIZ-SESSION-CONTROL-001) > stops a running session 50ms
+ ✓ src/SignUpResend.test.tsx > SignUpConfirmation expiry note (SIGNUP-EXPIRY-001) > takes the number of days from /api/config 53ms
+ ✓ src/SignUpResend.test.tsx > "Already signed up" resend form (RESEND-CONFIRMATION-001) > swaps the card to an email-only form and posts the typed address 52ms
+ ✓ src/SignUpResend.test.tsx > "Already signed up" resend form (RESEND-CONFIRMATION-001) > shows the 429 countdown and can go back to the sign up form 56ms
+ ✓ src/QuizSessionHistoryPage.test.tsx > QuizSessionHistoryPage (SESSION-DELETE-001) > shows the dry-run counts in a dialog, then deletes on confirm and refreshes the list 234ms
+ ✓ src/SignUpPage.test.tsx > SignUpPage (SIGNUP-CONFIRMATION-001) > keeps the form and shows the error after a 409 65ms
+ ✓ src/SignUpPage.test.tsx > SignUpPage (SIGNUP-CONFIRMATION-001) > keeps the form and shows the error after a 400 50ms
+ ✓ src/App.test.tsx > App sign-in form and signed-in redirect (HOME-LOGIN-001) > submits the home-page form the same way /login does 89ms
+ ✓ src/App.test.tsx > App sign-in form and signed-in redirect (HOME-LOGIN-001) > redirects a signed-in visitor away from the home page to /courses 13ms
+ ✓ src/App.test.tsx > App sign-in form and signed-in redirect (HOME-LOGIN-001) > does not redirect while signed out 9ms
+ ✓ src/App.test.tsx > App confirm-outcome banner (AUTH-UX-001) > shows a success banner for status=ok 16ms
+ ✓ src/App.test.tsx > App confirm-outcome banner (AUTH-UX-001) > shows an expired banner for status=expired 12ms
+ ✓ src/App.test.tsx > App confirm-outcome banner (AUTH-UX-001) > shows a used banner for status=used 12ms
+ ✓ src/App.test.tsx > App confirm-outcome banner (AUTH-UX-001) > shows an invalid banner for status=invalid 9ms
+ ✓ src/App.test.tsx > App confirm-outcome banner (AUTH-UX-001) > shows no banner when there is no ?status= at all 6ms
+ ✓ src/App.test.tsx > App confirm-outcome banner (AUTH-UX-001) > dismisses the banner when its close button is clicked 13ms
+ ✓ src/QuizSessionMonitorPage.test.tsx > QuizSessionMonitorPage (QUIZ-SESSION-CONTROL-001) > offers a Reopen (start) action after stopping, not a dead end 94ms
+ ✓ src/QuizSessionMonitorPage.test.tsx > QuizSessionMonitorPage (QUIZ-SESSION-CONTROL-001) > shows the joined count before start (QUIZ-SESSION-LIVE-STATUS-001) 19ms
+ ✓ src/QuizSessionMonitorPage.test.tsx > QuizSessionMonitorPage (QUIZ-SESSION-CONTROL-001) > shows the answers progress while running (QUIZ-SESSION-LIVE-STATUS-001) 31ms
+ ✓ src/QuizSessionHistoryPage.test.tsx > QuizSessionHistoryPage (SESSION-DELETE-001) > cancelling the dialog deletes nothing 104ms
+ ✓ src/QuizSessionHistoryPage.test.tsx > QuizSessionHistoryPage (SESSION-DELETE-001) > does not navigate to the monitor when a checkbox is clicked 48ms
+ ✓ src/QuizSessionMonitorPage.test.tsx > QuizSessionMonitorPage (QUIZ-SESSION-CONTROL-001) > shows the submission tally, not an answered percentage, after stop (revised at sprint planning) 18ms
+ ✓ src/QuizSessionMonitorPage.test.tsx > QuizSessionMonitorPage (QUIZ-SESSION-CONTROL-001) > polls for updated counts while closed (not just while running) 89ms
+ ✓ src/App.test.tsx > App log-out control (LOGOUT-001) > shows a "Log out" control in the account menu instead of "Sign in" once signed in (USER-MENU-001) 63ms
+ ✓ src/App.test.tsx > App log-out control (LOGOUT-001) > calls POST /api/logout and navigates home when "Log out" is clicked 79ms
+ ✓ src/QuizSessionMonitorPage.test.tsx > QuizSessionMonitorPage (QUIZ-SESSION-CONTROL-001) > stops polling once the session is stopped 76ms
+ ✓ src/QuizSessionMonitorPage.test.tsx > QuizSessionMonitorPage (QUIZ-SESSION-CONTROL-001) > shows Block #3 results once stopped (QUIZ-AUTO-EVAL-001) 25ms
+ ✓ src/QuizSessionMonitorPage.test.tsx > QuizSessionMonitorPage (QUIZ-SESSION-CONTROL-001) > shows a genuine zero-answer submission as a real score, not "needs manual grading" (QUIZ-CONNECTION-INTEGRITY-001) 20ms
+ ✓ src/QuizSessionMonitorPage.test.tsx > QuizSessionMonitorPage (QUIZ-SESSION-CONTROL-001) > shows Block #4 answer breakdown once stopped, marking the correct option and a no-answer row (QUIZ-CLASS-REVIEW-001) 22ms
+ ✓ src/QuizSessionMonitorPage.test.tsx > QuizSessionMonitorPage (QUIZ-SESSION-CONTROL-001) > renders a multi-question breakdown, one section per item 21ms
+ ✓ src/QuizSessionMonitorPage.test.tsx > QuizSessionMonitorPage (QUIZ-SESSION-CONTROL-001) > shows real per-option counts for a multi-select item and left-aligns every row — including No answer — regardless of correctness (BUG-ANSWER-BREAKDOWN-MULTISELECT, BUG-ANSWER-BREAKDOWN-BAR-MISALIGN) 23ms
+ ✓ src/QuizSessionMonitorPage.test.tsx > QuizSessionMonitorPage (QUIZ-SESSION-CONTROL-001) > does not show Block #4 before the session is stopped 12ms
+ ✓ src/QuizSessionMonitorPage.test.tsx > QuizSessionMonitorPage (QUIZ-SESSION-CONTROL-001) > does not show Block #3 before the session is stopped 13ms
+ ✓ src/QuizSessionMonitorPage.test.tsx > QuizSessionMonitorPage (QUIZ-SESSION-CONTROL-001) > shows an error when the session cannot be loaded 10ms
+ Test Files  15 passed (15)
+      Tests  128 passed (128)

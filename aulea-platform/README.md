@@ -61,6 +61,9 @@ the real server and client, and drives a real browser against them — it
 never touches a developer's own `server/docker-compose.yml` stack or
 long-running dev server. Safe to run alongside `npm run dev`/`db:up`.
 
+The e2e stack also starts its own Mailpit (SMTP `1026`, HTTP API `8026`), so specs can
+sign up and resend for real and read the confirmation links back from its API.
+
 ## Local email testing (Mailpit)
 
 `server/docker-compose.yml` starts a `mailpit` container that catches all
@@ -71,3 +74,16 @@ http://localhost:8025
 
 SMTP itself is on port `1025`, matching `SMTP_HOST`/`SMTP_PORT` in
 `server/.env.example`.
+
+## Sign up limits and expiry (RESEND-CONFIRMATION-001, SIGNUP-EXPIRY-001)
+
+Set in the server environment (all optional; invalid values fall back to the default):
+
+| Variable | Default | Meaning |
+| --- | --- | --- |
+| `RESEND_COOLDOWN_SECONDS` | `60` | seconds between two confirmation resends for one address |
+| `RESEND_MAX_PER_DAY` | `5` | resends per address in 24 hours |
+| `RESEND_IP_MAX_PER_HOUR` | `20` | resend requests per client IP in one hour |
+| `TRUST_PROXY` | unset | proxy hops (number), `true`, or address list for Express `trust proxy`. Set it behind a reverse proxy, or all callers share one IP limit |
+| `SIGNUP_PENDING_MAX_AGE_DAYS` | `3` | age after which an unconfirmed account is replaced when its address signs up again |
+

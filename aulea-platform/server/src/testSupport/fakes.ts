@@ -50,7 +50,7 @@ export function createFakeUserRepository(): UserRepository & { rows: UserForLogi
   return {
     rows,
     async create(user: NewUser) {
-      const created: UserForLogin = { id: String(nextId++), email: user.email, passwordHash: user.passwordHash, confirmedAt: user.confirmedAt }
+      const created: UserForLogin = { id: String(nextId++), email: user.email, passwordHash: user.passwordHash, confirmedAt: user.confirmedAt, createdAt: new Date() }
       rows.push(created)
       return { id: created.id, email: created.email }
     },
@@ -60,6 +60,12 @@ export function createFakeUserRepository(): UserRepository & { rows: UserForLogi
     },
     async findByEmail(email: string) {
       return rows.find((row) => row.email === email) ?? null
+    },
+    async deleteExpiredPendingByEmail(email: string, olderThan: Date) {
+      const index = rows.findIndex((row) => row.email === email && row.confirmedAt === null && row.createdAt < olderThan)
+      if (index === -1) return false
+      rows.splice(index, 1)
+      return true
     },
   }
 }

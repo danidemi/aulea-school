@@ -5,6 +5,7 @@ import { Input } from './components/ui/input'
 import { Label } from './components/ui/label'
 import AppHeader from './components/AppHeader'
 import SignUpConfirmation, { type SignUpOutcome } from './components/SignUpConfirmation'
+import ResendForm from './components/ResendForm'
 
 /**
  * `/signup` screen. Email + password fields, scaffolded by
@@ -23,13 +24,20 @@ function SignUpPage() {
   const [expediteEnabled, setExpediteEnabled] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
   const [outcome, setOutcome] = useState<SignUpOutcome | null>(null)
+  // RESEND-CONFIRMATION-001: defaults until `/api/config` answers; they match the server defaults.
+  const [pendingMaxAgeDays, setPendingMaxAgeDays] = useState(3)
+  const [resendCooldownSeconds, setResendCooldownSeconds] = useState(60)
+  const [resendFormOpen, setResendFormOpen] = useState(false)
 
   useEffect(() => {
     let cancelled = false
     fetch('/api/config')
       .then((res) => res.json())
       .then((config) => {
-        if (!cancelled) setExpediteEnabled(Boolean(config.expediteSignupEnabled))
+        if (cancelled) return
+        setExpediteEnabled(Boolean(config.expediteSignupEnabled))
+        if (Number(config.pendingMaxAgeDays) > 0) setPendingMaxAgeDays(Number(config.pendingMaxAgeDays))
+        if (Number(config.resendCooldownSeconds) > 0) setResendCooldownSeconds(Number(config.resendCooldownSeconds))
       })
       .catch(() => {
         // config fetch failing just keeps the expedite option hidden
@@ -83,7 +91,13 @@ function SignUpPage() {
       <main className="flex flex-1 items-center justify-center px-6 py-section-gap">
         <Card className="w-full max-w-sm">
           {outcome ? (
-            <SignUpConfirmation outcome={outcome} />
+            <SignUpConfirmation
+              outcome={outcome}
+              pendingMaxAgeDays={pendingMaxAgeDays}
+              resendCooldownSeconds={resendCooldownSeconds}
+            />
+          ) : resendFormOpen ? (
+            <ResendForm cooldownSeconds={resendCooldownSeconds} onBack={() => setResendFormOpen(false)} />
           ) : (
             <>
               <h1 className="mb-group-gap font-display text-2xl font-semibold text-ink">Create your account</h1>
@@ -137,6 +151,13 @@ function SignUpPage() {
                   {message}
                 </p>
               )}
+              <button
+                type="button"
+                onClick={() => setResendFormOpen(true)}
+                className="mt-group-gap text-sm font-medium text-ink underline"
+              >
+                Already signed up but no email? Resend it
+              </button>
             </>
           )}
         </Card>

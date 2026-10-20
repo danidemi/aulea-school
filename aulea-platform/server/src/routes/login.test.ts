@@ -38,6 +38,7 @@ function createFakeUserRepository(): UserRepository & { rows: UserForLogin[] } {
         email: user.email,
         passwordHash: user.passwordHash,
         confirmedAt: user.confirmedAt,
+        createdAt: new Date(),
       }
       rows.push(created)
       return { id: created.id, email: created.email }
@@ -48,6 +49,9 @@ function createFakeUserRepository(): UserRepository & { rows: UserForLogin[] } {
     },
     async findByEmail(email: string) {
       return rows.find((row) => row.email === email) ?? null
+    },
+    async deleteExpiredPendingByEmail() {
+      return false
     },
   }
 }

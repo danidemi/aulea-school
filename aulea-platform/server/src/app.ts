@@ -5,6 +5,7 @@ import { createSignupRouter } from './routes/signup.js'
 import { createLoginRouter } from './routes/login.js'
 import { createUserRepository, type UserRepository } from './db/users.js'
 import { createConfirmationTokenRepository, type ConfirmationTokenRepository } from './db/confirmationTokens.js'
+import { createResendRequestRepository, type ResendRequestRepository } from './db/resendRequests.js'
 import { createTenantRepository, type TenantRepository } from './db/tenants.js'
 import { createCoursesRouter } from './routes/courses.js'
 import { createCourseRepository, type CourseRepository } from './db/courses.js'
@@ -24,6 +25,7 @@ const CLIENT_DIST = path.resolve(__dirname, '../../client/dist')
 export interface AppDeps {
   users: UserRepository
   confirmationTokens: ConfirmationTokenRepository
+  resendRequests: ResendRequestRepository
   mailer: Mailer
   tenants: TenantRepository
   courses: CourseRepository
@@ -52,6 +54,16 @@ export interface AppDeps {
 export function createApp(deps?: Partial<AppDeps>): Express {
   const app = express()
 
+  // RESEND-CONFIRMATION-001: `req.ip` feeds the per-IP resend limit. Behind a
+  // reverse proxy it is the proxy's address unless Express is told to trust
+  // the forwarded header: `TRUST_PROXY` (unset or "false" = not trusted) is the hop
+  // count, "true", or an address list, as Express's `trust proxy` setting.
+  const trustProxy = process.env.TRUST_PROXY
+  // "false" counts as unset: Express would read it as an address list and refuse to start.
+  if (trustProxy && trustProxy !== 'false') {
+    app.set('trust proxy', /^\d+$/.test(trustProxy) ? Number(trustProxy) : trustProxy === 'true' ? true : trustProxy)
+  }
+
   // Lazy: only connects to Postgres/SMTP the first time a signup route
   // actually runs. Building these eagerly here would make every
   // createApp() call need DATABASE_URL/SMTP_HOST, breaking the DB-free
@@ -59,6 +71,7 @@ export function createApp(deps?: Partial<AppDeps>): Express {
   // hits the signup routes).
   const users = deps?.users ?? lazyUserRepository()
   const confirmationTokens = deps?.confirmationTokens ?? lazyConfirmationTokenRepository()
+  const resendRequests = deps?.resendRequests ?? lazyResendRequestRepository()
   const mailer = deps?.mailer ?? lazyMailer()
   const tenants = deps?.tenants ?? lazyTenantRepository()
   const courses = deps?.courses ?? lazyCourseRepository()
@@ -78,7 +91,7 @@ export function createApp(deps?: Partial<AppDeps>): Express {
 
   // API routes must be registered before the static/SPA fallback below,
   // or `/api/*` requests get swallowed and served index.html instead.
-  app.use(createSignupRouter(users, confirmationTokens, mailer))
+  app.use(createSignupRouter(users, confirmationTokens, mailer, resendRequests))
   app.use(createLoginRouter(users, tenants, sessionMiddleware))
   app.use(createCoursesRouter(courses, sessionMiddleware))
   app.use(createQuizzesRouter(courses, quizzes, sessionMiddleware))
@@ -112,6 +125,7 @@ function lazyUserRepository(): UserRepository {
     create: (user) => resolve().create(user),
     confirmUser: (userId) => resolve().confirmUser(userId),
     findByEmail: (email) => resolve().findByEmail(email),
+    deleteExpiredPendingByEmail: (email, olderThan) => resolve().deleteExpiredPendingByEmail(email, olderThan),
   }
 }
 
@@ -133,6 +147,26 @@ function lazyConfirmationTokenRepository(): ConfirmationTokenRepository {
     create: (token) => resolve().create(token),
     findByHash: (tokenHash) => resolve().findByHash(tokenHash),
     markUsed: (id) => resolve().markUsed(id),
+    deleteUnusedForUser: (userId, exceptId) => resolve().deleteUnusedForUser(userId, exceptId),
+  }
+}
+
+function lazyResendRequestRepository(): ResendRequestRepository {
+  let real: ResendRequestRepository | undefined
+
+  function resolve(): ResendRequestRepository {
+    if (!real) {
+      const databaseUrl = process.env.DATABASE_URL
+      if (!databaseUrl) {
+        throw new Error('DATABASE_URL is not set — copy server/.env.example to server/.env first')
+      }
+      real = createResendRequestRepository(databaseUrl)
+    }
+    return real
+  }
+
+  return {
+    admit: (caller, fn) => resolve().admit(caller, fn),
   }
 }
 

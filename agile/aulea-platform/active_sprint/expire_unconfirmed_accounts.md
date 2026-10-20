@@ -1,6 +1,6 @@
 ID: SIGNUP-EXPIRY-001
 
-Status: READY
+Status: IN_REVIEW
 
 Priority: Low
 
@@ -54,3 +54,12 @@ Implementation plan (sprint planning, 2026-10-18):
 * Confirmation link of a purged account: tokens are deleted, so `findByHash` gives null and the route already redirects to `status=invalid`; only a test is needed.
 * Tests: unit with fakes (expired replaced, young 409, confirmed 409, purge failure leaves both rows), repository integration test on Testcontainers (ADR-0014) for the transaction, and a Playwright spec for replace-on-signup that ages the row by updating `created_at` directly in the e2e database.
 * No migration. `db-seed.ts` unaffected unless it relies on the `email_taken` reply; check.
+
+
+Implemented (2026-10-20):
+* Server: `UserRepository.deleteExpiredPendingByEmail(email, olderThan)` (one transaction, row lock, tokens deleted before the user, all or nothing); `UserForLogin.createdAt`; `signupPendingMaxAgeDays()` in `config.ts`; `createReplacingExpired` in `signup.ts` keeps the "unique violation gives 409" design: on a violation it purges an expired pending account and retries the insert once. Used by `POST /api/signup` and `POST /api/signup/expedite`. The resend route treats an expired pending account like an unknown address. `GET /api/config` returns `pendingMaxAgeDays`.
+* Client: the confirmation view says the link lasts 24 hours and that the registration is dropped after N days (N from `/api/config`).
+* No migration, no scheduler. `db-seed.ts` unaffected (it uses the expedite route on fresh addresses).
+* Tests: server unit (expired replaced on both routes, young 409, confirmed 409, env override, purge failure leaves both rows, old link gives `invalid`, resend of an expired account sends nothing); Testcontainers on real Postgres for the transaction (delete, young, confirmed, other email, rollback when the user delete fails, address freed after purge, `createdAt`); client unit for the note. The DoD allows "Playwright e2e or repository test": the repository test covers replace-on-signup, aging the row directly in SQL; no e2e that ages a row was added.
+* do_and_donts applied: real-Postgres test for real SQL that the fakes only mirror (`sprint_26_10_14_22_40`); screenshot of the changed confirmation view attached (`sprint_26_09_19_00_00`); evidence attached, not only a claim (`sprint_26_09_26_22_30`); blast-radius check of the interface change (same as `RESEND-CONFIRMATION-001`); no table involved.
+* Verification (logs and screenshot in `assets/SIGNUP-EXPIRY-001/`): same green runs as `RESEND-CONFIRMATION-001` (server 310, integration 21, client 128, Playwright 25, `security-check.sh` exit 0); `server-unit-tests.log` lists the named cases, `server-unit-tests-full.log` is the whole run. `confirmation-view-3-days-note.png` shows the new sentence.

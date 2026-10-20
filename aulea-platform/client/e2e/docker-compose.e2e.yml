@@ -17,3 +17,12 @@ services:
       interval: 2s
       timeout: 2s
       retries: 30
+
+  # RESEND-CONFIRMATION-001: the fake mailer for the e2e stack. Real sign up and
+  # resend send mail; Mailpit captures it and its HTTP API lets a spec read the
+  # confirmation links. Own host ports, so a developer's Mailpit is not touched.
+  mailpit:
+    image: axllent/mailpit
+    ports:
+      - '${E2E_SMTP_PORT:-1026}:1025'
+      - '${E2E_MAIL_API_PORT:-8026}:8025'

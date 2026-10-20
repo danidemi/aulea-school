@@ -66,6 +66,28 @@ export const confirmationTokens = pgTable('confirmation_tokens', {
 })
 
 /**
+ * RESEND-CONFIRMATION-001: one row per call to `POST /api/signup/resend` that
+ * passed the limits, whether or not an account exists for the address, so the
+ * cooldown, daily cap and IP cap behave the same for known and unknown emails
+ * (a 429 must not reveal which emails have an account). Keyed by the SHA-256
+ * of the lower-cased email: no raw address is stored for unknown emails, and
+ * the limits derive from the database, so they survive a restart.
+ */
+export const resendRequests = pgTable(
+  'resend_requests',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    emailHash: text('email_hash').notNull(),
+    ip: text('ip').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    index('resend_requests_email_hash_created_at_idx').on(table.emailHash, table.createdAt),
+    index('resend_requests_ip_created_at_idx').on(table.ip, table.createdAt),
+  ],
+)
+
+/**
  * COURSE-001: courses belong to exactly one tenant from the start
  * (`tenant_id`, per ADR-0002's tenancy-before-courses decision) —
  * "all courses" in this story's DoD never means courses outside the
