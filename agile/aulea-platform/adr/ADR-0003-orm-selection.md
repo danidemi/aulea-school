@@ -24,7 +24,7 @@ over Prisma.
   is a thin layer over the `pg` driver, so there's one less moving part in `server/`'s build and
   deploy path.
 * `pg` is the driver named in ADR-0002 ("mature TypeScript/Node drivers ... e.g. Prisma or
-  Drizzle") and is Node ≥16, compatible with the project's Node 18 runtime.
+  Drizzle") and is Node ≥16, compatible with the project's Node runtime (see ADR-0017).
 * `drizzle-kit` ships both `generate` (SQL migration files) and `migrate` (an applied-migrations
   tracking table) commands, which DB-MIGRATIONS-001 uses — see that story's Definition of Done
   ("migration files live under version control" and "running the migration command twice is a

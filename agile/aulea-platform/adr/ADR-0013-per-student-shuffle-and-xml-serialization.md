@@ -75,7 +75,7 @@ favor of a real parse → mutate → serialize round trip.
   XML) accordingly. An unshuffled item/question is returned exactly as `resolveQuizItems` produces
   it today — no behavior change for that case.
 * **XML library: `@xmldom/xmldom`.** Verified live (`npm view`): pure JavaScript, `engines.node
-  >=14.6` (well under this project's Node 18 baseline), no native/`node-gyp` step — consistent
+  >=14.6` (well under this project's Node baseline, see ADR-0017), no native/`node-gyp` step — consistent
   with ADR-0004's and ADR-0008's standing preference for a build-portable dependency tree. Gives a
   real DOM (`DOMParser`/`XMLSerializer`) for a correct, namespace-preserving reorder of
   `qti-simple-choice` siblings under `qti-choice-interaction`, rather than a regex/string splice

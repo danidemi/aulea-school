@@ -45,7 +45,7 @@
 #     APP_BASE_URL, SMTP_HOST, SMTP_PORT (optional: SMTP_USER, SMTP_PASSWORD,
 #     SMTP_SECURE, SMTP_FROM, PORT). Each also accepts the *_FILE form.
 
-ARG NODE_VERSION=22
+ARG NODE_VERSION=24
 
 # ---- client: build the React bundle -------------------------------------
 FROM node:${NODE_VERSION}-alpine AS client-build
